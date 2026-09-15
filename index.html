@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230F172A'/><text x='50' y='64' font-family='serif' font-size='44' font-weight='bold' fill='%23C5A059' text-anchor='middle'>Z</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Dr. Zoya | Luxury Aesthetic Dermatology & Cosmetic Smile Studio</title>
+    <meta name="description" content="Official website of Dr. Zoya. Premier clinic for Aesthetic Dermatology, Cosmetic Dentistry, Invisible Aligners, Laser Treatments, and Facial Rejuvenation." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN for instant responsive utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: {
+                DEFAULT: '#C5A059',
+                light: '#E8D39E',
+                dark: '#9A7736',
+                subtle: 'rgba(197, 160, 89, 0.12)'
+              },
+              obsidian: '#090D14',
+              charcoal: '#121824',
+              sand: {
+                DEFAULT: '#FAF8F5',
+                card: '#FFFFFF',
+                muted: '#F1ECE5'
+              }
+            },
+            fontFamily: {
+              serif: ['Cormorant Garamond', 'Playfair Display', 'Georgia', 'serif'],
+              sans: ['Plus Jakarta Sans', 'Outfit', 'system-ui', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Clean CSS for Google Translate widget (hides intrusive default Google bars) -->
+    <style>
+      .goog-te-banner-frame.skiptranslate, 
+      .goog-te-banner-frame,
+      #goog-gt-tt, 
+      .goog-te-balloon-frame,
+      .goog-te-gadget {
+        display: none !important;
+        visibility: hidden !important;
+      }
+      body {
+        top: 0px !important;
+        position: static !important;
+      }
+      .goog-text-highlight {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      #google_translate_element {
+        display: none !important;
+      }
+      .skiptranslate > iframe {
+        display: none !important;
+      }
+    </style>
+
+    <!-- Google Translate Engine Setup -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        if (window.google && window.google.translate) {
+          new window.google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi,ar,ru,fr,es,de,bn,ur,fa,pt,it,zh-CN,ja',
+            autoDisplay: false
+          }, 'google_translate_element');
+        }
+      }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </head>
+  <body class="bg-[#FAF8F5] text-[#1E293B] antialiased selection:bg-[#C5A059] selection:text-white">
+    <!-- Hidden Mount Point for Translation Engine -->
+    <div id="google_translate_element"></div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
