@@ -15,6 +15,80 @@ import {
 } from 'lucide-react';
 import { useClinic } from '../context/ClinicContext';
 
+// Authentic Hair Care Protocols from Live DNA Clinic (https://dnaclinicindia.com/hair-care/)
+const DNA_HAIR_PROTOCOLS = {
+  prp: {
+    id: 'prp',
+    name: 'PRP Hair Therapy',
+    shortName: 'PRP Therapy',
+    icon: '💉',
+    badge: 'Signature (Dr. Zoya Rana)',
+    headline: 'Autologous Platelet-Rich Plasma Therapy',
+    description: 'Concentrated healing platelets from your own blood injected into shrinking follicles to awaken hair regrowth.',
+    timeline: '3–4 Sittings • Visible in 4–6 Wks',
+    concerns: ['Chronic Hair Fall', 'Crown Thinning', 'Dormant Roots', 'Widening Parting'],
+    quote: '“I had hair fall for 3 years. Dr. Zoya Rana suggested PRP, and in only 3–4 sittings my hair fall completely stopped and regrowth is amazing!”',
+    reviewer: 'Google Verified Patient Review',
+    color: '#06B6D4'
+  },
+  fall: {
+    id: 'fall',
+    name: 'Hair Fall Treatment',
+    shortName: 'Hair Fall Control',
+    icon: '🛡️',
+    badge: 'Follicle Anchoring',
+    headline: 'Clinically Guided Hair Fall Arrest Protocol',
+    description: 'Medically targeted treatment stopping active shedding, reinforcing hair anchors, and nourishing weak roots.',
+    timeline: 'Shedding Arrested in 3–4 Wks',
+    concerns: ['Excessive Daily Shedding', 'Brittle Hair Shafts', 'Telogen Effluvium', 'Nutritional Loss'],
+    quote: '“Hair fall controlled within 4 weeks with personalized treatment plan.”',
+    reviewer: 'DNA Clinic Patient Verification',
+    color: '#10B981'
+  },
+  scalp: {
+    id: 'scalp',
+    name: 'Scalp Treatment & Detox',
+    shortName: 'Scalp & Dandruff',
+    icon: '🧴',
+    badge: 'Anti-Dandruff & Infection',
+    headline: 'Deep Follicular Pore & Scalp Cleansing',
+    description: 'Medical cleansing resolving stubborn dandruff flakes, seborrheic dermatitis, and clarifying clogged pores.',
+    timeline: '1–2 Sessions for Clear Scalp',
+    concerns: ['Stubborn Dandruff', 'Itchy Irritated Scalp', 'Sebum Buildup', 'Scalp Infections'],
+    quote: '“Complete relief from chronic dandruff and itchy scalp issues.”',
+    reviewer: 'Verified Clinical Feedback',
+    color: '#8B5CF6'
+  },
+  gfc: {
+    id: 'gfc',
+    name: 'Hair Growth Therapy (GFC)',
+    shortName: 'GFC Therapy',
+    icon: '⚡',
+    badge: 'Next-Gen Regenerative',
+    headline: 'Acellular Growth Factor Concentrate',
+    description: 'Highly purified growth factors with zero RBCs for faster follicle stimulation and maximum thickness.',
+    timeline: '3 Sessions • High Density',
+    concerns: ['Pattern Baldness', 'Miniaturized Thin Hair', 'Low Follicle Density', 'Alopecia'],
+    quote: '“Noticeably thicker hair strands and active new baby hairs around temples.”',
+    reviewer: 'Certified Hair Specialist Case',
+    color: '#F59E0B'
+  },
+  transplant: {
+    id: 'transplant',
+    name: 'Hair Transplant Consult',
+    shortName: 'Hair Transplant',
+    icon: '📐',
+    badge: 'Permanent Coverage',
+    headline: 'Natural Hairline Restoration & FUE',
+    description: 'Permanent surgical redistribution of healthy donor follicles for natural, dense hairline reconstruction.',
+    timeline: 'Permanent Lifetime Regrowth',
+    concerns: ['Receding Hairline / M-Shape', 'Advanced Bald Patches', 'Loss of Frontal Density'],
+    quote: '“Natural hairline designed with surgical precision and dense placement.”',
+    reviewer: 'Hair Restoration Record',
+    color: '#C5A059'
+  }
+};
+
 // 4 Cinematic Treatment Dimensions with exact anatomical camera targets & overlays
 const AESTHETIC_DIMENSIONS = [
   {
@@ -51,7 +125,7 @@ const AESTHETIC_DIMENSIONS = [
     icon: '🦷',
     color: '#10B981',
     badgeText: 'Dental Arch Focus',
-    cameraTarget: { rotY: 0.0, rotX: 0.18, posZ: 2.7 }, // Zoomed close on mouth
+    cameraTarget: { rotY: 0.0, rotX: 0.18, posZ: 2.7 },
     hotspot3D: new THREE.Vector3(0, -0.42, 1.05),
     doctor: 'Dr. Varsha Jha',
     doctorRole: 'Lead Dental Surgeon & Smile Specialist',
@@ -70,26 +144,26 @@ const AESTHETIC_DIMENSIONS = [
   {
     id: 'hair',
     num: '03',
-    title: 'Scalp & Follicle Restoration',
-    subtitle: 'Autologous Cold-PRP & GFC Therapy',
-    tagline: 'Arrest shedding, awaken dormant follicles, and regrow natural hair density.',
+    title: 'Scalp & Hair Care Center',
+    subtitle: 'Medically Guided PRP, GFC & Scalp Therapy (dnaclinicindia.com/hair-care)',
+    tagline: 'Control hair fall, improve scalp health, and restore natural hair growth.',
     icon: '🌿',
     color: '#06B6D4',
-    badgeText: 'Scalp & Crown View',
-    cameraTarget: { rotY: 0.0, rotX: -0.54, posZ: 3.0 }, // Tilted down looking at scalp
+    badgeText: 'Scalp & Hair View',
+    cameraTarget: { rotY: 0.0, rotX: -0.56, posZ: 3.0 },
     hotspot3D: new THREE.Vector3(0, 1.05, 0.45),
-    doctor: 'Dr. Zoya Talat',
-    doctorRole: 'Associate Specialist & Laser Cosmetologist',
-    doctorImg: '/images/dr_zoya_talat.png',
+    doctor: 'Dr. Zoya Rana',
+    doctorRole: 'Director & Certified Hair Specialist',
+    doctorImg: '/images/dr_zoya_rana.png',
     baBefore: '/images/hair_rejuvenation.png',
     baAfter: '/images/hair_rejuvenation.png',
-    stats: { primary: '+45%', label: 'Verified Hair Density Boost', time: 'Monthly' },
-    focusDescription: 'Focused on Trichology & Scalp Crown: Reactivating dormant hair roots, micro-nutrient delivery, and concentrated growth factor injections.',
+    stats: { primary: '4–6 Wks', label: 'Visible Growth Timeline', time: '100% Safe' },
+    focusDescription: 'Focused on DNA Hair Care: Medically guided treatments to control hair fall, treat scalp infections, and stimulate natural follicle regrowth.',
     highlights: [
-      'Concentrated Growth Factor (GFC) Injections',
-      'Clinical Cold-PRP Platelet Regeneration',
-      'Microneedling Mesotherapy Nutrient Drive',
-      'Permanent Natural Hairline Transplant Consult'
+      'PRP Hair Therapy (Dr. Zoya Signature)',
+      'Hair Fall Arrest & Root Strengthening',
+      'Scalp Treatment & Dandruff Infection Detox',
+      'Hair Growth Therapy (GFC Concentrates)'
     ]
   },
   {
@@ -101,7 +175,7 @@ const AESTHETIC_DIMENSIONS = [
     icon: '💎',
     color: '#E11D48',
     badgeText: 'Mandibular Profile',
-    cameraTarget: { rotY: -0.62, rotX: 0.08, posZ: 3.2 }, // 3/4 Jawline Profile
+    cameraTarget: { rotY: -0.62, rotX: 0.08, posZ: 3.2 },
     hotspot3D: new THREE.Vector3(-0.6, -0.6, 0.75),
     doctor: 'Dr. Zoya Rana',
     doctorRole: 'Director & Chief Aesthetic Physician',
@@ -126,12 +200,14 @@ export const Hero3DAestheticExperience = () => {
 
   // States
   const [activeDimIndex, setActiveDimIndex] = useState(0);
+  const [hairSubProtocol, setHairSubProtocol] = useState('prp'); // 'prp', 'fall', 'scalp', 'gfc', 'transplant' from live site
   const [sliderPos, setSliderPos] = useState(50); // Before/After slider %
   const [isLoading, setIsLoading] = useState(true);
   const [screenHotspots, setScreenHotspots] = useState([]);
   const [isAutoSpin, setIsAutoSpin] = useState(false); // AUTO ROTATION OFF BY DEFAULT per user request
 
   const activeDim = AESTHETIC_DIMENSIONS[activeDimIndex];
+  const activeHairData = DNA_HAIR_PROTOCOLS[hairSubProtocol] || DNA_HAIR_PROTOCOLS.prp;
 
   // Animation & Three.js Refs
   const isAutoSpinRef = useRef(false);
@@ -853,23 +929,82 @@ export const Hero3DAestheticExperience = () => {
               </div>
             </div>
 
-            {/* Verified Clinical Procedures Checklist */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
-                Doctor's Prescribed Modalities:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {activeDim.highlights.map((item, idx) => (
-                  <div 
-                    key={idx}
-                    className="flex items-center space-x-2 text-xs text-[#0F172A] bg-white/90 p-2 rounded-xl border border-[#EAE4DC] shadow-2xs"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
-                    <span className="truncate font-medium">{item}</span>
+            {/* DEDICATED HAIR CARE PROTOCOL EXPLORER (From dnaclinicindia.com/hair-care/) */}
+            {activeDim.id === 'hair' ? (
+              <div className="space-y-3 bg-[#FAF8F5] p-3.5 rounded-2xl border border-[#EAE4DC]">
+                {/* 5 Hair Care Sub-Protocols Switcher */}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {Object.values(DNA_HAIR_PROTOCOLS).map((proto) => {
+                    const isProtoActive = hairSubProtocol === proto.id;
+                    return (
+                      <button
+                        key={proto.id}
+                        onClick={() => setHairSubProtocol(proto.id)}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1 ${
+                          isProtoActive
+                            ? 'bg-[#090D14] text-white shadow-sm border border-[#06B6D4]'
+                            : 'bg-white text-[#475569] border border-[#E2D9CC] hover:border-[#06B6D4]'
+                        }`}
+                      >
+                        <span>{proto.icon}</span>
+                        <span>{proto.shortName}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Active Hair Protocol Details */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#0F172A]">
+                      {activeHairData.headline}
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-[#0891B2] border border-[#06B6D4]/40">
+                      {activeHairData.timeline}
+                    </span>
                   </div>
-                ))}
+                  <p className="text-[11px] text-[#64748B] leading-relaxed">
+                    {activeHairData.description}
+                  </p>
+
+                  {/* Concerns Addressed */}
+                  <div className="flex flex-wrap gap-1 pt-1">
+                    <span className="text-[10px] font-semibold text-[#64748B] mr-1">Concerns:</span>
+                    {activeHairData.concerns.map((con, idx) => (
+                      <span key={idx} className="text-[10px] bg-white px-2 py-0.5 rounded-md border border-[#EAE4DC] text-[#0F172A] font-medium">
+                        ✓ {con}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Live Google Review Evidence */}
+                  <div className="mt-2 bg-[#F0FDFA] p-2.5 rounded-xl border border-[#99F6E4] text-[11px] text-[#134E4A] italic leading-tight space-y-1">
+                    <div>{activeHairData.quote}</div>
+                    <div className="text-[9px] font-bold not-italic text-[#0D9488] uppercase tracking-wider">
+                      ★ {activeHairData.reviewer}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* Verified Clinical Procedures Checklist for other dimensions */
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
+                  Doctor's Prescribed Modalities:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {activeDim.highlights.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      className="flex items-center space-x-2 text-xs text-[#0F172A] bg-white/90 p-2 rounded-xl border border-[#EAE4DC] shadow-2xs"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
+                      <span className="truncate font-medium">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Doctor Signature & Instant Action Bar */}
             <div className="pt-3 border-t border-[#EAE4DC] flex flex-wrap items-center justify-between gap-3">
@@ -895,11 +1030,11 @@ export const Hero3DAestheticExperience = () => {
 
               {/* Direct Booking Action */}
               <button
-                onClick={() => openBookingModal(activeDim.title)}
+                onClick={() => openBookingModal(activeDim.id === 'hair' ? activeHairData.name : activeDim.title)}
                 className="btn-gold px-5 py-2.5 rounded-full text-xs font-bold flex items-center space-x-2 shadow-md hover:shadow-xl transition-all cursor-pointer group"
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Book This Protocol</span>
+                <span>Book {activeDim.id === 'hair' ? activeHairData.shortName : 'This Protocol'}</span>
                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
               </button>
             </div>
