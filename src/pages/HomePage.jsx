@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useClinic } from '../context/ClinicContext';
-import { Interactive3DFace } from '../components/Interactive3DFace';
+import { Hero3DAestheticExperience } from '../components/Hero3DAestheticExperience';
 import { 
   Sparkles, 
   Calendar, 
@@ -169,14 +169,13 @@ export const HomePage = () => {
   return (
     <div className="space-y-16 sm:space-y-24">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-6 sm:pt-12 pb-12 sm:pb-20 bg-gradient-to-b from-[#FAF8F5] via-[#F5EFE6]/60 to-[#FAF8F5] border-b border-[#EAE4DC]">
-        <div className="clinic-container">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-            
-            {/* Left Column: Headline & Value Prop */}
-            <div className="lg:col-span-5 space-y-6 text-left">
-              
+      {/* 1. HERO SECTION: 3D AESTHETIC CLINICAL SANCTUARY */}
+      <section className="relative overflow-hidden pt-6 sm:pt-10 pb-14 sm:pb-20 bg-gradient-to-b from-[#FAF8F5] via-[#F5EFE6]/40 to-[#FAF8F5] border-b border-[#EAE4DC]">
+        <div className="clinic-container space-y-8 sm:space-y-10">
+          
+          {/* Top Hero Bar: Headline, Intro Value Prop & Quick Booking */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-2xl text-left">
               {/* Luxury Badge */}
               <div className="inline-flex items-center space-x-2 bg-white/95 border border-[#C5A059]/50 px-3.5 py-1.5 rounded-full shadow-xs">
                 <img src="/images/dna_logo.png" alt="DNA Clinic" className="w-4 h-4 object-contain" />
@@ -186,59 +185,56 @@ export const HomePage = () => {
               </div>
 
               {/* Main Headline */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0F172A] leading-[1.12] font-semibold tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#0F172A] leading-[1.12] font-semibold tracking-tight">
                 {clinicData.hero.titlePrimary}{' '}
-                <span className="italic block mt-1 font-normal text-[#C5A059] font-serif">
+                <span className="italic font-normal text-[#C5A059] font-serif block sm:inline">
                   {clinicData.hero.titleHighlight}
                 </span>
               </h1>
 
               {/* Subtext */}
-              <p className="text-sm sm:text-base text-[#475569] max-w-xl leading-relaxed">
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed max-w-xl">
                 {clinicData.hero.description}
               </p>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <button
-                  onClick={() => openBookingModal()}
-                  className="btn-gold px-7 py-3.5 rounded-full text-sm font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>Book Consultation (₹500 / ₹1,000)</span>
-                </button>
-
-                <button
-                  onClick={() => navigateTo('ai-analyzer')}
-                  className="px-6 py-3.5 rounded-full text-sm font-semibold bg-white border border-[#C5A059]/50 text-[#0F172A] hover:bg-[#F5EFE6] transition-all flex items-center space-x-2 shadow-xs"
-                >
-                  <Camera className="w-4 h-4 text-[#C5A059]" />
-                  <span>Try AI Smile & Skin Scan</span>
-                </button>
-              </div>
-
-              {/* Key Trust Stats Bar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#E8E2D9]">
-                {clinicData.hero.stats.map((stat, idx) => (
-                  <div key={idx} className="space-y-0.5">
-                    <div className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
-                      {stat.value}
-                    </div>
-                    <div className="text-[11px] text-[#64748B] font-medium leading-tight">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
             </div>
 
-            {/* Right Column: 3D Interactive Rotating Face & Clinical Anatomy Explorer */}
-            <div className="lg:col-span-7 relative">
-              <Interactive3DFace />
-            </div>
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <button
+                onClick={() => openBookingModal()}
+                className="btn-gold px-6 sm:px-7 py-3.5 rounded-full text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Book Consultation (₹500 / ₹1,000)</span>
+              </button>
 
+              <button
+                onClick={() => navigateTo('ai-analyzer')}
+                className="px-5 sm:px-6 py-3.5 rounded-full text-xs sm:text-sm font-semibold bg-white border border-[#C5A059]/50 text-[#0F172A] hover:bg-[#F5EFE6] transition-all flex items-center space-x-2 shadow-xs"
+              >
+                <Camera className="w-4 h-4 text-[#C5A059]" />
+                <span>Try AI Smile & Skin Scan</span>
+              </button>
+            </div>
           </div>
+
+          {/* Grand Centerpiece: 3D Aesthetic Experience with Before/After Drag Slider */}
+          <Hero3DAestheticExperience />
+
+          {/* Key Trust Stats Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#E8E2D9]">
+            {clinicData.hero.stats.map((stat, idx) => (
+              <div key={idx} className="space-y-0.5">
+                <div className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
+                  {stat.value}
+                </div>
+                <div className="text-[11px] text-[#64748B] font-medium leading-tight">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </section>
 
