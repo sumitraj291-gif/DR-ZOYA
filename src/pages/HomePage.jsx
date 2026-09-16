@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useClinic } from '../context/ClinicContext';
 import { 
   Sparkles, 
@@ -19,7 +19,9 @@ import {
   UserCheck,
   Stethoscope,
   Microscope,
-  Check
+  Check,
+  Zap,
+  Activity
 } from 'lucide-react';
 
 const InstagramIcon = ({ className = "w-4 h-4" }) => (
@@ -32,6 +34,111 @@ export const HomePage = () => {
   const { clinicData, navigateTo, openBookingModal } = useClinic();
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
   const [homeGalleryFilter, setHomeGalleryFilter] = useState('All');
+
+  // Interactive 3D Hero Clinical Pillar Showcase
+  const [heroPillar, setHeroPillar] = useState('skin'); // 'skin', 'dental', 'hair'
+  const [isHeroHovered, setIsHeroHovered] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  // Auto-cycle through the 3 clinical departments every 4.5 seconds
+  useEffect(() => {
+    if (isHeroHovered) return;
+    const pillars = ['skin', 'dental', 'hair'];
+    const timer = setInterval(() => {
+      setHeroPillar(prev => {
+        const nextIdx = (pillars.indexOf(prev) + 1) % pillars.length;
+        return pillars[nextIdx];
+      });
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [isHeroHovered]);
+
+  const handleHeroMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
+    setTilt({ x, y });
+  };
+
+  const handleHeroMouseLeave = () => {
+    setIsHeroHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
+  // Hero Pillar Configurations
+  const heroPillars = {
+    skin: {
+      id: 'skin',
+      tabLabel: 'Medical Skin & Laser',
+      icon: '✨',
+      badge: 'Advanced Dermatology',
+      doctorName: 'Dr. Zoya Rana',
+      doctorRole: 'Director & Chief Aesthetic Physician',
+      image: '/images/dr_zoya_rana.png',
+      hudTitle: '3D Dermal Scanning Active',
+      hudMetric1: 'Hydra Infusion: 99.4% Deep',
+      hudMetric2: 'Dermal Barrier: Rejuvenated',
+      accentColor: '#C5A059',
+      floatingBadge1: {
+        title: 'Glass Skin Radiance',
+        desc: 'US-FDA Laser & HydraFacial'
+      },
+      floatingBadge2: {
+        img: '/images/ba_skin_after.png',
+        title: 'Acne & Texture Reset',
+        desc: '6 Wks • Verified Clearance'
+      },
+      tags: ['HydraFacial MD', 'Pico Laser', 'Melasma Peels', 'Glass Skin']
+    },
+    dental: {
+      id: 'dental',
+      tabLabel: 'Digital Smile Makeover',
+      icon: '🦷',
+      badge: 'Cosmetic Dentistry',
+      doctorName: 'Dr. Varsha Jha',
+      doctorRole: 'Lead Dental Surgeon & Smile Specialist',
+      image: '/images/dr_varsha_jha.png',
+      hudTitle: '3D Digital Smile Arch Calibration',
+      hudMetric1: 'Ceramic Margins: 0.1mm Precision',
+      hudMetric2: 'Bite Symmetry: 100% Harmonized',
+      accentColor: '#10B981',
+      floatingBadge1: {
+        title: '3D Digital Smile Studio',
+        desc: 'Hollywood Smile Pre-Visualized'
+      },
+      floatingBadge2: {
+        img: '/images/ba_smile_after.png',
+        title: 'Ceramic Veneers Result',
+        desc: '2 Visits • Lifetime Durability'
+      },
+      tags: ['Invisible Aligners', 'Ceramic Veneers', 'Painless RCT', 'Whitening']
+    },
+    hair: {
+      id: 'hair',
+      tabLabel: 'Scalp Hair Restoration',
+      icon: '🌿',
+      badge: 'Trichology & Scalp Clinic',
+      doctorName: 'Dr. Zoya Talat',
+      doctorRole: 'Associate Specialist & Laser Cosmetologist',
+      image: '/images/dr_zoya_talat.png',
+      hudTitle: 'Trichoscopy Scalp Follicle HUD',
+      hudMetric1: 'Follicle Reactivation: Active',
+      hudMetric2: 'GFC Nutrient Absorption: 98%',
+      accentColor: '#06B6D4',
+      floatingBadge1: {
+        title: 'Scalp PRP & GFC Protocol',
+        desc: 'Concentrated Growth Factors'
+      },
+      floatingBadge2: {
+        img: '/images/hair_rejuvenation.png',
+        title: 'Density Boost Protocol',
+        desc: '45% Increase • Shedding Arrested'
+      },
+      tags: ['Scalp PRP Therapy', 'GFC Injections', 'Hair Fall Arrest', 'Follicle Boost']
+    }
+  };
+
+  const activeHeroData = heroPillars[heroPillar];
 
   // Core Service Pillars from Live DNA Clinic
   const specialties = [
@@ -125,44 +232,197 @@ export const HomePage = () => {
 
             </div>
 
-            {/* Right Column: Imagery with Luxury Frame */}
+            {/* Right Column: 3D Interactive Animated Showcase for Skin, Smile & Hair */}
             <div className="lg:col-span-5 relative">
               <div className="relative mx-auto max-w-md lg:max-w-none">
                 
-                {/* Background decorative glow */}
-                <div className="absolute -inset-4 bg-gradient-to-tr from-[#C5A059]/20 via-[#DFBE7B]/10 to-transparent rounded-3xl blur-2xl -z-10" />
+                {/* 1. Quick Department Switcher Tabs */}
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-3.5 bg-white/80 p-1.5 rounded-2xl border border-[#E8E2D9] shadow-xs backdrop-blur-md">
+                  {[
+                    { key: 'skin', label: 'Skin & Laser', icon: '✨', color: '#C5A059' },
+                    { key: 'dental', label: 'Smile Design', icon: '🦷', color: '#10B981' },
+                    { key: 'hair', label: 'Hair & PRP', icon: '🌿', color: '#06B6D4' }
+                  ].map(tab => {
+                    const isActive = heroPillar === tab.key;
+                    return (
+                      <button
+                        key={tab.key}
+                        onClick={() => {
+                          setHeroPillar(tab.key);
+                          setIsHeroHovered(true);
+                        }}
+                        className={`flex-1 flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          isActive
+                            ? 'bg-[#090D14] text-white shadow-md scale-[1.02]'
+                            : 'text-[#64748B] hover:text-[#0F172A] hover:bg-[#F5EFE6]/60'
+                        }`}
+                      >
+                        <span>{tab.icon}</span>
+                        <span className="truncate">{tab.label}</span>
+                        {isActive && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059] animate-pulse" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
 
-                {/* Primary Doctor Portrait (Dr. Zoya Rana from live site) */}
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-white">
-                  <img
-                    src="/images/dr_zoya_rana.png"
-                    alt="Dr. Zoya Rana - Director DNA Clinic"
-                    className="w-full h-[420px] sm:h-[480px] object-cover object-top hover:scale-102 transition-transform duration-700"
+                {/* 2. Interactive 3D Holographic Stage */}
+                <div
+                  onMouseMove={handleHeroMouseMove}
+                  onMouseEnter={() => setIsHeroHovered(true)}
+                  onMouseLeave={handleHeroMouseLeave}
+                  style={{
+                    transform: `perspective(1000px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
+                    transition: isHeroHovered ? 'transform 0.1s ease-out' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                  className="relative group cursor-pointer"
+                >
+                  {/* Background Dynamic Ambient Glow */}
+                  <div 
+                    className="absolute -inset-4 rounded-3xl blur-2xl opacity-60 transition-all duration-700 -z-10"
+                    style={{
+                      background: `radial-gradient(circle, ${activeHeroData.accentColor}35 0%, rgba(223, 190, 123, 0.1) 50%, transparent 75%)`
+                    }}
                   />
-                  
-                  {/* Floating Doctor Credentials Card */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-[#C5A059]/30">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-serif font-bold text-[#0F172A] text-sm">
-                          {clinicData.profile.doctorName}
+
+                  {/* Main Portrait Frame with Medical 3D Scanner overlay */}
+                  <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-gradient-to-b from-[#FAF8F5] to-[#F1ECE4]">
+                    
+                    {/* Dynamic Specialist Image */}
+                    <div className="relative h-[430px] sm:h-[490px] w-full overflow-hidden bg-white">
+                      <img
+                        key={activeHeroData.id}
+                        src={activeHeroData.image}
+                        alt={`${activeHeroData.doctorName} - ${activeHeroData.doctorRole}`}
+                        className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-103"
+                      />
+
+                      {/* Animated Laser Scanning Beam (Vertical Sweep) */}
+                      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                        <div className="w-full h-1 bg-gradient-to-r from-transparent via-[#C5A059] to-transparent shadow-[0_0_15px_#C5A059] opacity-75 animate-laser-scan" />
+                      </div>
+
+                      {/* Sci-Fi Medical HUD Reticles & Target Crosshairs */}
+                      <div className="absolute inset-0 pointer-events-none p-4 flex flex-col justify-between">
+                        {/* Top HUD Header */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2 bg-[#090D14]/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                            <span className="text-[10px] font-mono tracking-wider uppercase text-emerald-300 font-semibold">
+                              {activeHeroData.hudTitle}
+                            </span>
+                          </div>
+
+                          {/* Tech Orbit Icon */}
+                          <div className="w-7 h-7 rounded-full border border-[#C5A059]/60 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-orbit-spin">
+                            <Activity className="w-3.5 h-3.5 text-[#C5A059]" />
+                          </div>
                         </div>
-                        <div className="text-[10px] text-[#C5A059] font-medium uppercase tracking-wider">
-                          {clinicData.profile.doctorTitle}
+
+                        {/* Middle HUD Crosshairs */}
+                        <div className="flex justify-between items-center opacity-40 px-2">
+                          <div className="w-3 h-3 border-l-2 border-t-2 border-[#C5A059]" />
+                          <div className="text-[9px] font-mono text-white tracking-widest uppercase bg-black/50 px-2 py-0.5 rounded">
+                            DNA AESTHETIC PROTOCOL
+                          </div>
+                          <div className="w-3 h-3 border-r-2 border-b-2 border-[#C5A059]" />
+                        </div>
+
+                        {/* Bottom HUD Real-time Clinical Metrics */}
+                        <div className="flex items-center justify-between gap-2 text-[10px] font-mono text-white/90">
+                          <span className="bg-[#090D14]/75 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10">
+                            {activeHeroData.hudMetric1}
+                          </span>
+                          <span className="bg-[#090D14]/75 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10">
+                            {activeHeroData.hudMetric2}
+                          </span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-1 bg-[#FAF6EE] px-2 py-1 rounded-full border border-[#C5A059]/30">
-                        <Star className="w-3 h-3 text-[#C5A059] fill-[#C5A059]" />
+                    </div>
+
+                    {/* Primary Doctor Credentials Bar */}
+                    <div className="p-4 bg-white border-t border-[#EAE4DC] flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-serif font-bold text-[#0F172A] text-base">
+                            {activeHeroData.doctorName}
+                          </h4>
+                          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-[#FAF6EE] text-[#C5A059] border border-[#C5A059]/30">
+                            {activeHeroData.badge}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-[#64748B] font-medium tracking-wide mt-0.5">
+                          {activeHeroData.doctorRole}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-1 bg-[#FAF6EE] px-2.5 py-1 rounded-full border border-[#C5A059]/30 shadow-xs">
+                        <Star className="w-3.5 h-3.5 text-[#C5A059] fill-[#C5A059]" />
                         <span className="text-xs font-bold text-[#0F172A]">4.9</span>
                       </div>
                     </div>
+
                   </div>
+
+                  {/* 3. Floating 3D Badge (Top-Left) - Core Pillar Feature */}
+                  <div className="absolute -top-4 -left-4 sm:-left-6 bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-[#C5A059]/40 flex items-center space-x-3 animate-float-slow max-w-[220px]">
+                    <div 
+                      className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shadow-sm"
+                      style={{ backgroundColor: `${activeHeroData.accentColor}18` }}
+                    >
+                      {activeHeroData.icon}
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#0F172A] leading-tight">
+                        {activeHeroData.floatingBadge1.title}
+                      </div>
+                      <div className="text-[10px] text-[#64748B] font-medium leading-tight mt-0.5">
+                        {activeHeroData.floatingBadge1.desc}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4. Floating 3D Badge (Bottom-Right) - Verified Clinical Result Preview */}
+                  <div className="absolute -bottom-5 -right-3 sm:-right-6 bg-[#090D14] text-white p-2.5 rounded-2xl shadow-2xl border border-[#C5A059]/50 flex items-center space-x-3 animate-float-reverse max-w-[240px]">
+                    <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-white/20 shrink-0">
+                      <img
+                        src={activeHeroData.floatingBadge2.img}
+                        alt="Verified Clinical Result"
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-0 right-0 bg-[#C5A059] text-[8px] font-black text-black px-1 rounded-tl">
+                        VERIFIED
+                      </span>
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-white flex items-center space-x-1">
+                        <span>{activeHeroData.floatingBadge2.title}</span>
+                        <CheckCircle2 className="w-3 h-3 text-[#C5A059]" />
+                      </div>
+                      <div className="text-[10px] text-[#94A3B8] font-medium leading-tight mt-0.5">
+                        {activeHeroData.floatingBadge2.desc}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
-                {/* Floating Trust Badge Tag */}
-                <div className="absolute -top-3 -left-3 bg-[#090D14] text-white py-2 px-3.5 rounded-xl shadow-xl border border-[#C5A059]/40 flex items-center space-x-2">
-                  <ShieldCheck className="w-4 h-4 text-[#C5A059]" />
-                  <span className="text-[11px] font-semibold tracking-wide">Dehradun & Muzaffarnagar</span>
+                {/* 5. Interactive Treatment Pills for the Active Specialty */}
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B] mr-1">
+                    Featured:
+                  </span>
+                  {activeHeroData.tags.map((tag, i) => (
+                    <button
+                      key={i}
+                      onClick={() => openBookingModal(tag)}
+                      className="text-xs font-medium px-3 py-1 rounded-full bg-white border border-[#E2D9CC] text-[#0F172A] hover:border-[#C5A059] hover:bg-[#FAF6EE] transition-all shadow-2xs cursor-pointer flex items-center space-x-1"
+                    >
+                      <Sparkles className="w-2.5 h-2.5 text-[#C5A059]" />
+                      <span>{tag}</span>
+                    </button>
+                  ))}
                 </div>
 
               </div>
