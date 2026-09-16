@@ -34,7 +34,7 @@ export const Navbar = () => {
     { id: 'smile-makeover', label: 'Smile Makeover' },
     { id: 'about', label: 'About Dr. Zoya' },
     { id: 'ai-analyzer', label: 'AI Analyzer', badge: 'AI' },
-    { id: 'gallery', label: 'Results' },
+    { id: 'gallery', label: 'Gallery' },
     { id: 'contact', label: 'Contact' },
   ];
 

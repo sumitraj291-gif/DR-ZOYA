@@ -288,6 +288,141 @@ export const initialClinicData = {
     { id: "ig-5", image: "/images/insta_5.webp", title: "Clinic Treatment" }
   ],
 
+  gallery: [
+    {
+      id: "gal-1",
+      title: "Incisal Edge Ceramic Smile Restoration",
+      category: "Smile",
+      type: "before_after",
+      beforeImage: "/images/ba_smile_before.png",
+      afterImage: "/images/ba_smile_after.png",
+      description: "Full cosmetic dental rehabilitation restoring symmetry, bright natural shade, and incisal translucency.",
+      timeline: "2 Clinical Sittings",
+      clinician: "Dr. Varsha Jha & Dr. Zoya Rana"
+    },
+    {
+      id: "gal-2",
+      title: "Active Acne & Dermal Texture Reset",
+      category: "Skin",
+      type: "before_after",
+      beforeImage: "/images/ba_skin_before.png",
+      afterImage: "/images/ba_skin_after.png",
+      description: "Deep vortex pore clearance with customized medical facial protocol and barrier restoration.",
+      timeline: "6 Weeks Protocol",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-3",
+      title: "State-of-the-Art Aesthetic Suite",
+      category: "Clinic & Tech",
+      type: "single",
+      image: "/images/dna_banner1.png",
+      description: "Hospital-grade multi-stage sterilization and ergonomic patient consultation suites.",
+      timeline: "Infrastructure",
+      clinician: "DNA Clinics (Dehradun & Muzaffarnagar)"
+    },
+    {
+      id: "gal-4",
+      title: "Painless Endodontics & Cosmetic Operatory",
+      category: "Clinic & Tech",
+      type: "single",
+      image: "/images/general_dentistry.png",
+      description: "Microscope-assisted dentistry and computerized digital smile design suites.",
+      timeline: "Infrastructure",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-5",
+      title: "Laser Dermatology & Medical Facial Station",
+      category: "Skin",
+      type: "single",
+      image: "/images/advanced_facials.png",
+      description: "US-FDA certified laser technology for targeted pigment and anti-aging skin clearance.",
+      timeline: "Infrastructure",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-6",
+      title: "PRP & Scalp Rejuvenation Unit",
+      category: "Hair",
+      type: "single",
+      image: "/images/hair_rejuvenation.png",
+      description: "Clinical growth factor concentrate and microneedling therapy for hair restoration.",
+      timeline: "Infrastructure",
+      clinician: "Dr. Zoya Talat"
+    },
+    {
+      id: "gal-7",
+      title: "Aesthetic Laser Technology Suite",
+      category: "Clinic & Tech",
+      type: "single",
+      image: "/images/dna_banner2.png",
+      description: "Non-invasive laser facial rejuvenation and collagen induction therapy.",
+      timeline: "Technology",
+      clinician: "DNA Clinic"
+    },
+    {
+      id: "gal-8",
+      title: "Clinical Hair Protocol Demonstration",
+      category: "Hair",
+      type: "single",
+      image: "/images/dna_banner3.png",
+      description: "Scalp revitalization and follicular strengthening with growth factor protocols.",
+      timeline: "Clinical Care",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-9",
+      title: "Instagram Case: Skin Rejuvenation Glow",
+      category: "Instagram",
+      type: "single",
+      image: "/images/insta_1.webp",
+      description: "Immediate post-treatment radiant glow after clinical hydra dermabrasion.",
+      timeline: "Live Feed",
+      clinician: "@dnaclinicindia"
+    },
+    {
+      id: "gal-10",
+      title: "Instagram Case: Smile Designing Veneers",
+      category: "Instagram",
+      type: "single",
+      image: "/images/insta_2.webp",
+      description: "Ultra-thin ceramic veneers fitted with precision digital margins.",
+      timeline: "Live Feed",
+      clinician: "@dnaclinicindia"
+    },
+    {
+      id: "gal-11",
+      title: "Instagram Case: Clinical Hair Density Protocol",
+      category: "Instagram",
+      type: "single",
+      image: "/images/insta_3.webp",
+      description: "Follicular density boost after sessions of scalp PRP therapy.",
+      timeline: "Live Feed",
+      clinician: "@dnaclinicindia"
+    },
+    {
+      id: "gal-12",
+      title: "Instagram Case: Dermal Glow Transformation",
+      category: "Instagram",
+      type: "single",
+      image: "/images/insta_4.webp",
+      description: "Clearance of blemishes, even skin tone, and luminous hydration.",
+      timeline: "Live Feed",
+      clinician: "@dnaclinicindia"
+    },
+    {
+      id: "gal-13",
+      title: "Instagram Case: Doctor-Led Treatment Session",
+      category: "Instagram",
+      type: "single",
+      image: "/images/insta_5.webp",
+      description: "Doctor-led procedural care with gentle numbing and patient comfort.",
+      timeline: "Live Feed",
+      clinician: "@dnaclinicindia"
+    }
+  ],
+
   faqs: [
     {
       question: "Where are DNA Clinics located?",

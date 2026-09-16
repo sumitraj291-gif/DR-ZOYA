@@ -18,6 +18,9 @@ export const ClinicProvider = ({ children }) => {
         const parsed = JSON.parse(saved);
         // Ensure the cache is the authentic DNA Clinic India data with real contact (+91 63953 77355)
         if (parsed?.profile?.contact?.phone?.includes('63953') && parsed?.doctorTeam?.length >= 3) {
+          if (!parsed.gallery || parsed.gallery.length === 0) {
+            parsed.gallery = initialClinicData.gallery;
+          }
           return parsed;
         }
       }
@@ -167,6 +170,36 @@ export const ClinicProvider = ({ children }) => {
     showToast('Patient review deleted.');
   };
 
+  // Gallery & Media CMS Mutators
+  const addGalleryItem = (newItem) => {
+    const item = {
+      id: `gal-${Date.now()}`,
+      ...newItem
+    };
+    setClinicData(prev => ({
+      ...prev,
+      gallery: [item, ...(prev.gallery || [])]
+    }));
+    showToast('New gallery media added!');
+    return item;
+  };
+
+  const updateGalleryItem = (id, updatedFields) => {
+    setClinicData(prev => ({
+      ...prev,
+      gallery: (prev.gallery || []).map(item => item.id === id ? { ...item, ...updatedFields } : item)
+    }));
+    showToast('Gallery item updated successfully!');
+  };
+
+  const deleteGalleryItem = (id) => {
+    setClinicData(prev => ({
+      ...prev,
+      gallery: (prev.gallery || []).filter(item => item.id !== id)
+    }));
+    showToast('Gallery item removed from clinic showcase.');
+  };
+
   const resetToDefaults = () => {
     if (window.confirm("Are you sure you want to reset all CMS content to original clinic defaults? Any custom edits will be reverted.")) {
       setClinicData(initialClinicData);
@@ -227,6 +260,9 @@ export const ClinicProvider = ({ children }) => {
         addTestimonial,
         updateTestimonial,
         deleteTestimonial,
+        addGalleryItem,
+        updateGalleryItem,
+        deleteGalleryItem,
         resetToDefaults,
         appointments,
         addAppointment,

@@ -31,6 +31,7 @@ const InstagramIcon = ({ className = "w-4 h-4" }) => (
 export const HomePage = () => {
   const { clinicData, navigateTo, openBookingModal } = useClinic();
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+  const [homeGalleryFilter, setHomeGalleryFilter] = useState('All');
 
   // Core Service Pillars from Live DNA Clinic
   const specialties = [
@@ -416,6 +417,115 @@ export const HomePage = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 5B. CLINICAL GALLERY & OUTCOMES SHOWCASE */}
+      <section className="clinic-container">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
+          <div className="inline-flex items-center space-x-2 bg-[#FAF6EE] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#C5A059] uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Documented Clinic Gallery</span>
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
+            Real Patient Cases & Modern Facilities
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+            From Hollywood smile architecture to advanced clinical laser suites at Dehradun and Muzaffarnagar.
+          </p>
+
+          {/* Quick Filter Pills */}
+          <div className="flex flex-wrap justify-center gap-1.5 pt-2">
+            {['All', 'Smile', 'Skin', 'Clinic & Tech'].map(filter => (
+              <button
+                key={filter}
+                onClick={() => setHomeGalleryFilter(filter)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  homeGalleryFilter === filter
+                    ? 'bg-[#0F172A] text-[#C5A059] shadow-xs'
+                    : 'bg-[#FAF8F5] text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(clinicData.gallery || [])
+            .filter(item => homeGalleryFilter === 'All' || item.category === homeGalleryFilter)
+            .slice(0, 6)
+            .map(item => (
+              <div
+                key={item.id}
+                className="bg-white rounded-3xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+              >
+                {item.type === 'before_after' || (item.beforeImage && item.afterImage) ? (
+                  <div className="p-3.5 bg-[#FAF8F5] border-b border-[#EAE4DC]">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100">
+                        <img src={item.beforeImage} alt={`${item.title} - Before`} className="w-full h-full object-cover" />
+                        <span className="absolute top-2 left-2 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Before</span>
+                      </div>
+                      <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-[#C5A059]">
+                        <img src={item.afterImage} alt={`${item.title} - After`} className="w-full h-full object-cover" />
+                        <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[9px] font-extrabold px-1.5 py-0.5 rounded">After</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 border-b border-gray-100">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <span className="absolute bottom-2.5 left-3 text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white px-2 py-0.5 rounded-full">
+                      {item.category}
+                    </span>
+                  </div>
+                )}
+
+                <div className="p-5 space-y-2 text-left">
+                  <div className="flex items-center justify-between text-[11px] text-gray-400">
+                    <span className="font-bold text-[#C5A059] uppercase">{item.category}</span>
+                    {item.timeline && <span>{item.timeline}</span>}
+                  </div>
+                  <h4 className="font-serif text-base font-bold text-[#0F172A] leading-snug group-hover:text-[#C5A059] transition-colors">
+                    {item.title}
+                  </h4>
+                  <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="p-3.5 bg-[#FAF8F5] border-t border-[#EAE4DC] flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-gray-500 truncate max-w-[160px]">
+                    {item.clinician || "Dr. Zoya Rana"}
+                  </span>
+                  <button
+                    onClick={() => navigateTo('gallery')}
+                    className="text-[#C5A059] hover:underline font-bold text-xs flex items-center space-x-1"
+                  >
+                    <span>View Details</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
+
+        <div className="text-center pt-8">
+          <button
+            onClick={() => navigateTo('gallery')}
+            className="btn-obsidian px-8 py-3.5 rounded-full text-xs font-bold inline-flex items-center space-x-2 shadow-md hover:shadow-lg"
+          >
+            <span>Explore Complete DNA Gallery ({clinicData.gallery?.length || 13} Cases & Suites)</span>
+            <ArrowRight className="w-4 h-4 text-[#C5A059]" />
+          </button>
         </div>
       </section>
 

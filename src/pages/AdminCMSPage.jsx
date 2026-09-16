@@ -22,7 +22,10 @@ import {
   DollarSign, 
   Star,
   Check,
-  X
+  X,
+  Camera,
+  Layers,
+  Maximize2
 } from 'lucide-react';
 
 export const AdminCMSPage = () => {
@@ -35,6 +38,9 @@ export const AdminCMSPage = () => {
     deleteTreatment,
     addTestimonial,
     deleteTestimonial,
+    addGalleryItem,
+    updateGalleryItem,
+    deleteGalleryItem,
     resetToDefaults,
     appointments, 
     updateAppointmentStatus, 
@@ -82,6 +88,46 @@ export const AdminCMSPage = () => {
     date: 'September 2026',
     text: ''
   });
+
+  // Gallery CMS State
+  const [galleryCategoryFilter, setGalleryCategoryFilter] = useState('All');
+  const [gallerySearch, setGallerySearch] = useState('');
+  const [isAddingGallery, setIsAddingGallery] = useState(false);
+  const [newGalleryItem, setNewGalleryItem] = useState({
+    title: '',
+    category: 'Smile',
+    type: 'before_after',
+    beforeImage: '/images/ba_smile_before.png',
+    afterImage: '/images/ba_smile_after.png',
+    image: '/images/dna_banner1.png',
+    description: '',
+    timeline: '2 Clinical Sittings',
+    clinician: 'Dr. Varsha Jha & Dr. Zoya Rana'
+  });
+
+  const [editingGalleryId, setEditingGalleryId] = useState(null);
+  const [editingGalleryForm, setEditingGalleryForm] = useState(null);
+
+  const availableImagePresets = [
+    { label: 'Smile Before', path: '/images/ba_smile_before.png' },
+    { label: 'Smile After', path: '/images/ba_smile_after.png' },
+    { label: 'Skin Before', path: '/images/ba_skin_before.png' },
+    { label: 'Skin After', path: '/images/ba_skin_after.png' },
+    { label: 'Banner 1', path: '/images/dna_banner1.png' },
+    { label: 'Banner 2', path: '/images/dna_banner2.png' },
+    { label: 'Banner 3', path: '/images/dna_banner3.png' },
+    { label: 'General Dentistry', path: '/images/general_dentistry.png' },
+    { label: 'Advanced Facials', path: '/images/advanced_facials.png' },
+    { label: 'Hair Rejuvenation', path: '/images/hair_rejuvenation.png' },
+    { label: 'Dr. Zoya Rana', path: '/images/dr_zoya_rana.png' },
+    { label: 'Dr. Zoya Talat', path: '/images/dr_zoya_talat.png' },
+    { label: 'Dr. Varsha Jha', path: '/images/dr_varsha_jha.png' },
+    { label: 'Insta 1', path: '/images/insta_1.webp' },
+    { label: 'Insta 2', path: '/images/insta_2.webp' },
+    { label: 'Insta 3', path: '/images/insta_3.webp' },
+    { label: 'Insta 4', path: '/images/insta_4.webp' },
+    { label: 'Insta 5', path: '/images/insta_5.webp' }
+  ];
 
   // Filtered appointments for CRM
   const filteredAppointments = appointments.filter(apt => {
@@ -209,6 +255,43 @@ export const AdminCMSPage = () => {
     });
   };
 
+  const handleCreateGalleryItem = (e) => {
+    e.preventDefault();
+    if (!newGalleryItem.title.trim()) {
+      alert("Please enter a case or media title.");
+      return;
+    }
+    addGalleryItem(newGalleryItem);
+    setIsAddingGallery(false);
+    setNewGalleryItem({
+      title: '',
+      category: 'Smile',
+      type: 'before_after',
+      beforeImage: '/images/ba_smile_before.png',
+      afterImage: '/images/ba_smile_after.png',
+      image: '/images/dna_banner1.png',
+      description: '',
+      timeline: '2 Clinical Sittings',
+      clinician: 'Dr. Varsha Jha & Dr. Zoya Rana'
+    });
+  };
+
+  const handleStartEditGallery = (item) => {
+    setEditingGalleryId(item.id);
+    setEditingGalleryForm({ ...item });
+  };
+
+  const handleSaveEditGallery = (e) => {
+    e.preventDefault();
+    if (!editingGalleryForm.title.trim()) {
+      alert("Title cannot be blank");
+      return;
+    }
+    updateGalleryItem(editingGalleryId, editingGalleryForm);
+    setEditingGalleryId(null);
+    setEditingGalleryForm(null);
+  };
+
   return (
     <div className="py-8 sm:py-12 bg-[#F6F5F2] min-h-screen">
       <div className="clinic-container space-y-8">
@@ -314,6 +397,18 @@ export const AdminCMSPage = () => {
           >
             <Star className="w-4 h-4" />
             <span>Patient Reviews ({clinicData.testimonials.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('gallery')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all ${
+              activeTab === 'gallery'
+                ? 'bg-[#0F172A] text-[#C5A059] shadow-xs'
+                : 'text-gray-600 hover:text-black hover:bg-gray-100'
+            }`}
+          >
+            <Camera className="w-4 h-4" />
+            <span>Gallery & Media ({(clinicData.gallery || []).length})</span>
           </button>
         </div>
 
@@ -1088,6 +1183,445 @@ export const AdminCMSPage = () => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* TAB 6: GALLERY & MEDIA SHOWCASE MANAGEMENT */}
+        {activeTab === 'gallery' && (
+          <div className="space-y-6">
+            {/* Header Controls */}
+            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E8E2D9] shadow-subtle flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                {['All', 'Smile', 'Skin', 'Hair', 'Clinic & Tech', 'Instagram'].map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setGalleryCategoryFilter(cat)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                      galleryCategoryFilter === cat
+                        ? 'bg-[#0F172A] text-[#C5A059] shadow-xs'
+                        : 'bg-[#FAF8F5] text-gray-600 hover:bg-[#F1ECE5]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="relative flex-1 md:w-64">
+                  <input
+                    type="text"
+                    placeholder="Search gallery cases..."
+                    value={gallerySearch}
+                    onChange={e => setGallerySearch(e.target.value)}
+                    className="w-full pl-8 pr-3 py-1.5 border border-gray-200 rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059] bg-[#FAF8F5]"
+                  />
+                  <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2.5" />
+                </div>
+
+                <button
+                  onClick={() => setIsAddingGallery(true)}
+                  className="btn-gold px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow whitespace-nowrap"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Gallery Item</span>
+                </button>
+              </div>
+            </div>
+
+            {/* ADD GALLERY ITEM FORM */}
+            {isAddingGallery && (
+              <form onSubmit={handleCreateGalleryItem} className="bg-white p-6 rounded-2xl border-2 border-[#C5A059] shadow-lg space-y-5">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <div className="flex items-center space-x-2">
+                    <Camera className="w-5 h-5 text-[#C5A059]" />
+                    <h4 className="font-bold text-sm text-[#0F172A]">Add New Clinical Case / Media to Gallery</h4>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingGallery(false)}
+                    className="text-gray-400 hover:text-black"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Type Selector */}
+                <div className="flex items-center space-x-4 text-xs font-bold text-gray-700">
+                  <span>Display Type:</span>
+                  <label className="flex items-center space-x-1.5 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="newGalleryType"
+                      checked={newGalleryItem.type === 'before_after'}
+                      onChange={() => setNewGalleryItem({ ...newGalleryItem, type: 'before_after' })}
+                    />
+                    <span>Before / After Transformation</span>
+                  </label>
+                  <label className="flex items-center space-x-1.5 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="newGalleryType"
+                      checked={newGalleryItem.type === 'single'}
+                      onChange={() => setNewGalleryItem({ ...newGalleryItem, type: 'single' })}
+                    />
+                    <span>Single High-Res / Tech Suite Photo</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Case / Media Title *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Ceramic Incisal Makeover"
+                      value={newGalleryItem.title}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, title: e.target.value })}
+                      className="w-full p-2.5 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Category</label>
+                    <select
+                      value={newGalleryItem.category}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, category: e.target.value })}
+                      className="w-full p-2.5 border rounded-xl text-xs bg-[#FAF8F5]"
+                    >
+                      <option value="Smile">Smile (Dental Care)</option>
+                      <option value="Skin">Skin (Dermatology)</option>
+                      <option value="Hair">Hair (Restoration / PRP)</option>
+                      <option value="Clinic & Tech">Clinic & Tech (Infrastructure)</option>
+                      <option value="Instagram">Instagram (@dnaclinicindia)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Timeline / Duration</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 2 Visits or 6 Weeks"
+                      value={newGalleryItem.timeline}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, timeline: e.target.value })}
+                      className="w-full p-2.5 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+                </div>
+
+                {/* Images Configuration */}
+                {newGalleryItem.type === 'before_after' ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[#FAF8F5] rounded-xl border border-gray-200">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-gray-700">Before Image Path / URL *</label>
+                      <input
+                        type="text"
+                        required
+                        value={newGalleryItem.beforeImage}
+                        onChange={e => setNewGalleryItem({ ...newGalleryItem, beforeImage: e.target.value })}
+                        className="w-full p-2 border rounded-xl text-xs bg-white"
+                      />
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        <span className="text-[10px] text-gray-400">Quick presets:</span>
+                        <button type="button" onClick={() => setNewGalleryItem({ ...newGalleryItem, beforeImage: '/images/ba_smile_before.png' })} className="text-[10px] text-[#C5A059] underline hover:text-black">Smile Before</button>
+                        <button type="button" onClick={() => setNewGalleryItem({ ...newGalleryItem, beforeImage: '/images/ba_skin_before.png' })} className="text-[10px] text-[#C5A059] underline hover:text-black">Skin Before</button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-gray-700">After Image Path / URL *</label>
+                      <input
+                        type="text"
+                        required
+                        value={newGalleryItem.afterImage}
+                        onChange={e => setNewGalleryItem({ ...newGalleryItem, afterImage: e.target.value })}
+                        className="w-full p-2 border rounded-xl text-xs bg-white"
+                      />
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        <span className="text-[10px] text-gray-400">Quick presets:</span>
+                        <button type="button" onClick={() => setNewGalleryItem({ ...newGalleryItem, afterImage: '/images/ba_smile_after.png' })} className="text-[10px] text-[#C5A059] underline hover:text-black">Smile After</button>
+                        <button type="button" onClick={() => setNewGalleryItem({ ...newGalleryItem, afterImage: '/images/ba_skin_after.png' })} className="text-[10px] text-[#C5A059] underline hover:text-black">Skin After</button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 bg-[#FAF8F5] rounded-xl border border-gray-200 space-y-2">
+                    <label className="text-[11px] font-bold text-gray-700">Image Path / URL *</label>
+                    <input
+                      type="text"
+                      required
+                      value={newGalleryItem.image}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, image: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-white"
+                    />
+                    <div className="space-y-1 pt-1">
+                      <span className="text-[10px] text-gray-500 font-medium">Click any downloaded asset to select:</span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {availableImagePresets.map(preset => (
+                          <button
+                            key={preset.path}
+                            type="button"
+                            onClick={() => setNewGalleryItem({ ...newGalleryItem, image: preset.path })}
+                            className="text-[10px] bg-white hover:bg-gray-100 border border-gray-300 px-2 py-0.5 rounded-md text-gray-700 font-medium transition-colors"
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Supervising Clinician</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Dr. Varsha Jha & Dr. Zoya Rana"
+                      value={newGalleryItem.clinician}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, clinician: e.target.value })}
+                      className="w-full p-2.5 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Clinical Outcome / Description</label>
+                    <input
+                      type="text"
+                      placeholder="Summary of procedure, clinical results, and patient satisfaction..."
+                      value={newGalleryItem.description}
+                      onChange={e => setNewGalleryItem({ ...newGalleryItem, description: e.target.value })}
+                      className="w-full p-2.5 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingGallery(false)}
+                    className="px-4 py-2 border rounded-xl text-xs font-semibold text-gray-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn-gold px-6 py-2 rounded-xl text-xs font-bold shadow"
+                  >
+                    Save & Publish to Gallery
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* EDIT GALLERY ITEM MODAL */}
+            {editingGalleryId && editingGalleryForm && (
+              <form onSubmit={handleSaveEditGallery} className="bg-white p-6 rounded-2xl border-2 border-emerald-500 shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <div className="flex items-center space-x-2">
+                    <Edit className="w-4 h-4 text-emerald-600" />
+                    <h4 className="font-bold text-sm text-[#0F172A]">Edit Gallery Item: {editingGalleryForm.title}</h4>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setEditingGalleryId(null); setEditingGalleryForm(null); }}
+                    className="text-gray-400 hover:text-black"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Title</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingGalleryForm.title}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, title: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Category</label>
+                    <select
+                      value={editingGalleryForm.category}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, category: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    >
+                      <option value="Smile">Smile</option>
+                      <option value="Skin">Skin</option>
+                      <option value="Hair">Hair</option>
+                      <option value="Clinic & Tech">Clinic & Tech</option>
+                      <option value="Instagram">Instagram</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Timeline</label>
+                    <input
+                      type="text"
+                      value={editingGalleryForm.timeline || ''}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, timeline: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+                </div>
+
+                {editingGalleryForm.type === 'before_after' || (editingGalleryForm.beforeImage && editingGalleryForm.afterImage) ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[#FAF8F5] rounded-xl border">
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-gray-600">Before Image</label>
+                      <input
+                        type="text"
+                        value={editingGalleryForm.beforeImage || ''}
+                        onChange={e => setEditingGalleryForm({ ...editingGalleryForm, beforeImage: e.target.value })}
+                        className="w-full p-2 border rounded-xl text-xs bg-white"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-gray-600">After Image</label>
+                      <input
+                        type="text"
+                        value={editingGalleryForm.afterImage || ''}
+                        onChange={e => setEditingGalleryForm({ ...editingGalleryForm, afterImage: e.target.value })}
+                        className="w-full p-2 border rounded-xl text-xs bg-white"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Image Path / URL</label>
+                    <input
+                      type="text"
+                      value={editingGalleryForm.image || ''}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, image: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Clinician</label>
+                    <input
+                      type="text"
+                      value={editingGalleryForm.clinician || ''}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, clinician: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-gray-600">Description</label>
+                    <input
+                      type="text"
+                      value={editingGalleryForm.description || ''}
+                      onChange={e => setEditingGalleryForm({ ...editingGalleryForm, description: e.target.value })}
+                      className="w-full p-2 border rounded-xl text-xs bg-[#FAF8F5]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => { setEditingGalleryId(null); setEditingGalleryForm(null); }}
+                    className="px-4 py-2 border rounded-xl text-xs font-semibold text-gray-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-bold"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* GALLERY ITEMS LIST / GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(clinicData.gallery || [])
+                .filter(item => {
+                  const matchCat = galleryCategoryFilter === 'All' || item.category === galleryCategoryFilter;
+                  const matchSearch = item.title?.toLowerCase().includes(gallerySearch.toLowerCase()) ||
+                                      item.description?.toLowerCase().includes(gallerySearch.toLowerCase()) ||
+                                      item.clinician?.toLowerCase().includes(gallerySearch.toLowerCase());
+                  return matchCat && matchSearch;
+                })
+                .map(item => (
+                  <div key={item.id} className="bg-white rounded-2xl border border-[#E8E2D9] shadow-subtle flex flex-col justify-between overflow-hidden">
+                    <div>
+                      {item.type === 'before_after' || (item.beforeImage && item.afterImage) ? (
+                        <div className="p-3 bg-[#FAF8F5] border-b border-gray-100">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div className="relative rounded-lg overflow-hidden aspect-[4/3] bg-gray-100">
+                              <img src={item.beforeImage} alt="Before" className="w-full h-full object-cover" />
+                              <span className="absolute top-1 left-1 bg-black/80 text-white text-[9px] font-bold px-1 rounded">Before</span>
+                            </div>
+                            <div className="relative rounded-lg overflow-hidden aspect-[4/3] bg-gray-100 border border-[#C5A059]">
+                              <img src={item.afterImage} alt="After" className="w-full h-full object-cover" />
+                              <span className="absolute top-1 left-1 bg-[#C5A059] text-black text-[9px] font-bold px-1 rounded">After</span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 border-b border-gray-100">
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                          <span className="absolute bottom-2 left-2 text-[9px] font-bold uppercase bg-black/70 text-white px-2 py-0.5 rounded">
+                            {item.category}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="p-4 space-y-2">
+                        <div className="flex items-center justify-between text-[11px] text-gray-500">
+                          <span className="font-bold text-[#C5A059] uppercase">{item.category}</span>
+                          {item.timeline && <span>{item.timeline}</span>}
+                        </div>
+                        <h4 className="font-serif font-bold text-[#0F172A] text-sm leading-snug">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                          {item.description}
+                        </p>
+                        {item.clinician && (
+                          <div className="text-[11px] text-gray-400 font-medium truncate">
+                            {item.clinician}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-[#FAF8F5] border-t border-gray-100 flex items-center justify-between">
+                      <button
+                        onClick={() => handleStartEditGallery(item)}
+                        className="text-xs font-semibold text-gray-700 hover:text-black flex items-center space-x-1"
+                      >
+                        <Edit className="w-3.5 h-3.5 text-[#C5A059]" />
+                        <span>Edit</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm(`Delete "${item.title}" from clinic gallery?`)) {
+                            deleteGalleryItem(item.id);
+                          }
+                        }}
+                        className="text-red-500 hover:text-red-700 text-xs font-semibold flex items-center space-x-1"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+
+                  </div>
+                ))}
+            </div>
+
           </div>
         )}
 
