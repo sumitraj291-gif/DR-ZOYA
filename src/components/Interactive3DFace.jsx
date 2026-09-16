@@ -6,13 +6,8 @@ import {
   RotateCw, 
   CheckCircle2, 
   ArrowRight, 
-  X, 
   AlertCircle,
-  Calendar,
-  Layers,
-  ChevronRight,
-  ShieldCheck,
-  Stethoscope
+  Calendar
 } from 'lucide-react';
 import { useClinic } from '../context/ClinicContext';
 
@@ -115,51 +110,62 @@ const ANATOMY_ZONES = [
 
 export const Interactive3DFace = () => {
   const { openBookingModal } = useClinic();
-  const mountRef = useRef(null);
-  const [selectedZone, setSelectedZone] = useState(ANATOMY_ZONES[0]); // default to Teeth
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const [selectedZone, setSelectedZone] = useState(ANATOMY_ZONES[0]);
   const [isAutoRotate, setIsAutoRotate] = useState(true);
-  const [isInteracting, setIsInteracting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [screenHotspots, setScreenHotspots] = useState([]);
   const [rotationHintDismissed, setRotationHintDismissed] = useState(false);
 
-  // References to keep across renders
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
-  const headGroupRef = useRef(null);
+  // Mutable refs for Three.js animation loop to avoid re-rendering/re-creating scene
+  const isAutoRotateRef = useRef(isAutoRotate);
+  const isInteractingRef = useRef(false);
+  const isDraggingRef = useRef(false);
   const targetRotationRef = useRef({ x: 0, y: 0 });
   const currentRotationRef = useRef({ x: 0, y: 0 });
-  const isDraggingRef = useRef(false);
   const previousPointerRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef(null);
+  const headGroupRef = useRef(null);
+  const cameraRef = useRef(null);
+  const rendererRef = useRef(null);
 
+  // Keep isAutoRotateRef in sync without triggering useEffect
   useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
+    isAutoRotateRef.current = isAutoRotate;
+  }, [isAutoRotate]);
 
-    const width = container.clientWidth || 480;
-    const height = container.clientHeight || 520;
+  // Mount Three.js Scene exactly ONCE
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    let width = container.clientWidth || 440;
+    let height = container.clientHeight || 460;
 
     // 1. Scene setup
     const scene = new THREE.Scene();
-    sceneRef.current = scene;
 
     // 2. Camera
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
     camera.position.set(0, 0, 3.8);
     cameraRef.current = camera;
 
-    // 3. Renderer with high DPI and alpha transparency
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    // 3. Renderer attached directly to canvasRef
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      antialias: true, 
+      alpha: true, 
+      powerPreference: 'high-performance' 
+    });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
     rendererRef.current = renderer;
-    container.replaceChildren(renderer.domElement);
 
-    // 4. Lighting setup (Luxury Clinic Aesthetics)
+    // 4. Luxury Clinic Lighting
     const ambientLight = new THREE.AmbientLight(0xfff7ed, 1.4);
     scene.add(ambientLight);
 
@@ -180,7 +186,7 @@ export const Interactive3DFace = () => {
     scene.add(headGroup);
     headGroupRef.current = headGroup;
 
-    // Aesthetic Ring Grid around the 3D Head
+    // Orbit Ring Grid around 3D Head
     const ringGeo = new THREE.RingGeometry(1.65, 1.67, 64);
     const ringMat = new THREE.MeshBasicMaterial({ 
       color: 0xc5a059, 
@@ -192,8 +198,8 @@ export const Interactive3DFace = () => {
     orbitRing.rotation.x = Math.PI / 2.2;
     headGroup.add(orbitRing);
 
-    // Subtle DNA Floating Particle Field
-    const particleCount = 75;
+    // Particle field
+    const particleCount = 70;
     const particleGeo = new THREE.BufferGeometry();
     const particlePos = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
@@ -211,14 +217,12 @@ export const Interactive3DFace = () => {
     const particles = new THREE.Points(particleGeo, particleMat);
     headGroup.add(particles);
 
-    // 6. Load the 3D Head Model
+    // 6. Load GLTF model
     const loader = new GLTFLoader();
     loader.load(
       '/models/head.glb',
       (gltf) => {
         const root = gltf.scene;
-
-        // Apply luxury porcelain aesthetic material
         const luxuryMaterial = new THREE.MeshPhysicalMaterial({
           color: 0xf6f0e6,
           roughness: 0.32,
@@ -237,7 +241,6 @@ export const Interactive3DFace = () => {
           }
         });
 
-        // Center and normalize scale
         const box = new THREE.Box3().setFromObject(root);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
@@ -252,37 +255,27 @@ export const Interactive3DFace = () => {
         setIsLoading(false);
       },
       undefined,
-      (error) => {
-        console.warn('Failed to load head.glb, falling back to procedural aesthetic sculpture', error);
-        
-        // Procedural Aesthetic Sculpture Fallback (Smooth Stylized Bust)
+      (err) => {
+        console.warn('Fallback procedural model loaded', err);
         const fallbackGroup = new THREE.Group();
         const headGeo = new THREE.SphereGeometry(1, 48, 48);
         headGeo.scale(0.85, 1.15, 0.95);
         const fallbackMat = new THREE.MeshPhysicalMaterial({
           color: 0xf5eee2,
           roughness: 0.28,
-          clearcoat: 0.8,
-          clearcoatRoughness: 0.15
+          clearcoat: 0.8
         });
         const headMesh = new THREE.Mesh(headGeo, fallbackMat);
         fallbackGroup.add(headMesh);
-
-        // Stylized Neck
-        const neckGeo = new THREE.CylinderGeometry(0.42, 0.56, 0.75, 32);
-        const neckMesh = new THREE.Mesh(neckGeo, fallbackMat);
-        neckMesh.position.y = -1.1;
-        fallbackGroup.add(neckMesh);
-
         headGroup.add(fallbackGroup);
         setIsLoading(false);
       }
     );
 
-    // 7. Mouse / Touch Drag Rotation Handlers
+    // 7. Pointer Event Handlers
     const onPointerDown = (e) => {
       isDraggingRef.current = true;
-      setIsInteracting(true);
+      isInteractingRef.current = true;
       setRotationHintDismissed(true);
       previousPointerRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -302,26 +295,27 @@ export const Interactive3DFace = () => {
 
     const onPointerUp = () => {
       isDraggingRef.current = false;
-      setTimeout(() => setIsInteracting(false), 2000);
+      setTimeout(() => {
+        isInteractingRef.current = false;
+      }, 2500);
     };
 
-    const domElement = renderer.domElement;
-    domElement.addEventListener('pointerdown', onPointerDown);
+    canvas.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
 
-    // 8. Animation & Render Loop
+    // 8. Animation Loop
     let clock = new THREE.Clock();
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       const delta = clock.getDelta();
 
-      // Auto-rotation when idle and not interacting
-      if (isAutoRotate && !isDraggingRef.current && !isInteracting) {
+      // Auto-rotation when not interacting
+      if (isAutoRotateRef.current && !isDraggingRef.current && !isInteractingRef.current) {
         targetRotationRef.current.y += delta * 0.28;
       }
 
-      // Smooth inertia damping
+      // Inertia smoothing
       currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.08;
       currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.08;
 
@@ -329,7 +323,6 @@ export const Interactive3DFace = () => {
         headGroupRef.current.rotation.y = currentRotationRef.current.y;
         headGroupRef.current.rotation.x = currentRotationRef.current.x;
 
-        // Subtle floating breath effect
         const elapsed = clock.getElapsedTime();
         headGroupRef.current.position.y = Math.sin(elapsed * 1.5) * 0.035;
         orbitRing.rotation.z = elapsed * 0.25;
@@ -343,12 +336,10 @@ export const Interactive3DFace = () => {
           const worldPos = zone.hotspot3D.clone();
           worldPos.applyMatrix4(headGroupRef.current.matrixWorld);
 
-          // Calculate normal vector facing to determine if hotspot is on visible side
           const cameraDir = cameraRef.current.position.clone().sub(worldPos).normalize();
           const normal = worldPos.clone().sub(headGroupRef.current.position).normalize();
           const dot = cameraDir.dot(normal);
 
-          // Project to 2D screen coordinates
           const projected = worldPos.project(cameraRef.current);
           const x = (projected.x * 0.5 + 0.5) * width;
           const y = (-(projected.y * 0.5) + 0.5) * height;
@@ -357,7 +348,7 @@ export const Interactive3DFace = () => {
             ...zone,
             screenX: x,
             screenY: y,
-            isVisible: dot > 0.15 // only show when facing towards camera
+            isVisible: dot > 0.15
           };
         });
 
@@ -370,11 +361,11 @@ export const Interactive3DFace = () => {
     // 9. Resize handler
     const handleResize = () => {
       if (!container || !cameraRef.current || !rendererRef.current) return;
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      cameraRef.current.aspect = w / h;
+      width = container.clientWidth;
+      height = container.clientHeight;
+      cameraRef.current.aspect = width / height;
       cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(w, h);
+      rendererRef.current.setSize(width, height);
     };
 
     window.addEventListener('resize', handleResize);
@@ -382,18 +373,17 @@ export const Interactive3DFace = () => {
     return () => {
       cancelAnimationFrame(animationFrameRef.current);
       window.removeEventListener('resize', handleResize);
-      domElement.removeEventListener('pointerdown', onPointerDown);
+      canvas.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
       renderer.dispose();
-      if (container) container.replaceChildren();
     };
-  }, [isAutoRotate, isInteracting]);
+  }, []); // Run ONLY once on mount
 
-  // Handle Zone Selection (smoothly rotate 3D head to face that anatomical area)
+  // Zone selection rotates 3D head smoothly
   const handleSelectZone = (zone) => {
     setSelectedZone(zone);
-    setIsInteracting(true);
+    isInteractingRef.current = true;
     setRotationHintDismissed(true);
 
     if (zone.cameraTarget) {
@@ -402,6 +392,10 @@ export const Interactive3DFace = () => {
         y: zone.cameraTarget.rotY
       };
     }
+
+    setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 3000);
   };
 
   return (
@@ -434,10 +428,10 @@ export const Interactive3DFace = () => {
       {/* 2. Main 3D Viewport + Clinical Diagnosis Drawer */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
         
-        {/* 3D Head Stage (Col 7) */}
+        {/* 3D Head Stage (Col 6) */}
         <div className="lg:col-span-6 relative flex flex-col items-center">
           
-          {/* Subtle Ambient Glow behind 3D Head */}
+          {/* Ambient Glow */}
           <div 
             className="absolute inset-0 rounded-full blur-3xl opacity-40 -z-10 transition-all duration-700 pointer-events-none"
             style={{
@@ -447,64 +441,72 @@ export const Interactive3DFace = () => {
 
           {/* WebGL Canvas Container */}
           <div 
-            ref={mountRef} 
-            className="w-full h-[400px] sm:h-[460px] cursor-grab active:cursor-grabbing relative select-none touch-none"
+            ref={containerRef}
+            className="w-full h-[380px] sm:h-[450px] relative select-none touch-none"
           >
-            {/* Loading Indicator */}
+            {/* Dedicated Canvas with zero React child nodes */}
+            <canvas 
+              ref={canvasRef} 
+              className="w-full h-full cursor-grab active:cursor-grabbing block"
+            />
+
+            {/* Sibling Overlay: Loading Indicator */}
             {isLoading && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[#FAF8F5]/70 backdrop-blur-xs">
+              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[#FAF8F5]/80 backdrop-blur-xs pointer-events-none">
                 <div className="w-8 h-8 rounded-full border-2 border-[#C5A059] border-t-transparent animate-spin" />
                 <span className="text-xs font-mono uppercase tracking-widest text-[#0F172A]">
-                  Initializing 3D Anatomy Canvas...
+                  Loading 3D Anatomy Model...
                 </span>
               </div>
             )}
 
-            {/* Projected Interactive 3D Hotspot Pins */}
-            {!isLoading && screenHotspots.map((zone) => {
-              if (!zone.isVisible) return null;
-              const isSelected = selectedZone.id === zone.id;
-              return (
-                <div
-                  key={zone.id}
-                  onClick={() => handleSelectZone(zone)}
-                  style={{
-                    left: `${zone.screenX}px`,
-                    top: `${zone.screenY}px`,
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                  className="absolute cursor-pointer group z-20 transition-transform hover:scale-125"
-                >
-                  {/* Outer Pulsing Beacon Ring */}
-                  <div 
-                    className="w-8 h-8 rounded-full absolute -inset-1 opacity-75 animate-ping"
-                    style={{ backgroundColor: zone.color }}
-                  />
-
-                  {/* Pin Core */}
-                  <div 
-                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-md border-2 border-white transition-all ${
-                      isSelected ? 'ring-4 ring-[#C5A059] scale-115' : ''
-                    }`}
-                    style={{ backgroundColor: zone.color }}
+            {/* Sibling Overlay: 3D Projected Hotspots (pointer-events-auto on pins only) */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              {!isLoading && screenHotspots.map((zone) => {
+                if (!zone.isVisible) return null;
+                const isSelected = selectedZone.id === zone.id;
+                return (
+                  <div
+                    key={zone.id}
+                    onClick={() => handleSelectZone(zone)}
+                    style={{
+                      left: `${zone.screenX}px`,
+                      top: `${zone.screenY}px`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    className="absolute cursor-pointer pointer-events-auto group z-20 transition-transform hover:scale-125"
                   >
-                    <span>{zone.icon}</span>
-                  </div>
+                    {/* Outer Pulsing Beacon */}
+                    <div 
+                      className="w-8 h-8 rounded-full absolute -inset-1 opacity-75 animate-ping"
+                      style={{ backgroundColor: zone.color }}
+                    />
 
-                  {/* Hover Tooltip */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 bottom-7 bg-[#090D14] text-white text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap shadow-xl pointer-events-none border border-[#C5A059]/40">
-                    Click to Inspect: {zone.shortLabel}
+                    {/* Pin Core */}
+                    <div 
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-md border-2 border-white transition-all ${
+                        isSelected ? 'ring-4 ring-[#C5A059] scale-115' : ''
+                      }`}
+                      style={{ backgroundColor: zone.color }}
+                    >
+                      <span>{zone.icon}</span>
+                    </div>
+
+                    {/* Hover Tooltip */}
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute left-1/2 -translate-x-1/2 bottom-7 bg-[#090D14] text-white text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap shadow-xl pointer-events-none border border-[#C5A059]/40">
+                      Click to Inspect: {zone.shortLabel}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           {/* 3D Interaction Toolbar */}
           <div className="flex items-center justify-between w-full px-4 pt-2 text-[11px] text-[#64748B] font-medium">
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>3D Anatomy Active • Drag to Rotate</span>
+              <span>3D Anatomy Active • Drag to Rotate 360°</span>
             </div>
 
             <button
@@ -523,7 +525,7 @@ export const Interactive3DFace = () => {
           )}
         </div>
 
-        {/* Clinical Problem & Solution Inspector Drawer (Col 5) */}
+        {/* Clinical Problem & Solution Inspector Drawer (Col 6) */}
         <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-[#EAE4DC] shadow-xl space-y-4">
           
           {/* Header of Active Inspection */}
