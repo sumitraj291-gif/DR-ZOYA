@@ -3,22 +3,23 @@ import { initialClinicData, initialSeedAppointments } from '../data/defaultClini
 
 const ClinicContext = createContext();
 
-const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_march';
+const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_gallery_v5';
 const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
 
 export const ClinicProvider = ({ children }) => {
   // 1. Persistent Clinic Content Data (CMS)
   const [clinicData, setClinicData] = useState(() => {
     try {
-      // Purge all legacy v1 cache from browser
+      // Purge all legacy v1 and old cache from browser
       localStorage.removeItem('dr_zoya_clinic_data_v1');
+      localStorage.removeItem('dna_clinic_live_data_v2026_march');
       
       const saved = localStorage.getItem(CLINIC_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         // Ensure the cache is the authentic DNA Clinic India data with real contact (+91 63953 77355)
         if (parsed?.profile?.contact?.phone?.includes('63953') && parsed?.doctorTeam?.length >= 3) {
-          if (!parsed.gallery || parsed.gallery.length === 0) {
+          if (!parsed.gallery || parsed.gallery.length < 20) {
             parsed.gallery = initialClinicData.gallery;
           }
           return parsed;

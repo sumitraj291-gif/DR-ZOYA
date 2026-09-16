@@ -109,24 +109,44 @@ export const AdminCMSPage = () => {
   const [editingGalleryForm, setEditingGalleryForm] = useState(null);
 
   const availableImagePresets = [
+    // Live Gallery Assets from dnaclinicindia.com/gallery/
+    { label: 'Glow Therapy 1', path: '/images/gallery/glow_therapy_1.png' },
+    { label: 'Glow Therapy 2', path: '/images/gallery/glow_therapy_2.png' },
+    { label: 'Acne Treatment 1', path: '/images/gallery/acne_treatment_1.png' },
+    { label: 'Acne Treatment 2', path: '/images/gallery/acne_treatment_2.png' },
+    { label: 'Advanced Facials 1', path: '/images/gallery/advanced_facials_1.png' },
+    { label: 'Advanced Facials 2', path: '/images/gallery/advanced_facials_2.png' },
+    { label: 'Anti Ageing', path: '/images/gallery/anti_ageing_2.png' },
+    { label: 'Skin Rejuvenation', path: '/images/gallery/skin_rejuvenation_2.png' },
+    { label: 'Root Canal Therapy', path: '/images/gallery/root_canal_1.png' },
+    { label: 'General Dentistry', path: '/images/gallery/general_dentistry_2.png' },
+    { label: 'Dental Implants 1', path: '/images/gallery/dental_implants_1.png' },
+    { label: 'Dental Implants 2', path: '/images/gallery/dental_implants_2.png' },
+    { label: 'Braces & Aligners 1', path: '/images/gallery/braces_aligners_1.png' },
+    { label: 'Braces & Aligners 2', path: '/images/gallery/braces_aligners_2.png' },
+    { label: 'DNA Case 01', path: '/images/gallery/dna_gallery_01.png' },
+    { label: 'DNA Case 02', path: '/images/gallery/dna_gallery_02.png' },
+    { label: 'DNA Case 03', path: '/images/gallery/dna_gallery_03.png' },
+    { label: 'DNA Case 05', path: '/images/gallery/dna_gallery_05.png' },
+    { label: 'DNA Case 06', path: '/images/gallery/dna_gallery_06.png' },
+    { label: 'DNA Case 08', path: '/images/gallery/dna_gallery_08.png' },
+    { label: 'DNA Case 09', path: '/images/gallery/dna_gallery_09.png' },
+    { label: 'DNA Case 10', path: '/images/gallery/dna_gallery_10.png' },
+    { label: 'DNA Case 11', path: '/images/gallery/dna_gallery_11.png' },
+    { label: 'DNA Case 12', path: '/images/gallery/dna_gallery_12.png' },
+    { label: 'DNA Case 13', path: '/images/gallery/dna_gallery_13.png' },
+    
+    // Core Banners & Clinicians
     { label: 'Smile Before', path: '/images/ba_smile_before.png' },
     { label: 'Smile After', path: '/images/ba_smile_after.png' },
     { label: 'Skin Before', path: '/images/ba_skin_before.png' },
     { label: 'Skin After', path: '/images/ba_skin_after.png' },
-    { label: 'Banner 1', path: '/images/dna_banner1.png' },
-    { label: 'Banner 2', path: '/images/dna_banner2.png' },
-    { label: 'Banner 3', path: '/images/dna_banner3.png' },
-    { label: 'General Dentistry', path: '/images/general_dentistry.png' },
-    { label: 'Advanced Facials', path: '/images/advanced_facials.png' },
-    { label: 'Hair Rejuvenation', path: '/images/hair_rejuvenation.png' },
+    { label: 'Aesthetic Suite 1', path: '/images/dna_banner1.png' },
+    { label: 'Laser Tech Suite 2', path: '/images/dna_banner2.png' },
+    { label: 'Hair Care Suite 3', path: '/images/dna_banner3.png' },
     { label: 'Dr. Zoya Rana', path: '/images/dr_zoya_rana.png' },
     { label: 'Dr. Zoya Talat', path: '/images/dr_zoya_talat.png' },
-    { label: 'Dr. Varsha Jha', path: '/images/dr_varsha_jha.png' },
-    { label: 'Insta 1', path: '/images/insta_1.webp' },
-    { label: 'Insta 2', path: '/images/insta_2.webp' },
-    { label: 'Insta 3', path: '/images/insta_3.webp' },
-    { label: 'Insta 4', path: '/images/insta_4.webp' },
-    { label: 'Insta 5', path: '/images/insta_5.webp' }
+    { label: 'Dr. Varsha Jha', path: '/images/dr_varsha_jha.png' }
   ];
 
   // Filtered appointments for CRM

@@ -289,30 +289,287 @@ export const initialClinicData = {
   ],
 
   gallery: [
+    // 1. DENTAL CARE & SMILE DESIGNING CASES FROM https://dnaclinicindia.com/gallery/
     {
-      id: "gal-1",
+      id: "gal-smile-1",
       title: "Incisal Edge Ceramic Smile Restoration",
       category: "Smile",
       type: "before_after",
       beforeImage: "/images/ba_smile_before.png",
       afterImage: "/images/ba_smile_after.png",
-      description: "Full cosmetic dental rehabilitation restoring symmetry, bright natural shade, and incisal translucency.",
+      description: "Full cosmetic dental rehabilitation restoring incisal translucency, tooth proportion, and natural bright shade.",
       timeline: "2 Clinical Sittings",
       clinician: "Dr. Varsha Jha & Dr. Zoya Rana"
     },
     {
-      id: "gal-2",
+      id: "gal-braces-1",
+      title: "Invisible Aligners & Orthodontic Smile Architecture",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/braces_aligners_1.png",
+      description: "Computer-guided digital clear aligners custom planned for crowded and misaligned anterior teeth.",
+      timeline: "6 - 9 Months",
+      clinician: "Dr. Varsha Jha (Dental Surgeon)"
+    },
+    {
+      id: "gal-braces-2",
+      title: "Digital Smile Designing & Aligner Alignment",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/braces_aligners_2.png",
+      description: "Precision orthodontic correction using discreet, removable medical-grade clear aligners.",
+      timeline: "Comprehensive Care",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-implant-1",
+      title: "Titanium Dental Implant & Crown Replacement",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dental_implants_1.png",
+      description: "Permanent bio-compatible titanium root replacement restored with zirconia lifelike crown.",
+      timeline: "Single Sitting + Osseointegration",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-implant-2",
+      title: "Full Arch Implant Rehabilitation",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dental_implants_2.png",
+      description: "Advanced implantology restoring complete chewing functionality and facial profile balance.",
+      timeline: "Specialist Protocol",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-rct-1",
+      title: "Painless Rotary Endodontics & Micro-Restoration",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/root_canal_1.png",
+      description: "Microscope-assisted painless single-visit root canal therapy preserving the natural tooth anatomy.",
+      timeline: "45 Mins (Single Visit)",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-gen-dent",
+      title: "Aesthetic Composite Fillings & General Operatory",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/general_dentistry_2.png",
+      description: "Tooth-colored nano-hybrid fillings with hospital-grade multi-stage sterilization protocols.",
+      timeline: "Preventive Care",
+      clinician: "Dr. Varsha Jha"
+    },
+
+    // 2. SKIN CARE & AESTHETIC DERMATOLOGY CASES FROM https://dnaclinicindia.com/gallery/
+    {
+      id: "gal-skin-1",
       title: "Active Acne & Dermal Texture Reset",
       category: "Skin",
       type: "before_after",
       beforeImage: "/images/ba_skin_before.png",
       afterImage: "/images/ba_skin_after.png",
-      description: "Deep vortex pore clearance with customized medical facial protocol and barrier restoration.",
+      description: "Deep pore clearance with customized medical facial protocol, chemical peeling, and barrier restoration.",
       timeline: "6 Weeks Protocol",
+      clinician: "Dr. Zoya Rana (Director)"
+    },
+    {
+      id: "gal-glow-1",
+      title: "Medical Glow Therapy & Deep Hydration Infusion",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/glow_therapy_1.png",
+      description: "Clinical hyaluronic and antioxidant infusion for immediate red-carpet luminosity and glass skin texture.",
+      timeline: "50 Mins Protocol",
       clinician: "Dr. Zoya Rana"
     },
     {
-      id: "gal-3",
+      id: "gal-glow-2",
+      title: "Radiant Skin Tone & Dermal Hydration",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/glow_therapy_2.png",
+      description: "Intense dermal nourishment targeting dullness, uneven complexion, and environmental oxidative stress.",
+      timeline: "Instant Radiance",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-acne-1",
+      title: "Medical-Grade Acne Clearance Protocol",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/acne_treatment_1.png",
+      description: "Targeted salicylic peels and blue light phototherapy to calm active inflammation and eradicate bacteria.",
+      timeline: "4 - 6 Sessions",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-acne-2",
+      title: "Post-Acne Scar Remodeling & Pore Refinement",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/acne_treatment_2.png",
+      description: "Microneedling and collagen induction therapy to smooth out pitted scars and texture irregularities.",
+      timeline: "Sequential Care",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-facials-1",
+      title: "Advanced Medical Hydra Facial Suite",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/advanced_facials_1.png",
+      description: "Vortex suction pore purification and nutrient infusion with US-FDA approved clinical instruments.",
+      timeline: "Monthly Maintenance",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-facials-2",
+      title: "Clinical Exfoliation & Epidermal Polish",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/advanced_facials_2.png",
+      description: "Gentle clinical peeling and epidermal polishing leaving skin smooth, supple, and radiant.",
+      timeline: "Zero Downtime",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-anti-age",
+      title: "Anti-Ageing Collagen Induction & Fine Line Softening",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/anti_ageing_2.png",
+      description: "Non-invasive dermal firming and targeted peptide delivery to restore youthful bounce and firmness.",
+      timeline: "Preventive Anti-Aging",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-skin-rej",
+      title: "Laser Skin Rejuvenation & Melasma Management",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/skin_rejuvenation_2.png",
+      description: "Q-switched pigment clearance and gentle collagen stimulation for Indian skin types.",
+      timeline: "3 - 5 Sessions",
+      clinician: "Dr. Zoya Talat"
+    },
+
+    // 3. CLINICAL OUTCOME SHOWCASES DIRECT FROM https://dnaclinicindia.com/gallery/
+    {
+      id: "gal-dna-01",
+      title: "DNA Clinical Case: Comprehensive Smile Reconstruction",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dna_gallery_01.png",
+      description: "Documented smile makeover case restoring symmetry, aesthetics, and bite alignment.",
+      timeline: "Clinical Case 01",
+      clinician: "DNA Clinic Team"
+    },
+    {
+      id: "gal-dna-02",
+      title: "DNA Clinical Case: Anterior Dental Restorations",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dna_gallery_02.png",
+      description: "Precision ceramic incisal veneers crafted to match natural tooth translucency.",
+      timeline: "Clinical Case 02",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-dna-03",
+      title: "DNA Clinical Case: Laser Skin Tone Perfection",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/dna_gallery_03.png",
+      description: "Even tone and blemish elimination through personalized dermatological protocol.",
+      timeline: "Clinical Case 03",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-dna-05",
+      title: "DNA Clinical Case: Dermal Glow & Texture Polish",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/dna_gallery_05.png",
+      description: "Restoration of glowing complexion and reduction in congested pores.",
+      timeline: "Clinical Case 05",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-dna-06",
+      title: "DNA Clinical Case: Cosmetic Dentistry Outcome",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dna_gallery_06.png",
+      description: "Straight, bright, uniform aesthetic outcome for dental makeover patient.",
+      timeline: "Clinical Case 06",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-dna-08",
+      title: "DNA Clinical Case: Skin Barrier Renewal",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/dna_gallery_08.png",
+      description: "Restoring sensitive dermal barrier with gentle medical-grade nourishment.",
+      timeline: "Clinical Case 08",
+      clinician: "Dr. Zoya Talat"
+    },
+    {
+      id: "gal-dna-09",
+      title: "DNA Clinical Case: Clear Aligners Result",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dna_gallery_09.png",
+      description: "Complete closure of dental diastema and harmonious smile curve.",
+      timeline: "Clinical Case 09",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-dna-10",
+      title: "DNA Clinical Case: Laser Facial Resurfacing",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/dna_gallery_10.png",
+      description: "Smoothing of coarse skin texture and elimination of sun spots.",
+      timeline: "Clinical Case 10",
+      clinician: "Dr. Zoya Rana"
+    },
+    {
+      id: "gal-dna-11",
+      title: "DNA Clinical Case: Advanced Hair Growth Protocol",
+      category: "Hair",
+      type: "single",
+      image: "/images/gallery/dna_gallery_11.png",
+      description: "Follicular density boost with growth factor concentrate (GFC) scalp therapy.",
+      timeline: "Clinical Case 11",
+      clinician: "Dr. Zoya Rana & Dr. Zoya Talat"
+    },
+    {
+      id: "gal-dna-12",
+      title: "DNA Clinical Case: Aesthetic Smile Makeover",
+      category: "Smile",
+      type: "single",
+      image: "/images/gallery/dna_gallery_12.png",
+      description: "Hollywood smile transformation with ultra-thin porcelain veneers.",
+      timeline: "Clinical Case 12",
+      clinician: "Dr. Varsha Jha"
+    },
+    {
+      id: "gal-dna-13",
+      title: "DNA Clinical Case: Pigmentation & Melasma Clearance",
+      category: "Skin",
+      type: "single",
+      image: "/images/gallery/dna_gallery_13.png",
+      description: "Deep melasma fading with targeted medical laser protocols.",
+      timeline: "Clinical Case 13",
+      clinician: "Dr. Zoya Rana"
+    },
+
+    // 4. CLINIC SUITES & INFRASTRUCTURE
+    {
+      id: "gal-suite-1",
       title: "State-of-the-Art Aesthetic Suite",
       category: "Clinic & Tech",
       type: "single",
@@ -322,37 +579,7 @@ export const initialClinicData = {
       clinician: "DNA Clinics (Dehradun & Muzaffarnagar)"
     },
     {
-      id: "gal-4",
-      title: "Painless Endodontics & Cosmetic Operatory",
-      category: "Clinic & Tech",
-      type: "single",
-      image: "/images/general_dentistry.png",
-      description: "Microscope-assisted dentistry and computerized digital smile design suites.",
-      timeline: "Infrastructure",
-      clinician: "Dr. Varsha Jha"
-    },
-    {
-      id: "gal-5",
-      title: "Laser Dermatology & Medical Facial Station",
-      category: "Skin",
-      type: "single",
-      image: "/images/advanced_facials.png",
-      description: "US-FDA certified laser technology for targeted pigment and anti-aging skin clearance.",
-      timeline: "Infrastructure",
-      clinician: "Dr. Zoya Rana"
-    },
-    {
-      id: "gal-6",
-      title: "PRP & Scalp Rejuvenation Unit",
-      category: "Hair",
-      type: "single",
-      image: "/images/hair_rejuvenation.png",
-      description: "Clinical growth factor concentrate and microneedling therapy for hair restoration.",
-      timeline: "Infrastructure",
-      clinician: "Dr. Zoya Talat"
-    },
-    {
-      id: "gal-7",
+      id: "gal-suite-2",
       title: "Aesthetic Laser Technology Suite",
       category: "Clinic & Tech",
       type: "single",
@@ -362,64 +589,14 @@ export const initialClinicData = {
       clinician: "DNA Clinic"
     },
     {
-      id: "gal-8",
-      title: "Clinical Hair Protocol Demonstration",
+      id: "gal-suite-3",
+      title: "Scalp PRP & Clinical Hair Unit",
       category: "Hair",
       type: "single",
-      image: "/images/dna_banner3.png",
-      description: "Scalp revitalization and follicular strengthening with growth factor protocols.",
-      timeline: "Clinical Care",
-      clinician: "Dr. Zoya Rana"
-    },
-    {
-      id: "gal-9",
-      title: "Instagram Case: Skin Rejuvenation Glow",
-      category: "Instagram",
-      type: "single",
-      image: "/images/insta_1.webp",
-      description: "Immediate post-treatment radiant glow after clinical hydra dermabrasion.",
-      timeline: "Live Feed",
-      clinician: "@dnaclinicindia"
-    },
-    {
-      id: "gal-10",
-      title: "Instagram Case: Smile Designing Veneers",
-      category: "Instagram",
-      type: "single",
-      image: "/images/insta_2.webp",
-      description: "Ultra-thin ceramic veneers fitted with precision digital margins.",
-      timeline: "Live Feed",
-      clinician: "@dnaclinicindia"
-    },
-    {
-      id: "gal-11",
-      title: "Instagram Case: Clinical Hair Density Protocol",
-      category: "Instagram",
-      type: "single",
-      image: "/images/insta_3.webp",
-      description: "Follicular density boost after sessions of scalp PRP therapy.",
-      timeline: "Live Feed",
-      clinician: "@dnaclinicindia"
-    },
-    {
-      id: "gal-12",
-      title: "Instagram Case: Dermal Glow Transformation",
-      category: "Instagram",
-      type: "single",
-      image: "/images/insta_4.webp",
-      description: "Clearance of blemishes, even skin tone, and luminous hydration.",
-      timeline: "Live Feed",
-      clinician: "@dnaclinicindia"
-    },
-    {
-      id: "gal-13",
-      title: "Instagram Case: Doctor-Led Treatment Session",
-      category: "Instagram",
-      type: "single",
-      image: "/images/insta_5.webp",
-      description: "Doctor-led procedural care with gentle numbing and patient comfort.",
-      timeline: "Live Feed",
-      clinician: "@dnaclinicindia"
+      image: "/images/hair_rejuvenation.png",
+      description: "Clinical growth factor concentrate and microneedling therapy for hair restoration.",
+      timeline: "Infrastructure",
+      clinician: "Dr. Zoya Talat"
     }
   ],
 
