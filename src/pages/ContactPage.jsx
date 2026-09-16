@@ -137,11 +137,42 @@ export const ContactPage = () => {
               </div>
             </div>
 
-            {/* Valet & Amenity Tag */}
-            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE4DC] flex items-center space-x-3 text-xs text-gray-700">
-              <ShieldCheck className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
-              <span>Complimentary private valet parking available for all patients at The Grand Atrium main porch.</span>
+            {/* Dual Clinic Branches */}
+            <div className="bg-[#FAF8F5] p-5 rounded-2xl border border-[#EAE4DC] space-y-3 text-xs text-gray-700">
+              <div className="font-bold text-[#0F172A] flex items-center space-x-1.5">
+                <MapPin className="w-4 h-4 text-[#C5A059]" />
+                <span>Our Clinic Branches</span>
+              </div>
+              <div className="space-y-2 pt-1 border-t border-gray-200">
+                <div>
+                  <strong className="text-gray-900 block font-semibold">Dehradun Centre (Uttarakhand):</strong>
+                  <span className="text-gray-600">{clinicData.profile.contact.dehradunAddress}</span>
+                </div>
+                <div>
+                  <strong className="text-gray-900 block font-semibold">Muzaffarnagar Centre (Uttar Pradesh):</strong>
+                  <span className="text-gray-600">{clinicData.profile.contact.muzaffarnagarAddress}</span>
+                </div>
+              </div>
             </div>
+
+            {/* Instagram Card */}
+            <a
+              href={clinicData.profile.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white p-4 rounded-2xl border border-[#C5A059]/40 shadow-xs flex items-center justify-between hover:bg-[#FAF6EE] transition-colors"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-500 text-white flex items-center justify-center">
+                  <span className="font-bold text-sm">IG</span>
+                </div>
+                <div>
+                  <div className="font-bold text-xs text-[#0F172A]">Follow Us on Instagram</div>
+                  <div className="text-[11px] text-[#C5A059] font-medium">{clinicData.profile.instagramHandle}</div>
+                </div>
+              </div>
+              <span className="text-xs font-semibold text-gray-500">View Page →</span>
+            </a>
 
           </div>
 

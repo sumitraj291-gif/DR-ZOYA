@@ -56,7 +56,7 @@ export const Navbar = () => {
             </div>
             <div className="hidden md:flex items-center space-x-1.5">
               <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span className="truncate max-w-xs">Golf Course Rd, DLF Phase 5, Gurugram</span>
+              <span className="truncate max-w-xs">Dehradun & Muzaffarnagar Clinics</span>
             </div>
           </div>
 
@@ -95,15 +95,16 @@ export const Navbar = () => {
             onClick={() => handleNavClick('home')} 
             className="flex items-center space-x-3 text-left group focus:outline-none"
           >
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#0F172A] to-[#1E293B] border border-[#C5A059]/60 flex items-center justify-center shadow-sm group-hover:border-[#C5A059] transition-all">
-              <span className="font-serif text-2xl font-bold text-[#C5A059]">Z</span>
+            <div className="w-12 h-12 rounded-2xl bg-white border border-[#C5A059]/50 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all">
+              <img src="/images/dna_logo.png" alt="DNA Clinic Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <div className="font-serif text-xl sm:text-2xl font-semibold tracking-wide text-[#0F172A] leading-none">
-                DR. ZOYA
+              <div className="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#0F172A] leading-none flex items-center space-x-1.5">
+                <span>DR. ZOYA</span>
+                <span className="text-[10px] text-[#C5A059] font-sans font-bold bg-[#C5A059]/15 px-1.5 py-0.5 rounded">DNA CLINIC</span>
               </div>
-              <div className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-[#64748B] font-medium mt-1">
-                Aesthetics & Smile Studio
+              <div className="text-[10px] sm:text-[11px] tracking-wider uppercase text-[#64748B] font-medium mt-1">
+                Skin • Hair • Dental Care
               </div>
             </div>
           </button>

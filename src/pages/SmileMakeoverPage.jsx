@@ -146,6 +146,68 @@ export const SmileMakeoverPage = () => {
         </div>
       </section>
 
+      {/* Real Smile Transformation Case */}
+      <section className="clinic-container">
+        <div className="bg-white rounded-3xl border border-[#E8E2D9] p-6 sm:p-10 shadow-subtle grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-5 space-y-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#C5A059] bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
+              Documented Clinical Case
+            </span>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0F172A]">
+              Real Smile Transformation at DNA Clinic
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+              Full incisal edge restoration and porcelain aesthetic smile reconstruction. Performed with digital mock-ups and zero nerve trauma.
+            </p>
+            <div className="space-y-2 text-xs text-gray-700 pt-2 border-t border-gray-100">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
+                <span>Lead Dental Surgeon: <strong>Dr. Varsha Jha (BDS)</strong></span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
+                <span>Supervised by: <strong>Dr. Zoya Rana (Director)</strong></span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
+                <span>Timeline: <strong>2 Clinical Sittings</strong></span>
+              </div>
+            </div>
+            <button
+              onClick={() => openBookingModal()}
+              className="btn-gold px-6 py-2.5 rounded-full text-xs font-semibold mt-2"
+            >
+              Book Smile Consultation
+            </button>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="grid grid-cols-2 gap-4 bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE4DC]">
+              <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-gray-200">
+                <img
+                  src="/images/ba_smile_before.png"
+                  alt="Smile Before Treatment"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase">
+                  Before
+                </span>
+              </div>
+              <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-[#C5A059]/40">
+                <img
+                  src="/images/ba_smile_after.png"
+                  alt="Smile After Treatment"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-md uppercase shadow-sm">
+                  After
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. COMPARISON: VENEERS VS INVISALIGN */}
       <section className="clinic-container max-w-4xl">
         <div className="text-center space-y-3 mb-10">

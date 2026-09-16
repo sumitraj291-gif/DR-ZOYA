@@ -19,10 +19,9 @@ export const TreatmentsPage = () => {
 
   const categories = [
     'All',
-    'Aesthetic Dermatology',
-    'Cosmetic Dentistry',
-    'Anti-Aging & Injectables',
-    'Hair Restoration'
+    'Skin Care',
+    'Dental Care',
+    'Hair Care'
   ];
 
   const filteredTreatments = clinicData.treatments.filter((t) => {
@@ -107,11 +106,26 @@ export const TreatmentsPage = () => {
                 key={treatment.id}
                 className="bg-white rounded-2xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 flex flex-col justify-between overflow-hidden group"
               >
+                {/* Treatment Image */}
+                {treatment.image && (
+                  <div className="relative h-44 overflow-hidden bg-gray-100">
+                    <img
+                      src={treatment.image}
+                      alt={treatment.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[10px] font-bold tracking-wider uppercase text-white bg-black/60 backdrop-blur-xs px-2.5 py-1 rounded-full border border-white/20">
+                      {treatment.category}
+                    </span>
+                  </div>
+                )}
+
                 {/* Card Header & Category */}
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold tracking-wider uppercase text-[#C5A059] bg-[#FAF6EE] px-2.5 py-1 rounded-full border border-[#C5A059]/30">
-                      {treatment.category}
+                      {treatment.subCategory || treatment.category}
                     </span>
                     <div className="flex items-center space-x-1 text-xs text-gray-500">
                       <Clock className="w-3.5 h-3.5 text-gray-400" />

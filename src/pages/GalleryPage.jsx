@@ -67,32 +67,62 @@ export const GalleryPage = () => {
               key={t.id}
               className="bg-white rounded-3xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden flex flex-col justify-between"
             >
-              <div className="p-6 sm:p-8 space-y-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#C5A059] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
-                    {t.category} Transformation
-                  </span>
-                  <div className="flex items-center space-x-1.5 text-xs text-gray-500">
-                    <Clock className="w-3.5 h-3.5 text-gray-400" />
-                    <span>Timeline: {t.turnaround}</span>
+              <div>
+                {/* Visual Before & After comparison if images exist */}
+                {t.beforeImage && t.afterImage ? (
+                  <div className="p-4 sm:p-6 pb-0">
+                    <div className="grid grid-cols-2 gap-3 bg-[#FAF8F5] p-3 rounded-2xl border border-[#EAE4DC]">
+                      <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-gray-200">
+                        <img 
+                          src={t.beforeImage} 
+                          alt={`${t.concern} - Before`} 
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                          Before
+                        </span>
+                      </div>
+                      <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-[#C5A059]/40">
+                        <img 
+                          src={t.afterImage} 
+                          alt={`${t.concern} - After`} 
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-sm">
+                          After
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
-                <div>
-                  <span className="text-xs font-semibold text-gray-400">{t.patientLabel}</span>
-                  <h3 className="font-serif text-2xl font-bold text-[#0F172A] mt-0.5">
-                    {t.concern}
-                  </h3>
-                </div>
-
-                <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE4DC] space-y-2 text-xs">
-                  <div>
-                    <strong className="text-gray-500 block text-[10px] uppercase">Clinical Protocol:</strong>
-                    <span className="font-medium text-[#0F172A]">{t.treatmentUsed}</span>
+                <div className="p-6 sm:p-8 space-y-5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#C5A059] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
+                      {t.category} Transformation
+                    </span>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <Clock className="w-3.5 h-3.5 text-gray-400" />
+                      <span>Timeline: {t.turnaround}</span>
+                    </div>
                   </div>
+
                   <div>
-                    <strong className="text-gray-500 block text-[10px] uppercase">Observed Outcome:</strong>
-                    <span className="text-emerald-800 font-medium">{t.resultDescription}</span>
+                    <span className="text-xs font-semibold text-gray-400">{t.patientLabel}</span>
+                    <h3 className="font-serif text-2xl font-bold text-[#0F172A] mt-0.5">
+                      {t.concern}
+                    </h3>
+                  </div>
+
+                  <div className="bg-[#FAF8F5] p-4 rounded-2xl border border-[#EAE4DC] space-y-2 text-xs">
+                    <div>
+                      <strong className="text-gray-500 block text-[10px] uppercase">Clinical Protocol:</strong>
+                      <span className="font-medium text-[#0F172A]">{t.treatmentUsed}</span>
+                    </div>
+                    <div>
+                      <strong className="text-gray-500 block text-[10px] uppercase">Observed Outcome:</strong>
+                      <span className="text-emerald-800 font-medium">{t.resultDescription}</span>
+                    </div>
                   </div>
                 </div>
               </div>
