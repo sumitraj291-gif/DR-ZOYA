@@ -1,671 +1,442 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Sparkles, 
+  ChevronLeft, 
+  ChevronRight, 
   Play, 
   Pause, 
-  RotateCw, 
   Calendar, 
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Info
+  ArrowRight, 
+  CheckCircle2, 
+  ShieldCheck, 
+  Award,
+  Smile,
+  HeartPulse
 } from 'lucide-react';
 import { useClinic } from '../context/ClinicContext';
 
-// 4 Visual Simulation Phases (Total 28 Seconds Cycle: ~7s each)
-const SIMULATION_PHASES = [
+// 3 Core Clinical Services matching the user's 3 uploaded hero images
+const HERO_SERVICES = [
   {
-    id: 'hair',
-    num: '01',
-    title: 'Scalp PRP & Follicle Regrowth',
-    icon: '🌿',
-    color: '#06B6D4',
-    timeRange: [0, 7],
-    targetCamera: { rotY: 0.0, rotX: -0.58, posZ: 2.85 },
-    badge: 'PRP Follicle Infusion Active',
-    metric: '+45% Density Awoken',
-    doctor: 'Dr. Zoya Rana',
-    doctorRole: 'Certified Hair Specialist'
+    id: 'dental',
+    step: '01',
+    category: 'Pediatric & Cosmetic Dentistry',
+    title: 'Painless Digital Smile Architecture & Gentle Family Care',
+    description: 'Transforming smiles with painless laser dentistry, digital 3D smile design, pediatric care, and seamless ceramic restorations in a calm sanctuary.',
+    image: '/images/hero/hero_dental.png',
+    alt: 'Smiling child receiving gentle, friendly dental care at DNA Dental Clinic',
+    doctor: 'Dr. Varsha Jha',
+    doctorRole: 'Lead Dental Surgeon (BDS)',
+    doctorImg: '/images/dr_varsha.png',
+    themeColor: '#059669', // Emerald / Mint
+    accentBg: 'from-emerald-500/10 via-amber-500/5 to-transparent',
+    glowColor: 'rgba(16, 185, 129, 0.18)',
+    stat: { value: '99.8%', label: 'Painless Patient Rating' },
+    badges: [
+      'Gentle Pediatric Dentistry',
+      'Zero-Pain Laser RCT',
+      'Digital Smile Aesthetics'
+    ],
+    ctaText: 'Book Dental Consultation',
+    serviceKey: 'dental'
   },
   {
     id: 'skin',
-    num: '02',
-    title: 'Dermal Hydra & Laser Clarity',
-    icon: '✨',
-    color: '#C5A059',
-    timeRange: [7, 14],
-    targetCamera: { rotY: 0.42, rotX: 0.02, posZ: 2.95 },
-    badge: 'Laser Clarity & Glass Skin Scan',
-    metric: '99.4% Pore Reset',
+    step: '02',
+    category: 'Medical Aesthetics & Dermatology',
+    title: 'Advanced Dermal Rejuvenation & Radiant Glass Skin',
+    description: 'Science-backed medical facials, US-FDA laser toning, chemical peels, and customized dermal serums crafted to renew your natural skin vitality.',
+    image: '/images/hero/hero_skin.png',
+    alt: 'Patient receiving dermatologist-formulated facial serum and aesthetic skin treatment',
     doctor: 'Dr. Zoya Rana',
-    doctorRole: 'Chief Aesthetic Physician'
+    doctorRole: 'Cosmetologist & Aesthetic Physician',
+    doctorImg: '/images/dr_zoya.png',
+    themeColor: '#C5A059', // Luxury Gold
+    accentBg: 'from-[#C5A059]/15 via-amber-500/5 to-transparent',
+    glowColor: 'rgba(197, 160, 89, 0.22)',
+    stat: { value: '100%', label: 'Customized Formulations' },
+    badges: [
+      'HydraFacial & Laser Clarity',
+      'Acne & Pigmentation Reset',
+      'Zero Downtime Protocols'
+    ],
+    ctaText: 'Book Skin Consultation',
+    serviceKey: 'skin'
   },
   {
-    id: 'smile',
-    num: '03',
-    title: 'Digital 3D Smile Makeover',
-    icon: '🦷',
-    color: '#10B981',
-    timeRange: [14, 21],
-    targetCamera: { rotY: 0.0, rotX: 0.18, posZ: 2.65 },
-    badge: 'Ceramic Veneer Arch Aligning',
-    metric: '0.1mm Precision Smile',
-    doctor: 'Dr. Varsha Jha',
-    doctorRole: 'Lead Dental Surgeon'
-  },
-  {
-    id: 'contour',
-    num: '04',
-    title: 'SMAS Jawline Sculpt & Lift',
-    icon: '💎',
-    color: '#E11D48',
-    timeRange: [21, 28],
-    targetCamera: { rotY: -0.65, rotX: 0.08, posZ: 3.05 },
-    badge: 'Mandibular V-Line Tightening',
-    metric: '100% Sharp Contour',
+    id: 'hair',
+    step: '03',
+    category: 'Trichology & Scalp Restoration',
+    title: 'Clinical Scalp PRP Therapy & Follicle Regrowth',
+    description: 'Targeted scalp micro-infusion, Growth Factor Concentrate (GFC), and clinical hair fall arrest protocols to awaken dormant follicles naturally.',
+    image: '/images/hero/hero_hair.png',
+    alt: 'Clinical trichology scalp examination by hair restoration specialist',
     doctor: 'Dr. Zoya Rana',
-    doctorRole: 'Director DNA Clinics'
+    doctorRole: 'Certified Hair & Scalp Specialist',
+    doctorImg: '/images/dr_zoya.png',
+    themeColor: '#0284C7', // Medical Blue
+    accentBg: 'from-sky-500/10 via-amber-500/5 to-transparent',
+    glowColor: 'rgba(2, 132, 199, 0.18)',
+    stat: { value: '+45%', label: 'Average Density Gain' },
+    badges: [
+      'Clinical PRP & GFC Therapy',
+      'Dormant Root Activation',
+      'Visible Density in 90 Days'
+    ],
+    ctaText: 'Book Scalp Analysis',
+    serviceKey: 'hair'
   }
 ];
 
 export const Hero3DAestheticExperience = () => {
   const { openBookingModal } = useClinic();
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
-
-  // 28-Second Cinematic Simulation Clock
-  const [simTime, setSimTime] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0); // 0 to 100%
+  const [touchStart, setTouchStart] = useState(0);
 
-  // Active Phase calculation
-  const activePhaseIndex = Math.min(
-    3, 
-    Math.max(0, Math.floor(simTime / 7))
-  );
-  const activePhase = SIMULATION_PHASES[activePhaseIndex];
+  const SLIDE_DURATION = 4000; // 4 seconds per service
+  const UPDATE_INTERVAL = 40; // Update progress bar every 40ms
 
-  // Refs for 60fps render loop
-  const simTimeRef = useRef(0);
-  const isPlayingRef = useRef(true);
-  const isUserInteractingRef = useRef(false);
-  const isDraggingRef = useRef(false);
-  const targetRotationRef = useRef({ x: -0.58, y: 0.0 });
-  const currentRotationRef = useRef({ x: -0.58, y: 0.0 });
-  const targetCameraZRef = useRef(2.85);
-  const currentCameraZRef = useRef(2.85);
-  const previousPointerRef = useRef({ x: 0, y: 0 });
-
-  // Three.js References
-  const headGroupRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
-  const skinMaterialRef = useRef(null);
-  const animationFrameRef = useRef(null);
-
-  // 3D Effect Groups
-  const hairFXGroupRef = useRef(null);
-  const skinFXGroupRef = useRef(null);
-  const smileFXGroupRef = useRef(null);
-  const contourFXGroupRef = useRef(null);
-  const hairRaysMeshRef = useRef(null);
-  const smileStarsGroupRef = useRef(null);
-
+  // Auto-rotation timer with progress bar
   useEffect(() => {
-    isPlayingRef.current = isPlaying;
-  }, [isPlaying]);
+    if (!isPlaying) return;
 
-  // Jump to Phase directly on click
-  const handleJumpToPhase = (phaseIdx) => {
-    const targetSec = phaseIdx * 7 + 0.1;
-    simTimeRef.current = targetSec;
-    setSimTime(targetSec);
-    const phase = SIMULATION_PHASES[phaseIdx];
-    if (phase) {
-      targetRotationRef.current = {
-        x: phase.targetCamera.rotX,
-        y: phase.targetCamera.rotY
-      };
-      targetCameraZRef.current = phase.targetCamera.posZ;
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setActiveIndex((current) => (current + 1) % HERO_SERVICES.length);
+          return 0;
+        }
+        return prev + (UPDATE_INTERVAL / SLIDE_DURATION) * 100;
+      });
+    }, UPDATE_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, activeIndex]);
+
+  const handleSelectService = (index) => {
+    setActiveIndex(index);
+    setProgress(0);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % HERO_SERVICES.length);
+    setProgress(0);
+  };
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + HERO_SERVICES.length) % HERO_SERVICES.length);
+    setProgress(0);
+  };
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (diff > 50) {
+      handleNext();
+    } else if (diff < -50) {
+      handlePrev();
     }
   };
 
-  // Mount Three.js Once
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-
-    let width = container.clientWidth || 800;
-    let height = container.clientHeight || 560;
-
-    // 1. Scene
-    const scene = new THREE.Scene();
-
-    // 2. Camera
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0, 2.85);
-    cameraRef.current = camera;
-
-    // 3. Renderer with ACES ToneMapping
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas, 
-      antialias: true, 
-      alpha: true, 
-      powerPreference: 'high-performance' 
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
-    rendererRef.current = renderer;
-
-    // 4. Portrait Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xfff5ea, 1.8);
-    scene.add(ambientLight);
-
-    const keyLight = new THREE.DirectionalLight(0xffeedd, 3.6);
-    keyLight.position.set(3.5, 4.2, 3.8);
-    scene.add(keyLight);
-
-    const fillLight = new THREE.DirectionalLight(0xe0f2fe, 1.7);
-    fillLight.position.set(-3.5, 2.2, 2.8);
-    scene.add(fillLight);
-
-    const goldRimLight = new THREE.DirectionalLight(0xc5a059, 2.6);
-    goldRimLight.position.set(0, -3.5, -2.8);
-    scene.add(goldRimLight);
-
-    // 5. Head Group
-    const headGroup = new THREE.Group();
-    scene.add(headGroup);
-    headGroupRef.current = headGroup;
-
-    // Floating Stardust Starlight Particles
-    const pCount = 110;
-    const pGeo = new THREE.BufferGeometry();
-    const pPos = new Float32Array(pCount * 3);
-    for (let i = 0; i < pCount * 3; i += 3) {
-      pPos[i] = (Math.random() - 0.5) * 4.2;
-      pPos[i + 1] = (Math.random() - 0.5) * 4.2;
-      pPos[i + 2] = (Math.random() - 0.5) * 3.0;
-    }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-    const pMat = new THREE.PointsMaterial({
-      color: 0xc5a059,
-      size: 0.038,
-      transparent: true,
-      opacity: 0.6
-    });
-    const particles = new THREE.Points(pGeo, pMat);
-    headGroup.add(particles);
-
-    // ===============================================
-    // 3D SIMULATION VISUAL EFFECTS (ATTACHED TO HEAD)
-    // ===============================================
-
-    // 1. HAIR & SCALP EFFECT (PRP Concentrated Energy Halo + Growing Follicle Rays)
-    const hairFX = new THREE.Group();
-    const haloGeo = new THREE.RingGeometry(0.55, 0.78, 48);
-    const haloMat = new THREE.MeshBasicMaterial({
-      color: 0x06b6d4,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.8
-    });
-    const haloMesh = new THREE.Mesh(haloGeo, haloMat);
-    haloMesh.position.set(0, 0.98, 0.38);
-    haloMesh.rotation.x = Math.PI / 2.05;
-    hairFX.add(haloMesh);
-
-    // Dynamic growing follicle strands
-    const hairRayCount = 36;
-    const hairRayGeo = new THREE.BufferGeometry();
-    const hairRayPos = new Float32Array(hairRayCount * 6);
-    for (let i = 0; i < hairRayCount; i++) {
-      const angle = (i / hairRayCount) * Math.PI * 2;
-      const r = 0.52 + Math.random() * 0.22;
-      const x = Math.cos(angle) * r;
-      const z = Math.sin(angle) * r * 0.85;
-      const y = 0.96;
-      hairRayPos[i * 6] = x;
-      hairRayPos[i * 6 + 1] = y;
-      hairRayPos[i * 6 + 2] = z;
-      hairRayPos[i * 6 + 3] = x;
-      hairRayPos[i * 6 + 4] = y + 0.25; // hair height
-      hairRayPos[i * 6 + 5] = z;
-    }
-    hairRayGeo.setAttribute('position', new THREE.BufferAttribute(hairRayPos, 3));
-    const hairRayMat = new THREE.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: 0.9 });
-    const hairRays = new THREE.LineSegments(hairRayGeo, hairRayMat);
-    hairFX.add(hairRays);
-    hairRaysMeshRef.current = hairRays;
-
-    headGroup.add(hairFX);
-    hairFXGroupRef.current = hairFX;
-
-    // 2. DERMAL SKIN EFFECT (Golden Laser Sweeper Grid over cheek)
-    const skinFX = new THREE.Group();
-    const dermalDiskGeo = new THREE.RingGeometry(0.32, 0.52, 32);
-    const dermalDiskMat = new THREE.MeshBasicMaterial({
-      color: 0xc5a059,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.75
-    });
-    const dermalDisk = new THREE.Mesh(dermalDiskGeo, dermalDiskMat);
-    dermalDisk.position.set(0.60, -0.05, 0.76);
-    dermalDisk.rotation.y = Math.PI / 3.8;
-    skinFX.add(dermalDisk);
-
-    // Laser crosshair
-    const chGeo = new THREE.BufferGeometry();
-    const chPos = new Float32Array([
-      -0.22, 0, 0, 0.22, 0, 0,
-      0, -0.22, 0, 0, 0.22, 0
-    ]);
-    chGeo.setAttribute('position', new THREE.BufferAttribute(chPos, 3));
-    const chMat = new THREE.LineBasicMaterial({ color: 0xffd700 });
-    const chMesh = new THREE.LineSegments(chGeo, chMat);
-    chMesh.position.copy(dermalDisk.position);
-    chMesh.rotation.copy(dermalDisk.rotation);
-    skinFX.add(chMesh);
-
-    headGroup.add(skinFX);
-    skinFXGroupRef.current = skinFX;
-
-    // 3. DIGITAL SMILE ARCH (Glowing Dental Veneer Curve with Sparkling Stars)
-    const smileFX = new THREE.Group();
-    const smileCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.35, -0.44, 0.98),
-      new THREE.Vector3(-0.18, -0.40, 1.05),
-      new THREE.Vector3(0.0, -0.38, 1.08),
-      new THREE.Vector3(0.18, -0.40, 1.05),
-      new THREE.Vector3(0.35, -0.44, 0.98)
-    ]);
-    const smileTubeGeo = new THREE.TubeGeometry(smileCurve, 32, 0.024, 12, false);
-    const smileTubeMat = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.9 });
-    const smileTube = new THREE.Mesh(smileTubeGeo, smileTubeMat);
-    smileFX.add(smileTube);
-
-    // Sparkling tooth nodes
-    const starsGroup = new THREE.Group();
-    for (let t = 0; t <= 1; t += 0.2) {
-      const pt = smileCurve.getPoint(t);
-      const starGeo = new THREE.SphereGeometry(0.035, 16, 16);
-      const starMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const star = new THREE.Mesh(starGeo, starMat);
-      star.position.copy(pt);
-      starsGroup.add(star);
-    }
-    smileFX.add(starsGroup);
-    smileStarsGroupRef.current = starsGroup;
-
-    headGroup.add(smileFX);
-    smileFXGroupRef.current = smileFX;
-
-    // 4. CONTOUR & JAWLINE (Rose Gold Mandibular Lift Line)
-    const contourFX = new THREE.Group();
-    const jawCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.75, -0.22, 0.45),
-      new THREE.Vector3(-0.68, -0.48, 0.65),
-      new THREE.Vector3(-0.45, -0.68, 0.82),
-      new THREE.Vector3(0.0, -0.74, 0.92)
-    ]);
-    const jawTubeGeo = new THREE.TubeGeometry(jawCurve, 32, 0.022, 12, false);
-    const jawTubeMat = new THREE.MeshBasicMaterial({ color: 0xe11d48, transparent: true, opacity: 0.9 });
-    const jawTube = new THREE.Mesh(jawTubeGeo, jawTubeMat);
-    contourFX.add(jawTube);
-
-    headGroup.add(contourFX);
-    contourFXGroupRef.current = contourFX;
-
-    // ===============================================
-    // LOAD REALISTIC HUMAN HEAD
-    // ===============================================
-    const loader = new GLTFLoader();
-    loader.load(
-      '/models/head.glb',
-      (gltf) => {
-        const root = gltf.scene;
-        const skinMat = new THREE.MeshPhysicalMaterial({
-          color: 0xdfb49d,
-          roughness: 0.58,
-          metalness: 0.0,
-          clearcoat: 0.24,
-          clearcoatRoughness: 0.32,
-          reflectivity: 0.55,
-          sheen: 0.75,
-          sheenColor: 0xd97757
-        });
-        skinMaterialRef.current = skinMat;
-
-        root.traverse((child) => {
-          if (child.isMesh) {
-            child.material = skinMat;
-            child.geometry.computeVertexNormals();
-          }
-        });
-
-        const box = new THREE.Box3().setFromObject(root);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2.45 / maxDim;
-
-        root.position.sub(center.multiplyScalar(scale));
-        root.position.y += 0.08;
-        root.scale.multiplyScalar(scale);
-
-        headGroup.add(root);
-        setIsLoading(false);
-      },
-      undefined,
-      (err) => {
-        console.warn('Using procedural sculpture', err);
-        const fallbackGroup = new THREE.Group();
-        const headGeo = new THREE.SphereGeometry(1, 48, 48);
-        headGeo.scale(0.85, 1.18, 0.95);
-        const skinMat = new THREE.MeshPhysicalMaterial({
-          color: 0xdfb49d,
-          roughness: 0.55,
-          clearcoat: 0.25
-        });
-        skinMaterialRef.current = skinMat;
-        const mesh = new THREE.Mesh(headGeo, skinMat);
-        fallbackGroup.add(mesh);
-        headGroup.add(fallbackGroup);
-        setIsLoading(false);
-      }
-    );
-
-    // ===============================================
-    // MANUAL DRAG INTERACTION HANDLERS
-    // ===============================================
-    const onPointerDown = (e) => {
-      isDraggingRef.current = true;
-      isUserInteractingRef.current = true;
-      previousPointerRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const onPointerMove = (e) => {
-      if (!isDraggingRef.current) return;
-      const deltaX = e.clientX - previousPointerRef.current.x;
-      const deltaY = e.clientY - previousPointerRef.current.y;
-      previousPointerRef.current = { x: e.clientX, y: e.clientY };
-
-      targetRotationRef.current.y += deltaX * 0.009;
-      targetRotationRef.current.x = Math.max(
-        -0.65, 
-        Math.min(0.65, targetRotationRef.current.x + deltaY * 0.009)
-      );
-    };
-
-    const onPointerUp = () => {
-      isDraggingRef.current = false;
-      setTimeout(() => {
-        isUserInteractingRef.current = false;
-      }, 4000);
-    };
-
-    canvas.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('pointerup', onPointerUp);
-
-    // ===============================================
-    // 28-SECOND ANIMATION LOOP & SIMULATION ENGINE
-    // ===============================================
-    let clock = new THREE.Clock();
-    const animate = () => {
-      animationFrameRef.current = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
-      const elapsed = clock.getElapsedTime();
-
-      // Progress 28-second simulation time
-      if (isPlayingRef.current) {
-        simTimeRef.current = (simTimeRef.current + delta) % 28;
-        setSimTime(simTimeRef.current);
-
-        // Auto-direct camera to current phase if user isn't manually dragging
-        if (!isUserInteractingRef.current) {
-          const currentPhaseIdx = Math.min(3, Math.floor(simTimeRef.current / 7));
-          const p = SIMULATION_PHASES[currentPhaseIdx];
-          if (p) {
-            targetRotationRef.current = {
-              x: p.targetCamera.rotX,
-              y: p.targetCamera.rotY
-            };
-            targetCameraZRef.current = p.targetCamera.posZ;
-          }
-        }
-      }
-
-      // Smooth camera and head movement
-      currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.08;
-      currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.08;
-      currentCameraZRef.current += (targetCameraZRef.current - currentCameraZRef.current) * 0.07;
-
-      if (cameraRef.current) {
-        cameraRef.current.position.z = currentCameraZRef.current;
-      }
-
-      if (headGroupRef.current) {
-        headGroupRef.current.rotation.y = currentRotationRef.current.y;
-        headGroupRef.current.rotation.x = currentRotationRef.current.x;
-        headGroupRef.current.position.y = Math.sin(elapsed * 1.4) * 0.025;
-      }
-
-      // Activate corresponding visual simulation on 3D model based on simTime
-      const curPhase = Math.floor(simTimeRef.current / 7);
-
-      // Phase 0: Hair (0-7s)
-      if (hairFXGroupRef.current) {
-        const isHair = curPhase === 0;
-        hairFXGroupRef.current.visible = isHair;
-        if (isHair) {
-          haloMesh.rotation.z = elapsed * 0.8;
-          // Animate growing hair rays
-          const growth = (Math.sin(elapsed * 4) * 0.5 + 0.5);
-          if (hairRaysMeshRef.current) {
-            hairRaysMeshRef.current.scale.set(1, 0.7 + growth * 0.6, 1);
-          }
-        }
-      }
-
-      // Phase 1: Skin (7-14s)
-      if (skinFXGroupRef.current) {
-        const isSkin = curPhase === 1;
-        skinFXGroupRef.current.visible = isSkin;
-        if (isSkin) {
-          dermalDisk.rotation.z = elapsed * 0.9;
-          // Skin glow aura effect
-          if (skinMaterialRef.current) {
-            skinMaterialRef.current.clearcoat = 0.2 + (Math.sin(elapsed * 3) * 0.5 + 0.5) * 0.4;
-          }
-        }
-      }
-
-      // Phase 2: Smile (14-21s)
-      if (smileFXGroupRef.current) {
-        const isSmile = curPhase === 2;
-        smileFXGroupRef.current.visible = isSmile;
-        if (isSmile && smileStarsGroupRef.current) {
-          smileTube.material.opacity = 0.7 + Math.sin(elapsed * 4) * 0.25;
-          smileStarsGroupRef.current.children.forEach((c, idx) => {
-            c.scale.setScalar(1 + Math.sin(elapsed * 5 + idx) * 0.35);
-          });
-        }
-      }
-
-      // Phase 3: Contour (21-28s)
-      if (contourFXGroupRef.current) {
-        const isContour = curPhase === 3;
-        contourFXGroupRef.current.visible = isContour;
-        if (isContour) {
-          jawTube.material.opacity = 0.75 + Math.sin(elapsed * 3.5) * 0.22;
-        }
-      }
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      if (!container || !cameraRef.current || !rendererRef.current) return;
-      width = container.clientWidth;
-      height = container.clientHeight;
-      cameraRef.current.aspect = width / height;
-      cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(width, height);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      cancelAnimationFrame(animationFrameRef.current);
-      window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', onPointerUp);
-      renderer.dispose();
-    };
-  }, []);
+  const activeService = HERO_SERVICES[activeIndex];
 
   return (
-    <div className="w-full relative">
-
-      {/* 3D Clinical Stage Viewport */}
+    <div 
+      className="relative w-full rounded-3xl bg-gradient-to-br from-white via-[#FCFAF7] to-[#F7F2EA] border border-[#EAE4DC] shadow-[0_20px_50px_rgba(15,23,42,0.06)] overflow-hidden transition-all duration-500"
+      onMouseEnter={() => setIsPlaying(false)}
+      onMouseLeave={() => setIsPlaying(true)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Ambient background glow matching active service */}
       <div 
-        ref={containerRef}
-        className="w-full h-[480px] sm:h-[540px] relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#FAF8F5] via-[#F4EDE4]/60 to-[#FAF8F5] border border-[#EAE4DC] shadow-2xl select-none"
-      >
-        {/* Dynamic Atmospheric Glow */}
-        <div 
-          className="absolute inset-0 rounded-full blur-3xl opacity-40 -z-10 transition-all duration-1000 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle, ${activePhase.color}55 0%, rgba(197, 160, 89, 0.15) 55%, transparent 75%)`
-          }}
-        />
+        className="absolute inset-0 opacity-40 transition-colors duration-700 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse 65% 55% at 70% 45%, ${activeService.glowColor} 0%, transparent 70%)`
+        }}
+      />
+      
+      {/* Subtle luxury pattern lines */}
+      <div className="absolute inset-0 bg-[radial-gradient(#C5A059_0.8px,transparent_0.8px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
-        {/* 3D WebGL Canvas */}
-        <canvas 
-          ref={canvasRef} 
-          className="w-full h-full cursor-grab active:cursor-grabbing block"
-        />
-
-        {/* Loading Spinner */}
-        {isLoading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[#FAF8F5]/85 backdrop-blur-xs pointer-events-none">
-            <div className="w-9 h-9 rounded-full border-2 border-[#C5A059] border-t-transparent animate-spin" />
-            <span className="text-xs font-mono uppercase tracking-widest text-[#0F172A] font-bold">
-              Loading 3D Anatomy Simulator...
-            </span>
-          </div>
-        )}
-
-        {/* TOP HUD: Live Clinical Scan Readout */}
-        <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
-          
-          {/* Active Phase Chip */}
-          <div className="bg-[#090D14]/90 text-white backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 flex items-center space-x-2.5 shadow-xl">
-            <span className="w-2.5 h-2.5 rounded-full animate-ping" style={{ backgroundColor: activePhase.color }} />
-            <span className="text-xs font-mono font-bold tracking-wider uppercase text-white flex items-center space-x-1.5">
-              <span>{activePhase.icon}</span>
-              <span style={{ color: activePhase.color }}>{activePhase.badge}</span>
-            </span>
-          </div>
-
-          {/* Real-time Metric Pill */}
-          <div className="hidden sm:flex items-center space-x-2 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-lg border border-[#C5A059]/40">
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="text-xs font-bold text-[#0F172A]">{activePhase.metric}</span>
-          </div>
-        </div>
-
-        {/* CENTER FLOATING BIG ACTION BUTTON (Instant One-Click Booking) */}
-        <div className="absolute top-4 right-4 sm:top-auto sm:bottom-20 sm:right-6 z-20">
-          <button
-            onClick={() => openBookingModal(activePhase.title)}
-            className="btn-gold px-6 py-3.5 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2 shadow-2xl hover:scale-105 transition-all cursor-pointer group border border-white/40"
-          >
-            <Calendar className="w-4 h-4" />
-            <span>Book {activePhase.title.split(' ')[0]} Care</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
-
-        {/* USER ROTATION HINT */}
-        <div className="absolute top-16 left-4 pointer-events-none hidden sm:block">
-          <span className="bg-black/50 text-white/80 text-[10px] font-medium px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-xs">
-            ✋ Drag 360° to inspect anytime
+      {/* Top Header Bar: Service Step Tabs with Live Progress Bars */}
+      <div className="relative z-10 px-4 sm:px-8 pt-5 pb-3 border-b border-[#EAE4DC]/60 flex flex-wrap items-center justify-between gap-3 bg-white/60 backdrop-blur-sm">
+        <div className="flex items-center space-x-2">
+          <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeService.themeColor }} />
+          <span className="w-2 h-2 rounded-full -ml-3" style={{ backgroundColor: activeService.themeColor }} />
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+            Core Clinical Specialties
+          </span>
+          <span className="text-[11px] font-medium text-[#64748B] hidden sm:inline">
+            (Appearing Sequentially)
           </span>
         </div>
 
-        {/* BOTTOM HUD: 28-Second Visual Journey Scrubber & Controls */}
-        <div className="absolute bottom-4 left-4 right-4 bg-[#090D14]/90 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-white/15 shadow-2xl z-20 space-y-2.5">
-          
-          {/* Scrubber Progress Bar */}
-          <div className="relative h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
-            <div 
-              className="h-full transition-all duration-100 rounded-full"
-              style={{
-                width: `${(simTime / 28) * 100}%`,
-                backgroundColor: activePhase.color
-              }}
-            />
-          </div>
-
-          {/* 4 Phase Selectors & Timeline Controls */}
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            
-            {/* 4 Phase Quick-Jump Buttons */}
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {SIMULATION_PHASES.map((p, idx) => {
-                const isCur = activePhaseIndex === idx;
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => handleJumpToPhase(idx)}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      isCur
-                        ? 'bg-white text-black shadow-lg scale-105'
-                        : 'bg-white/10 text-white/80 hover:bg-white/20'
-                    }`}
-                  >
-                    <span>{p.icon}</span>
-                    <span className="hidden sm:inline">{p.title.split(' ')[0]}</span>
-                    {isCur && (
-                      <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: p.color }} />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Play/Pause & Time Indicator */}
-            <div className="flex items-center space-x-3 text-xs text-white">
-              <span className="font-mono text-[11px] text-[#C5A059] font-bold">
-                {Math.floor(simTime)}s / 28s
-              </span>
-
+        {/* 3 Interactive Service Selectors */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {HERO_SERVICES.map((srv, idx) => {
+            const isActive = idx === activeIndex;
+            return (
               <button
-                onClick={() => setIsPlaying(prev => !prev)}
-                className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center cursor-pointer transition-all text-white"
-                title={isPlaying ? 'Pause Simulation' : 'Play Simulation'}
+                key={srv.id}
+                onClick={() => handleSelectService(idx)}
+                className={`relative px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 flex items-center space-x-1.5 cursor-pointer overflow-hidden ${
+                  isActive 
+                    ? 'bg-[#0F172A] text-white shadow-md' 
+                    : 'bg-white/80 hover:bg-white text-[#475569] border border-[#E2D9CE]'
+                }`}
               >
-                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
+                {/* Live progress indicator filling up on the active pill */}
+                {isActive && isPlaying && (
+                  <div 
+                    className="absolute left-0 top-0 bottom-0 bg-[#C5A059]/40 transition-all ease-linear"
+                    style={{ width: `${progress}%` }}
+                  />
+                )}
+                <span className="relative z-10 text-[10px] opacity-70">{srv.step}</span>
+                <span className="relative z-10">
+                  {srv.id === 'dental' && '🦷 Dental'}
+                  {srv.id === 'skin' && '✨ Skin'}
+                  {srv.id === 'hair' && '🌿 Hair'}
+                </span>
               </button>
-            </div>
+            );
+          })}
 
+          {/* Pause / Play button */}
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            title={isPlaying ? "Pause rotation" : "Resume auto-play"}
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E2D9CE] text-[#64748B] hover:text-[#0F172A] transition-all cursor-pointer shadow-xs ml-1"
+          >
+            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content Area: 2-Column Showcase */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center p-6 sm:p-10 gap-8 lg:gap-12 min-h-[440px]">
+        
+        {/* LEFT COLUMN: Service Details & Clinical Assurance (5 cols) */}
+        <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
+          {/* Sub-badge */}
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white border border-[#EAE4DC] shadow-xs">
+            <span 
+              className="text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-sm text-white"
+              style={{ backgroundColor: activeService.themeColor }}
+            >
+              {activeService.step}
+            </span>
+            <span className="text-xs font-semibold text-[#0F172A]">
+              {activeService.category}
+            </span>
           </div>
 
+          {/* Service Title */}
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#0F172A] leading-snug tracking-tight transition-all duration-300">
+            {activeService.title}
+          </h2>
+
+          {/* Description */}
+          <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+            {activeService.description}
+          </p>
+
+          {/* Clinical Advantage Pills */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            {activeService.badges.map((badge, bIdx) => (
+              <div 
+                key={bIdx}
+                className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/90 border border-[#E8E2D9] text-xs font-medium text-[#1E293B] shadow-xs"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059]" />
+                <span>{badge}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Doctor Signature & CTA Row */}
+          <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#EAE4DC]">
+            <div className="flex items-center space-x-3">
+              <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-[#C5A059] shadow-xs shrink-0 bg-white">
+                <img 
+                  src={activeService.doctorImg} 
+                  alt={activeService.doctor} 
+                  className="w-full h-full object-cover object-top"
+                  onError={(e) => { e.target.src = '/images/dna_logo.png'; }}
+                />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-[#0F172A]">
+                  {activeService.doctor}
+                </div>
+                <div className="text-[11px] text-[#64748B]">
+                  {activeService.doctorRole}
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => openBookingModal(activeService.serviceKey)}
+              className="px-5 py-2.5 rounded-full text-xs font-semibold text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer group shrink-0"
+              style={{ backgroundColor: activeService.themeColor }}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{activeService.ctaText}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
         </div>
 
+        {/* RIGHT COLUMN: The 3 Cutout Images Appearing One by One (6 cols) */}
+        <div className="lg:col-span-6 relative flex items-center justify-center order-1 lg:order-2">
+          
+          {/* Circular Stage / Pedestal with Luxury Glow */}
+          <div className="relative w-full max-w-[500px] aspect-[4/3] flex items-center justify-center">
+            
+            {/* Ambient Multi-Ring Halo Backdrop */}
+            <div 
+              className="absolute w-[80%] h-[80%] rounded-full transition-all duration-700 blur-2xl opacity-60"
+              style={{ backgroundColor: activeService.glowColor }}
+            />
+            <div className="absolute w-[90%] h-[90%] rounded-full border border-[#C5A059]/20 border-dashed animate-[spin_60s_linear_infinite]" />
+            <div className="absolute w-[75%] h-[75%] rounded-full bg-gradient-to-b from-white/90 to-[#F5EFE6]/80 shadow-inner border border-white/80" />
+
+            {/* The 3 Images Stacked - Active one is smoothly transitioned in */}
+            {HERO_SERVICES.map((srv, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <div
+                  key={srv.id}
+                  className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out ${
+                    isActive 
+                      ? 'opacity-100 scale-100 translate-y-0 z-20 pointer-events-auto' 
+                      : 'opacity-0 scale-95 translate-y-4 z-10 pointer-events-none'
+                  }`}
+                >
+                  <img
+                    src={srv.image}
+                    alt={srv.alt}
+                    className="max-w-full max-h-[340px] w-auto h-auto object-contain drop-shadow-[0_20px_30px_rgba(15,23,42,0.18)] select-none hover:scale-[1.02] transition-transform duration-500"
+                    loading="eager"
+                  />
+                </div>
+              );
+            })}
+
+            {/* Floating Trust Card Top-Right */}
+            <div className="absolute -top-2 right-2 sm:right-6 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-[#E2D9CE] shadow-lg flex items-center space-x-2.5 animate-[bounce_4s_ease-in-out_infinite]">
+              <div 
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-xs"
+                style={{ backgroundColor: activeService.themeColor }}
+              >
+                {activeService.stat.value}
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] font-bold text-[#0F172A] leading-tight">
+                  Clinical Benchmark
+                </div>
+                <div className="text-[9px] text-[#64748B]">
+                  {activeService.stat.label}
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Trust Card Bottom-Left */}
+            <div className="absolute -bottom-2 left-2 sm:left-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-[#E2D9CE] shadow-lg flex items-center space-x-2.5">
+              <ShieldCheck className="w-5 h-5 text-[#C5A059]" />
+              <div className="text-left">
+                <div className="text-[10px] font-bold text-[#0F172A] leading-tight">
+                  US-FDA Approved Tech
+                </div>
+                <div className="text-[9px] text-[#64748B]">
+                  Sterile & Pain-Free Setup
+                </div>
+              </div>
+            </div>
+
+            {/* Left / Right Arrow Controls */}
+            <button
+              onClick={handlePrev}
+              aria-label="Previous treatment"
+              className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 border border-[#E2D9CE] text-[#0F172A] flex items-center justify-center shadow-md hover:scale-110 hover:bg-white transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleNext}
+              aria-label="Next treatment"
+              className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 border border-[#E2D9CE] text-[#0F172A] flex items-center justify-center shadow-md hover:scale-110 hover:bg-white transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+      {/* Bottom Service Cards / Carousel Dots */}
+      <div className="relative z-10 px-4 sm:px-8 py-3.5 bg-[#FAF7F2] border-t border-[#EAE4DC] grid grid-cols-3 gap-2 sm:gap-4">
+        {HERO_SERVICES.map((srv, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <button
+              key={srv.id}
+              onClick={() => handleSelectService(idx)}
+              className={`p-2.5 sm:p-3 rounded-xl text-left transition-all duration-300 flex items-center space-x-2.5 sm:space-x-3 cursor-pointer border ${
+                isActive 
+                  ? 'bg-white border-[#C5A059] shadow-sm' 
+                  : 'bg-white/50 border-transparent hover:bg-white/80 hover:border-[#E2D9CE]'
+              }`}
+            >
+              {/* Mini thumbnail preview of user's image */}
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-[#FAF8F5] border border-[#EAE4DC] overflow-hidden shrink-0 flex items-center justify-center p-0.5">
+                <img 
+                  src={srv.image} 
+                  alt={srv.category} 
+                  className="w-full h-full object-contain"
+                />
+              </div>
+
+              {/* Title & Step */}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center space-x-1.5">
+                  <span 
+                    className="text-[9px] font-bold px-1 rounded-xs uppercase text-white"
+                    style={{ backgroundColor: srv.themeColor }}
+                  >
+                    {srv.step}
+                  </span>
+                  <span className={`text-[11px] sm:text-xs font-bold truncate ${isActive ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+                    {srv.id === 'dental' && 'Dental Care'}
+                    {srv.id === 'skin' && 'Skin Glow'}
+                    {srv.id === 'hair' && 'Hair Restoration'}
+                  </span>
+                </div>
+                <div className="text-[10px] text-[#94A3B8] truncate hidden sm:block">
+                  {srv.category}
+                </div>
+              </div>
+
+              {/* Active pulse */}
+              {isActive && (
+                <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: srv.themeColor }} />
+              )}
+            </button>
+          );
+        })}
       </div>
 
     </div>
   );
 };
+
+export default Hero3DAestheticExperience;
