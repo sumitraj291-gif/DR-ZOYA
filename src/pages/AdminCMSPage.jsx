@@ -65,7 +65,7 @@ export const AdminCMSPage = () => {
     advanceFee: 500,
     description: '',
     benefitsStr: 'Instant Radiance, Zero Downtime, Collagen Stimulation',
-    image: '/images/treatment_aesthetic.jpg'
+    image: '/images/advanced_facials.png'
   });
 
   // Editing existing treatment state
@@ -165,7 +165,7 @@ export const AdminCMSPage = () => {
       advanceFee: 500,
       description: '',
       benefitsStr: 'Instant Radiance, Zero Downtime, Collagen Stimulation',
-      image: '/images/treatment_aesthetic.jpg'
+      image: '/images/advanced_facials.png'
     });
   };
 

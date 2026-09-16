@@ -19,7 +19,7 @@ export const AIAnalyzerPage = () => {
   const { openBookingModal } = useClinic();
   
   const [activeTab, setActiveTab] = useState('upload'); // 'upload' or 'camera'
-  const [imagePreview, setImagePreview] = useState('/images/dr_zoya_portrait.jpg');
+  const [imagePreview, setImagePreview] = useState('/images/dr_zoya_rana.png');
   const [isScanning, setIsScanning] = useState(false);
   const [scanStepText, setScanStepText] = useState('');
   const [analysisReport, setAnalysisReport] = useState(null);
@@ -211,7 +211,7 @@ export const AIAnalyzerPage = () => {
               {activeTab === 'upload' && (
                 <button
                   onClick={() => {
-                    setImagePreview('/images/dr_zoya_portrait.jpg');
+                    setImagePreview('/images/dr_zoya_rana.png');
                     setAnalysisReport(null);
                   }}
                   className="text-[11px] text-[#C5A059] font-medium hover:underline"

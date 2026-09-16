@@ -3,12 +3,24 @@ import { initialClinicData, initialSeedAppointments } from '../data/defaultClini
 
 const ClinicContext = createContext();
 
+const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_march';
+const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
+
 export const ClinicProvider = ({ children }) => {
   // 1. Persistent Clinic Content Data (CMS)
   const [clinicData, setClinicData] = useState(() => {
     try {
-      const saved = localStorage.getItem('dr_zoya_clinic_data_v1');
-      if (saved) return JSON.parse(saved);
+      // Purge all legacy v1 cache from browser
+      localStorage.removeItem('dr_zoya_clinic_data_v1');
+      
+      const saved = localStorage.getItem(CLINIC_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Ensure the cache is the authentic DNA Clinic India data with real contact (+91 63953 77355)
+        if (parsed?.profile?.contact?.phone?.includes('63953') && parsed?.doctorTeam?.length >= 3) {
+          return parsed;
+        }
+      }
     } catch (e) {
       console.error('Error loading clinic data from localStorage:', e);
     }
@@ -18,7 +30,7 @@ export const ClinicProvider = ({ children }) => {
   // 2. Persistent Appointments & Leads (CRM)
   const [appointments, setAppointments] = useState(() => {
     try {
-      const saved = localStorage.getItem('dr_zoya_appointments_v1');
+      const saved = localStorage.getItem(APPOINTMENTS_STORAGE_KEY);
       if (saved) return JSON.parse(saved);
     } catch (e) {
       console.error('Error loading appointments from localStorage:', e);
@@ -42,7 +54,9 @@ export const ClinicProvider = ({ children }) => {
   // Sync clinicData changes to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('dr_zoya_clinic_data_v1', JSON.stringify(clinicData));
+      // Clean legacy keys
+      localStorage.removeItem('dr_zoya_clinic_data_v1');
+      localStorage.setItem(CLINIC_STORAGE_KEY, JSON.stringify(clinicData));
     } catch (e) {
       console.error('Error saving clinic data:', e);
     }
@@ -51,7 +65,7 @@ export const ClinicProvider = ({ children }) => {
   // Sync appointments changes to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('dr_zoya_appointments_v1', JSON.stringify(appointments));
+      localStorage.setItem(APPOINTMENTS_STORAGE_KEY, JSON.stringify(appointments));
     } catch (e) {
       console.error('Error saving appointments:', e);
     }
@@ -159,6 +173,8 @@ export const ClinicProvider = ({ children }) => {
       setAppointments(initialSeedAppointments);
       localStorage.removeItem('dr_zoya_clinic_data_v1');
       localStorage.removeItem('dr_zoya_appointments_v1');
+      localStorage.removeItem(CLINIC_STORAGE_KEY);
+      localStorage.removeItem(APPOINTMENTS_STORAGE_KEY);
       showToast('All clinic data reset to official defaults.', 'info');
     }
   };

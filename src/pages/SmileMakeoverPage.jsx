@@ -96,8 +96,8 @@ export const SmileMakeoverPage = () => {
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
               <img
-                src="/images/dental_smile_makeover.jpg"
-                alt="Digital Smile Design Consultation with Dr. Zoya"
+                src="/images/general_dentistry.png"
+                alt="Digital Smile Design Consultation with Dr. Zoya & Dr. Varsha"
                 className="w-full h-[380px] sm:h-[440px] object-cover"
               />
               <div className="absolute bottom-3 left-3 right-3 bg-black/75 backdrop-blur-sm p-3 rounded-xl text-white text-xs border border-white/20 flex items-center justify-between">
