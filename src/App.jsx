@@ -13,12 +13,17 @@ import { AIAnalyzerPage } from './pages/AIAnalyzerPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { BookPage } from './pages/BookPage';
 import { ContactPage } from './pages/ContactPage';
-import { AdminCMSPage } from './pages/AdminCMSPage';
+import { AdminApp } from './admin/AdminApp';
 
 import { CheckCircle2, Info, AlertCircle } from 'lucide-react';
 
 const PageContent = () => {
   const { activePage, toastMessage } = useClinic();
+
+  // Full-screen dedicated workspace for Admin CRM & CMS portal
+  if (activePage === 'admin') {
+    return <AdminApp />;
+  }
 
   const renderActivePage = () => {
     switch (activePage) {
@@ -38,8 +43,6 @@ const PageContent = () => {
         return <BookPage />;
       case 'contact':
         return <ContactPage />;
-      case 'admin':
-        return <AdminCMSPage />;
       default:
         return <HomePage />;
     }
@@ -85,3 +88,4 @@ export default function App() {
     </ClinicProvider>
   );
 }
+

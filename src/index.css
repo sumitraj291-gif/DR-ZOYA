@@ -298,3 +298,100 @@ body {
 .animate-pulse-glow {
   animation: pulseGlow 3s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   Admin Panel Luxury CRM / ERP Design System
+   ========================================================================== */
+
+.font-serif-heading {
+  font-family: var(--font-serif);
+}
+
+.btn-gold-primary {
+  background: linear-gradient(135deg, #DFBE7B 0%, #C5A059 50%, #9F7B39 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+.btn-gold-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
+}
+.btn-gold-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary-dark {
+  background-color: #090D14;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease-in-out;
+}
+.btn-secondary-dark:hover {
+  background-color: #121824;
+  transform: translateY(-1px);
+}
+
+/* Admin Luxury Table Design */
+.luxury-table-container {
+  background: #FFFFFF;
+  border: 1px solid #E8E2D9;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.luxury-table th {
+  background: #090D14;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 0.875rem 1rem;
+}
+
+.luxury-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #F1ECE5;
+}
+
+.luxury-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.luxury-table tbody tr:hover {
+  background-color: #FAF8F5;
+}
+
+/* Admin Modals & Drawers Animations */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes drawerIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-drawer-in {
+  animation: drawerIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useClinic } from '../context/ClinicContext';
 import { LanguageSelector } from './LanguageSelector';
-import { 
-  Phone, 
-  Clock, 
-  MapPin, 
-  Calendar, 
-  Menu, 
-  X, 
-  Sparkles, 
-  ShieldCheck, 
+import {
+  Phone,
+  Clock,
+  MapPin,
+  Calendar,
+  Menu,
+  X,
+  Sparkles,
+  ShieldCheck,
   ChevronRight,
   MessageCircle,
   SlidersHorizontal
@@ -63,7 +63,7 @@ export const Navbar = () => {
           <div className="flex items-center space-x-3 ml-auto text-xs">
             <LanguageSelector variant="header" />
             <span className="text-[#334155] hidden sm:inline">|</span>
-            <a 
+            <a
               href={`tel:${clinicData.profile.contact.phone.replace(/[^0-9+]/g, '')}`}
               className="hidden sm:flex items-center space-x-1 text-[#E2E8F0] hover:text-[#C5A059] transition-colors"
             >
@@ -84,15 +84,14 @@ export const Navbar = () => {
       </div>
 
       {/* Main Navigation Bar */}
-      <nav className={`w-full transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-[#E2E8F0]' 
+      <nav className={`w-full transition-all duration-300 ${scrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-[#E2E8F0]'
           : 'bg-[#FAF8F5]/90 backdrop-blur-sm py-4 border-b border-[#EAE4DC]'
-      }`}>
+        }`}>
         <div className="clinic-container flex items-center justify-between">
           {/* Logo & Brand Identity */}
-          <button 
-            onClick={() => handleNavClick('home')} 
+          <button
+            onClick={() => handleNavClick('home')}
             className="flex items-center space-x-3 text-left group focus:outline-none"
           >
             <div className="w-12 h-12 rounded-2xl bg-white border border-[#C5A059]/50 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all">
@@ -117,11 +116,10 @@ export const Navbar = () => {
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`px-3 py-2 text-sm font-medium rounded-full transition-all relative ${
-                    isActive 
-                      ? 'text-[#0F172A] font-semibold bg-[#EFE9DF]' 
+                  className={`px-3 py-2 text-sm font-medium rounded-full transition-all relative ${isActive
+                      ? 'text-[#0F172A] font-semibold bg-[#EFE9DF]'
                       : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F4EFEB]'
-                  }`}
+                    }`}
                 >
                   <span className="flex items-center space-x-1.5">
                     <span>{link.label}</span>
@@ -179,7 +177,7 @@ export const Navbar = () => {
                 <div className="font-serif text-lg font-bold text-[#0F172A]">Clinic Navigation</div>
                 <div className="flex items-center space-x-2">
                   <LanguageSelector variant="drawer" />
-                  <button 
+                  <button
                     onClick={() => setMobileMenuOpen(false)}
                     className="p-1 text-gray-500 hover:text-black"
                   >
@@ -193,11 +191,10 @@ export const Navbar = () => {
                   <button
                     key={link.id}
                     onClick={() => handleNavClick(link.id)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-colors ${
-                      activePage === link.id
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-colors ${activePage === link.id
                         ? 'bg-[#F5EFE6] text-[#0F172A] font-semibold border-l-4 border-[#C5A059]'
                         : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                      }`}
                   >
                     <span className="flex items-center space-x-2">
                       <span>{link.label}</span>
@@ -237,7 +234,7 @@ export const Navbar = () => {
               </button>
 
               <div className="flex items-center justify-center space-x-4 pt-2 text-xs text-gray-500">
-                <a 
+                <a
                   href={`tel:${clinicData.profile.contact.phone.replace(/[^0-9+]/g, '')}`}
                   className="flex items-center space-x-1 text-gray-700 hover:text-[#C5A059]"
                 >
@@ -245,7 +242,7 @@ export const Navbar = () => {
                   <span>Call Reception</span>
                 </a>
                 <span>•</span>
-                <a 
+                <a
                   href={`https://wa.me/${clinicData.profile.contact.whatsapp.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
