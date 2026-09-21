@@ -55,9 +55,12 @@ export const submitContactInquiry = (data) =>
 
 /**
  * Submit an appointment booking from the booking modal.
+ * NOTE: Backend uses the same /public/contact-inquiry endpoint for all lead types.
+ * /bookings/create-order is for Razorpay Phase 2 (paid advance booking).
  */
 export const submitBookingLead = (data) =>
-  request('POST', '/public/booking-lead', data);
+  request('POST', '/public/contact-inquiry', data);
+
 
 /**
  * Submit a WhatsApp bot lead.
