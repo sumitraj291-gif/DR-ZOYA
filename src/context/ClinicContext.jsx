@@ -1,5 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { initialClinicData, initialSeedAppointments } from '../data/defaultClinicData';
+import {
+  fetchClinicData,
+  submitContactInquiry,
+  submitBookingLead,
+  submitWhatsAppBotLead,
+  updateDoctorOnServer,
+  addDoctorOnServer,
+  deleteDoctorOnServer,
+  updateClinicProfile as updateClinicProfileAPI,
+  updateHeroSection as updateHeroSectionAPI,
+} from '../services/api';
 
 const ClinicContext = createContext();
 
@@ -18,9 +29,15 @@ export const ClinicProvider = ({ children }) => {
       if (saved) {
         const parsed = JSON.parse(saved);
         // Ensure the cache is the authentic DNA Clinic India data with real contact (+91 63953 77355)
-        if (parsed?.profile?.contact?.phone?.includes('63953') && parsed?.doctorTeam?.length >= 3) {
+        if (parsed?.profile?.contact?.phone?.includes('63953')) {
           if (!parsed.gallery || parsed.gallery.length < 20) {
             parsed.gallery = initialClinicData.gallery;
+          }
+          if (!parsed.profile?.team || parsed.profile.team.length === 0) {
+            parsed.profile = {
+              ...(parsed.profile || initialClinicData.profile),
+              team: initialClinicData.profile.team
+            };
           }
           return parsed;
         }
@@ -54,6 +71,97 @@ export const ClinicProvider = ({ children }) => {
   const [preselectedTreatment, setPreselectedTreatment] = useState(null);
   const [whatsAppBotOpen, setWhatsAppBotOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const [backendLoaded, setBackendLoaded] = useState(false);
+
+  // ── Fetch from backend on app load (non-blocking, graceful fallback) ────────
+  useEffect(() => {
+    if (backendLoaded) return;
+    fetchClinicData()
+      .then(res => {
+        if (!res?.data) return;
+        const { settings, team, treatments, testimonials } = res.data;
+        if (!settings) return;
+
+        // Build profile from backend settings + team
+        const backendProfile = {
+          clinicName: settings.clinicName,
+          brandAlias: settings.brandAlias || 'Dr. Zoya\'s DNA Clinic India',
+          tagline: settings.tagline || '',
+          doctorName: settings.doctorName,
+          doctorTitle: settings.doctorTitle,
+          doctorRole: settings.doctorRole,
+          doctorBio: settings.doctorBio,
+          doctorExperienceYears: settings.doctorExperienceYears || 12,
+          patientCount: settings.patientCount || '15,000+',
+          rating: settings.rating || '4.9',
+          reviewCount: settings.reviewCount || '1,240+',
+          instagram: settings.instagram || 'https://www.instagram.com/dnaclinicindia/',
+          instagramHandle: settings.instagramHandle || '@dnaclinicindia',
+          certifications: settings.certifications || [],
+          whyChooseUs: settings.whyChooseUs || [],
+          contact: {
+            phone: settings.phone,
+            altPhone: settings.altPhone || settings.phone,
+            whatsapp: settings.whatsapp,
+            email: settings.email,
+            address: settings.address,
+            dehradunAddress: settings.dehradunAddress || '',
+            muzaffarnagarAddress: settings.muzaffarnagarAddress || '',
+            timings: settings.timings,
+            emergencyHelpline: settings.phone,
+          },
+          team: (team || []).filter(d => d.isActive !== false),
+        };
+
+        const backendHero = {
+          badge: settings.heroBadge,
+          titlePrimary: settings.heroTitlePrimary,
+          titleHighlight: settings.heroTitleHighlight,
+          description: settings.heroDescription,
+          stats: settings.heroStats || [],
+        };
+
+        const backendTreatments = (treatments || []).map(t => ({
+          id: t.slug || t.id,
+          _serverId: t.id,
+          title: t.title,
+          category: t.category,
+          subCategory: t.subCategory || '',
+          duration: t.duration,
+          price: t.priceDisplay,
+          advanceFee: t.advanceFee,
+          description: t.description,
+          benefits: t.benefits || [],
+          isPopular: t.isPopular,
+          image: t.imageUrl || '/images/advanced_facials.png',
+        }));
+
+        const backendTestimonials = (testimonials || []).map(t => ({
+          id: t.id,
+          name: t.patientName,
+          location: t.location,
+          verifiedProcedure: t.verifiedProcedure,
+          rating: t.rating,
+          date: t.reviewDate,
+          text: t.reviewText,
+        }));
+
+        setClinicData(prev => ({
+          ...prev,
+          profile: backendProfile,
+          hero: backendHero,
+          treatments: backendTreatments.length > 0 ? backendTreatments : prev.treatments,
+          testimonials: backendTestimonials.length > 0 ? backendTestimonials : prev.testimonials,
+          gallery: (res.data.gallery?.length > 0) ? res.data.gallery : prev.gallery,
+        }));
+
+        setBackendLoaded(true);
+        console.log('[DNA Clinic] ✅ Backend data synced successfully.');
+      })
+      .catch(err => {
+        console.warn('[DNA Clinic] ⚠️ Backend unavailable, using cached/default data.', err.message);
+      });
+  }, []);
 
   // Sync clinicData changes to localStorage
   useEffect(() => {
@@ -201,6 +309,82 @@ export const ClinicProvider = ({ children }) => {
     showToast('Gallery item removed from clinic showcase.');
   };
 
+  // Doctors Team CMS Mutators
+  const updateDoctor = (id, updatedFields) => {
+    setClinicData(prev => {
+      const currentTeam = prev.profile?.team || [];
+      const updatedTeam = currentTeam.map(doc => doc.id === id ? { ...doc, ...updatedFields } : doc);
+      
+      let updatedProfile = { ...prev.profile, team: updatedTeam };
+      
+      // If lead doctor is updated, sync lead profile credentials
+      const updatedDoc = updatedTeam.find(d => d.id === id);
+      if (updatedDoc && (updatedDoc.id === 'doc-1' || updatedFields.isLead || updatedDoc.role?.toLowerCase().includes('director') || updatedDoc.role?.toLowerCase().includes('founder'))) {
+        updatedProfile.doctorName = updatedDoc.name;
+        if (updatedDoc.qualification) updatedProfile.doctorTitle = updatedDoc.qualification;
+        if (updatedDoc.role) updatedProfile.doctorRole = updatedDoc.role;
+        if (updatedDoc.image) updatedProfile.doctorImage = updatedDoc.image;
+        if (updatedDoc.bio) updatedProfile.doctorBio = updatedDoc.bio;
+      }
+
+      return {
+        ...prev,
+        profile: updatedProfile
+      };
+    });
+    // Sync to backend silently
+    updateDoctorOnServer(id, updatedFields).catch(err => console.warn('[API] updateDoctor failed:', err.message));
+    showToast('Doctor details and photo updated! Changes are live on the website.');
+  };
+
+  const addDoctor = (newDoctor) => {
+    const doc = {
+      id: `doc-${Date.now()}`,
+      name: newDoctor.name || 'New Doctor',
+      role: newDoctor.role || 'Specialist',
+      qualification: newDoctor.qualification || 'Certified Practitioner',
+      specialty: newDoctor.specialty || 'Clinical Aesthetics',
+      image: newDoctor.image || '/images/dr_zoya_rana.png',
+      location: newDoctor.location || 'Dehradun & Muzaffarnagar Clinics',
+      ...newDoctor
+    };
+    setClinicData(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        team: [...(prev.profile?.team || []), doc]
+      }
+    }));
+    // Sync to backend silently
+    addDoctorOnServer(doc).catch(err => console.warn('[API] addDoctor failed:', err.message));
+    showToast(`Doctor "${doc.name}" added to specialist panel!`);
+    return doc;
+  };
+
+  const deleteDoctor = (id) => {
+    setClinicData(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        team: (prev.profile?.team || []).filter(doc => doc.id !== id)
+      }
+    }));
+    // Sync to backend silently
+    deleteDoctorOnServer(id).catch(err => console.warn('[API] deleteDoctor failed:', err.message));
+    showToast('Doctor removed from specialist panel.');
+  };
+
+  const updateDoctorTeam = (newTeam) => {
+    setClinicData(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        team: newTeam
+      }
+    }));
+    showToast('Doctors panel updated successfully!');
+  };
+
   const resetToDefaults = () => {
     if (window.confirm("Are you sure you want to reset all CMS content to original clinic defaults? Any custom edits will be reverted.")) {
       setClinicData(initialClinicData);
@@ -258,6 +442,10 @@ export const ClinicProvider = ({ children }) => {
         addTreatment,
         updateTreatment,
         deleteTreatment,
+        addDoctor,
+        updateDoctor,
+        deleteDoctor,
+        updateDoctorTeam,
         addTestimonial,
         updateTestimonial,
         deleteTestimonial,

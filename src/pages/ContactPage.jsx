@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useClinic } from '../context/ClinicContext';
+import { submitContactInquiry } from '../services/api';
 import { 
   Phone, 
   Mail, 
@@ -32,6 +33,7 @@ export const ContactPage = () => {
       return;
     }
 
+    // Save to local CRM
     addAppointment({
       patientName: form.name,
       phone: form.phone,
@@ -46,6 +48,15 @@ export const ContactPage = () => {
       notes: form.message,
       status: 'New'
     });
+
+    // Also submit to backend API
+    submitContactInquiry({
+      name: form.name,
+      phone: form.phone,
+      email: form.email || '',
+      treatment: form.treatment,
+      message: form.message
+    }).catch(err => console.warn('[API] Contact inquiry submission failed:', err.message));
 
     setSubmitted(true);
     showToast('Inquiry received! Dr. Zoya’s clinic concierge will call you shortly.');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useClinic } from '../context/ClinicContext';
+import { submitWhatsAppBotLead } from '../services/api';
 import { 
   MessageCircle, 
   X, 
@@ -103,10 +104,17 @@ export const FloatingWidgets = () => {
       status: 'New'
     });
 
+    // 2. Also submit to backend API
+    submitWhatsAppBotLead({
+      name: visitorName,
+      phone: visitorPhone,
+      concern: visitorConcern || 'Aesthetic Consultation'
+    }).catch(err => console.warn('[API] WhatsApp bot lead submission failed:', err.message));
+
     setSubmittedLead(true);
     showToast('Inquiry logged into clinic system! Redirecting to WhatsApp...');
 
-    // 2. Open WhatsApp with prefilled message to Dr. Zoya's official clinic line
+    // 3. Open WhatsApp with prefilled message to Dr. Zoya's official clinic line
     const textMsg = encodeURIComponent(
       `Hi Dr. Zoya's Clinic! I am ${visitorName}. I was chatting with your website bot regarding: ${visitorConcern || 'Aesthetic / Smile consultation'}. My phone is ${visitorPhone}. Please share available appointment slots!`
     );

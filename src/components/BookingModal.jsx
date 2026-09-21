@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useClinic } from '../context/ClinicContext';
+import { submitBookingLead } from '../services/api';
 import { 
   X, 
   Check, 
@@ -121,6 +122,20 @@ export const BookingModal = () => {
         leadSource: 'Website Pre-Paid Booking',
         notes: formData.notes ? `${formData.notes} | Consultation Fee: ₹${feeOption}` : `Consultation Fee: ₹${feeOption}`,
       });
+
+      // Also submit to backend API
+      submitBookingLead({
+        patientName: formData.fullName,
+        phone: formData.phone,
+        email: formData.email || '',
+        treatmentName: selectedTreatment?.title || 'General Aesthetic Consultation',
+        category: selectedTreatment?.category || 'General',
+        appointmentDate: selectedDate,
+        timeSlot: selectedSlot,
+        feeAmount: feeOption,
+        leadSource: 'WEBSITE_BOOKING',
+        notes: formData.notes || '',
+      }).catch(err => console.warn('[API] Booking submission failed:', err.message));
 
       setIsProcessingPayment(false);
       setBookingSuccess(createdRecord);

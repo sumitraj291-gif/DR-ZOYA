@@ -25,7 +25,13 @@ import {
   X,
   Camera,
   Layers,
-  Maximize2
+  Maximize2,
+  Upload,
+  UserCheck,
+  UserPlus,
+  Image as ImageIcon,
+  MapPin,
+  GraduationCap
 } from 'lucide-react';
 
 export const AdminCMSPage = () => {
@@ -36,6 +42,10 @@ export const AdminCMSPage = () => {
     addTreatment, 
     updateTreatment, 
     deleteTreatment,
+    addDoctor,
+    updateDoctor,
+    deleteDoctor,
+    updateDoctorTeam,
     addTestimonial,
     deleteTestimonial,
     addGalleryItem,
@@ -49,7 +59,7 @@ export const AdminCMSPage = () => {
     showToast 
   } = useClinic();
 
-  const [activeTab, setActiveTab] = useState('crm'); // 'crm', 'treatments', 'profile', 'hero', 'testimonials'
+  const [activeTab, setActiveTab] = useState('crm'); // 'crm', 'treatments', 'doctors', 'profile', 'hero', 'testimonials'
   
   // CRM Filters
   const [crmStatusFilter, setCrmStatusFilter] = useState('All');
@@ -107,6 +117,50 @@ export const AdminCMSPage = () => {
 
   const [editingGalleryId, setEditingGalleryId] = useState(null);
   const [editingGalleryForm, setEditingGalleryForm] = useState(null);
+
+  // Doctor CMS State
+  const [editingDoctorId, setEditingDoctorId] = useState(null);
+  const [editingDoctorForm, setEditingDoctorForm] = useState(null);
+  const [isAddingDoctor, setIsAddingDoctor] = useState(false);
+  const [newDoctorForm, setNewDoctorForm] = useState({
+    name: '',
+    role: 'Specialist',
+    qualification: '',
+    specialty: '',
+    image: '/images/dr_zoya_rana.png',
+    location: 'Dehradun & Muzaffarnagar Clinics',
+    bio: '',
+  });
+
+  // Doctor photo presets
+  const doctorPhotoPresets = [
+    { label: 'Dr. Zoya Rana', path: '/images/dr_zoya_rana.png' },
+    { label: 'Dr. Zoya Talat', path: '/images/dr_zoya_talat.png' },
+    { label: 'Dr. Varsha Jha', path: '/images/dr_varsha_jha.png' },
+    { label: 'Dr. Zoya (Alt)', path: '/images/dr_zoya.png' },
+    { label: 'Dr. Varsha (Alt)', path: '/images/dr_varsha.png' },
+  ];
+
+  // Compress & convert uploaded image to base64 data URL (max 600x600px)
+  const compressImageToDataUrl = (file, maxSize = 600) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/webp', 0.82));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   const availableImagePresets = [
     // Live Gallery Assets from dnaclinicindia.com/gallery/
@@ -381,6 +435,18 @@ export const AdminCMSPage = () => {
           >
             <FileText className="w-4 h-4" />
             <span>Treatments Catalog ({clinicData.treatments.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('doctors')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all ${
+              activeTab === 'doctors'
+                ? 'bg-[#0F172A] text-[#C5A059] shadow-xs'
+                : 'text-gray-600 hover:text-black hover:bg-gray-100'
+            }`}
+          >
+            <UserCheck className="w-4 h-4" />
+            <span>Doctors Team ({(clinicData.profile.team || []).length})</span>
           </button>
 
           <button
@@ -875,6 +941,259 @@ export const AdminCMSPage = () => {
           </div>
         )}
 
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* TAB: DOCTORS TEAM MANAGEMENT                                   */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {activeTab === 'doctors' && (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="font-serif text-2xl font-bold text-[#0F172A]">Doctors &amp; Specialist Panel</h3>
+                <p className="text-xs text-gray-500 mt-1">Edit doctor names, roles, qualifications, specialties, and photos. Changes apply live to the entire website instantly.</p>
+              </div>
+              <button
+                onClick={() => { setIsAddingDoctor(true); setEditingDoctorId(null); }}
+                className="btn-gold px-5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 cursor-pointer shadow-md flex-shrink-0"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Add New Doctor</span>
+              </button>
+            </div>
+
+            {/* === ADD NEW DOCTOR FORM === */}
+            {isAddingDoctor && (
+              <div className="bg-white p-6 rounded-3xl border-2 border-[#C5A059]/50 shadow-lg space-y-5">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-serif text-lg font-bold text-[#0F172A] flex items-center space-x-2">
+                    <UserPlus className="w-5 h-5 text-[#C5A059]" />
+                    <span>Add New Specialist</span>
+                  </h4>
+                  <button onClick={() => setIsAddingDoctor(false)} className="p-1 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Photo Preview */}
+                <div className="flex items-start gap-5">
+                  <div className="flex-shrink-0">
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-[#C5A059]/40 bg-gray-100">
+                      <img src={newDoctorForm.image} alt="Preview" className="w-full h-full object-cover object-top" onError={e => { e.target.src = '/images/dr_zoya_rana.png'; }} />
+                    </div>
+                    <p className="text-[10px] text-gray-400 text-center mt-1">Photo Preview</p>
+                  </div>
+                  <div className="flex-1 space-y-3">
+                    {/* Upload from device */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-1 flex items-center space-x-1"><Upload className="w-3 h-3" /><span>Upload Photo from Device</span></label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="w-full text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-[#FAF6EE] file:text-[#C5A059] file:font-semibold hover:file:bg-[#C5A059]/10 cursor-pointer"
+                        onChange={async (e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const dataUrl = await compressImageToDataUrl(file);
+                            setNewDoctorForm(prev => ({ ...prev, image: dataUrl }));
+                          }
+                        }}
+                      />
+                    </div>
+                    {/* Presets */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-1 flex items-center space-x-1"><ImageIcon className="w-3 h-3" /><span>Or Select Official Portrait</span></label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {doctorPhotoPresets.map(p => (
+                          <button key={p.path} type="button" onClick={() => setNewDoctorForm(prev => ({ ...prev, image: p.path }))}
+                            className={`text-[10px] px-2.5 py-1 rounded-lg border font-medium transition-all ${newDoctorForm.image === p.path ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#C5A059]'}`}>
+                            {p.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* URL input */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-1">Or Enter Image URL</label>
+                      <input type="text" placeholder="https://..." value={newDoctorForm.image.startsWith('data:') ? '' : newDoctorForm.image}
+                        onChange={e => setNewDoctorForm(prev => ({ ...prev, image: e.target.value }))}
+                        className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Doctor Details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div><label className="block text-xs font-semibold text-gray-700 mb-1">Full Name *</label>
+                    <input type="text" required placeholder="Dr. Rahul Sharma" value={newDoctorForm.name}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-700 mb-1">Designation / Role *</label>
+                    <input type="text" required placeholder="Orthodontist & Smile Specialist" value={newDoctorForm.role}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, role: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-700 mb-1">Qualification &amp; Degrees</label>
+                    <input type="text" placeholder="BDS, MDS (Orthodontics)" value={newDoctorForm.qualification}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, qualification: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                  <div><label className="block text-xs font-semibold text-gray-700 mb-1">Primary Clinical Specialty</label>
+                    <input type="text" placeholder="Invisible Aligners & Ceramic Veneers" value={newDoctorForm.specialty}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, specialty: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                  <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-700 mb-1 flex items-center space-x-1"><MapPin className="w-3 h-3" /><span>Clinic Locations / OPD Days</span></label>
+                    <input type="text" placeholder="Dehradun & Muzaffarnagar Clinics | Mon-Sat" value={newDoctorForm.location}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, location: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                  <div className="sm:col-span-2"><label className="block text-xs font-semibold text-gray-700 mb-1">Short Biography (Optional)</label>
+                    <textarea rows={2} placeholder="Dr. Rahul Sharma brings 8 years of expertise in orthodontic corrections..." value={newDoctorForm.bio}
+                      onChange={e => setNewDoctorForm(prev => ({ ...prev, bio: e.target.value }))}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                </div>
+                <div className="flex justify-end space-x-2 pt-1">
+                  <button type="button" onClick={() => setIsAddingDoctor(false)} className="px-4 py-2 rounded-xl text-xs font-semibold border border-gray-300 text-gray-600 hover:bg-gray-50">Cancel</button>
+                  <button type="button" onClick={() => {
+                    if (!newDoctorForm.name.trim()) { alert('Please enter doctor name.'); return; }
+                    addDoctor(newDoctorForm);
+                    setIsAddingDoctor(false);
+                    setNewDoctorForm({ name: '', role: 'Specialist', qualification: '', specialty: '', image: '/images/dr_zoya_rana.png', location: 'Dehradun & Muzaffarnagar Clinics', bio: '' });
+                  }} className="btn-gold px-5 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 cursor-pointer">
+                    <Check className="w-3.5 h-3.5" /><span>Add to Panel</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* === DOCTOR CARDS GRID === */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {(clinicData.profile.team || []).map((doc) => (
+                <div key={doc.id} className="bg-white rounded-3xl border border-[#E8E2D9] shadow-subtle overflow-hidden">
+                  {/* === VIEWING MODE === */}
+                  {editingDoctorId !== doc.id ? (
+                    <>
+                      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+                        <img src={doc.image} alt={doc.name} className="w-full h-full object-cover object-top" onError={e => { e.target.src = '/images/dr_zoya_rana.png'; }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#090D14]/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-3 left-3 right-3">
+                          <div className="font-serif text-lg font-bold text-white leading-tight">{doc.name}</div>
+                          <div className="text-[11px] text-[#C5A059] font-semibold mt-0.5">{doc.role}</div>
+                        </div>
+                      </div>
+                      <div className="p-4 space-y-2">
+                        <div className="text-xs text-gray-600 flex items-start space-x-1.5">
+                          <GraduationCap className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                          <span>{doc.qualification || '—'}</span>
+                        </div>
+                        <div className="text-xs text-gray-600 flex items-start space-x-1.5">
+                          <UserCheck className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                          <span>Specialty: <strong>{doc.specialty || '—'}</strong></span>
+                        </div>
+                        <div className="text-xs text-gray-500 flex items-start space-x-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                          <span>{doc.location || 'Dehradun & Muzaffarnagar'}</span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t border-gray-100">
+                          <button onClick={() => { setEditingDoctorId(doc.id); setEditingDoctorForm({ ...doc }); setIsAddingDoctor(false); }}
+                            className="flex items-center space-x-1.5 text-xs font-bold text-[#0F172A] bg-[#FAF6EE] hover:bg-[#C5A059]/20 border border-[#C5A059]/40 px-3 py-1.5 rounded-lg transition-all">
+                            <Edit className="w-3.5 h-3.5" /><span>Edit Doctor</span>
+                          </button>
+                          <button onClick={() => { if (window.confirm(`Remove ${doc.name} from the specialist panel?`)) deleteDoctor(doc.id); }}
+                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors border border-red-100">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    /* === EDIT MODE === */
+                    <div className="p-5 space-y-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-serif text-base font-bold text-[#0F172A]">Edit: {doc.name}</h4>
+                        <button onClick={() => setEditingDoctorId(null)} className="p-1 rounded-full text-gray-400 hover:text-red-500">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Photo management */}
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-[#C5A059]/40 bg-gray-100">
+                            <img src={editingDoctorForm.image} alt="Preview" className="w-full h-full object-cover object-top" onError={e => { e.target.src = '/images/dr_zoya_rana.png'; }} />
+                          </div>
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <label className="block text-[11px] font-bold text-gray-700 flex items-center space-x-1"><Upload className="w-3 h-3" /><span>Upload Photo from Device</span></label>
+                          <input type="file" accept="image/*"
+                            className="w-full text-xs text-gray-600 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-[#FAF6EE] file:text-[#C5A059] cursor-pointer"
+                            onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                const dataUrl = await compressImageToDataUrl(file);
+                                setEditingDoctorForm(prev => ({ ...prev, image: dataUrl }));
+                              }
+                            }} />
+                          <div className="flex flex-wrap gap-1">
+                            {doctorPhotoPresets.map(p => (
+                              <button key={p.path} type="button" onClick={() => setEditingDoctorForm(prev => ({ ...prev, image: p.path }))}
+                                className={`text-[10px] px-2 py-0.5 rounded-md border font-medium transition-all ${editingDoctorForm.image === p.path ? 'bg-[#C5A059] text-white border-[#C5A059]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#C5A059]'}`}>
+                                {p.label}
+                              </button>
+                            ))}
+                          </div>
+                          <input type="text" placeholder="Or custom image URL" value={editingDoctorForm.image.startsWith('data:') ? '' : editingDoctorForm.image}
+                            onChange={e => setEditingDoctorForm(prev => ({ ...prev, image: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-[11px] focus:ring-1 focus:ring-[#C5A059]" />
+                        </div>
+                      </div>
+
+                      {/* Doctor fields */}
+                      <div className="space-y-2">
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5">Full Name</label>
+                          <input type="text" value={editingDoctorForm.name} onChange={e => setEditingDoctorForm(prev => ({ ...prev, name: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5">Designation / Role</label>
+                          <input type="text" value={editingDoctorForm.role} onChange={e => setEditingDoctorForm(prev => ({ ...prev, role: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5">Qualification &amp; Degrees</label>
+                          <input type="text" value={editingDoctorForm.qualification || ''} onChange={e => setEditingDoctorForm(prev => ({ ...prev, qualification: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5">Primary Clinical Specialty</label>
+                          <input type="text" value={editingDoctorForm.specialty || ''} onChange={e => setEditingDoctorForm(prev => ({ ...prev, specialty: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5 flex items-center space-x-1"><MapPin className="w-3 h-3" /><span>Clinic Locations / OPD Days</span></label>
+                          <input type="text" value={editingDoctorForm.location || ''} onChange={e => setEditingDoctorForm(prev => ({ ...prev, location: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                        <div><label className="block text-[11px] font-bold text-gray-700 mb-0.5">Short Biography</label>
+                          <textarea rows={2} value={editingDoctorForm.bio || ''} onChange={e => setEditingDoctorForm(prev => ({ ...prev, bio: e.target.value }))}
+                            className="w-full px-2.5 py-1.5 border rounded-lg text-xs focus:ring-1 focus:ring-[#C5A059]" /></div>
+                      </div>
+
+                      <div className="flex justify-end space-x-2 pt-1 border-t border-gray-100">
+                        <button type="button" onClick={() => setEditingDoctorId(null)} className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-300 text-gray-600">Cancel</button>
+                        <button type="button" onClick={() => {
+                          updateDoctor(doc.id, editingDoctorForm);
+                          setEditingDoctorId(null);
+                          setEditingDoctorForm(null);
+                        }} className="btn-gold px-4 py-1.5 rounded-lg text-xs font-bold flex items-center space-x-1.5 cursor-pointer">
+                          <Save className="w-3.5 h-3.5" /><span>Save &amp; Go Live</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Empty state */}
+            {(clinicData.profile.team || []).length === 0 && (
+              <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-[#C5A059]/40">
+                <UserCheck className="w-12 h-12 text-[#C5A059]/40 mx-auto mb-3" />
+                <p className="text-sm font-semibold text-gray-500">No doctors in the specialist panel yet.</p>
+                <p className="text-xs text-gray-400 mt-1">Click "Add New Doctor" to add the first specialist.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
         {/* TAB 3: DOCTOR & CLINIC PROFILE INFO */}
         {activeTab === 'profile' && (
           <form onSubmit={handleSaveProfile} className="bg-white p-6 sm:p-8 rounded-3xl border border-[#E8E2D9] shadow-subtle space-y-6 text-left max-w-4xl">
