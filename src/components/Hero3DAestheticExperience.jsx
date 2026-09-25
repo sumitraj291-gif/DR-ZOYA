@@ -28,9 +28,9 @@ const HERO_SERVICES = [
     doctor: 'Dr. Varsha Jha',
     doctorRole: 'Lead Dental Surgeon (BDS)',
     doctorImg: '/images/dr_varsha.png',
-    themeColor: '#059669', // Emerald / Mint
+    themeColor: '#047857', // Emerald-700 for accessible WCAG contrast
     accentBg: 'from-emerald-500/10 via-amber-500/5 to-transparent',
-    glowColor: 'rgba(16, 185, 129, 0.18)',
+    glowColor: 'rgba(4, 120, 87, 0.18)',
     stat: { value: '99.8%', label: 'Painless Patient Rating' },
     badges: [
       'Gentle Pediatric Dentistry',
@@ -74,9 +74,9 @@ const HERO_SERVICES = [
     doctor: 'Dr. Zoya Rana',
     doctorRole: 'Certified Hair & Scalp Specialist',
     doctorImg: '/images/dr_zoya.png',
-    themeColor: '#0284C7', // Medical Blue
+    themeColor: '#0369A1', // Sky-700 for accessible WCAG contrast
     accentBg: 'from-sky-500/10 via-amber-500/5 to-transparent',
-    glowColor: 'rgba(2, 132, 199, 0.18)',
+    glowColor: 'rgba(3, 105, 161, 0.18)',
     stat: { value: '+45%', label: 'Average Density Gain' },
     badges: [
       'Clinical PRP & GFC Therapy',
@@ -166,70 +166,69 @@ export const Hero3DAestheticExperience = () => {
       {/* Subtle luxury pattern lines */}
       <div className="absolute inset-0 bg-[radial-gradient(#C5A059_0.8px,transparent_0.8px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
-      {/* Top Header Bar: Service Step Tabs with Live Progress Bars */}
-      <div className="relative z-10 px-4 sm:px-8 pt-5 pb-3 border-b border-[#EAE4DC]/60 flex flex-wrap items-center justify-between gap-3 bg-white/60 backdrop-blur-sm">
+      {/* Top Header Bar: Status & Play/Pause Controls */}
+      <div className="relative z-10 px-4 sm:px-8 py-3.5 border-b border-[#EAE4DC]/60 flex items-center justify-between gap-3 bg-white/60 backdrop-blur-sm">
         <div className="flex items-center space-x-2">
           <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeService.themeColor }} />
           <span className="w-2 h-2 rounded-full -ml-3" style={{ backgroundColor: activeService.themeColor }} />
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+          <span className="text-xs font-bold tracking-wide text-[#0F172A]">
             Core Clinical Specialties
           </span>
-          <span className="text-[11px] font-medium text-[#64748B] hidden sm:inline">
+          <span className="text-xs font-medium text-[#475569] hidden sm:inline">
             (Appearing Sequentially)
           </span>
         </div>
 
-        {/* 3 Interactive Service Selectors */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {HERO_SERVICES.map((srv, idx) => {
-            const isActive = idx === activeIndex;
-            return (
-              <button
-                key={srv.id}
-                onClick={() => handleSelectService(idx)}
-                className={`relative px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 flex items-center space-x-1.5 cursor-pointer overflow-hidden ${
-                  isActive 
-                    ? 'bg-[#0F172A] text-white shadow-md' 
-                    : 'bg-white/80 hover:bg-white text-[#475569] border border-[#E2D9CE]'
-                }`}
-              >
-                {/* Live progress indicator filling up on the active pill */}
-                {isActive && isPlaying && (
-                  <div 
-                    className="absolute left-0 top-0 bottom-0 bg-[#C5A059]/40 transition-all ease-linear"
-                    style={{ width: `${progress}%` }}
-                  />
-                )}
-                <span className="relative z-10 text-[10px] opacity-70">{srv.step}</span>
-                <span className="relative z-10">
-                  {srv.id === 'dental' && '🦷 Dental'}
-                  {srv.id === 'skin' && '✨ Skin'}
-                  {srv.id === 'hair' && '🌿 Hair'}
-                </span>
-              </button>
-            );
-          })}
-
-          {/* Pause / Play button */}
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            title={isPlaying ? "Pause rotation" : "Resume auto-play"}
-            className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E2D9CE] text-[#64748B] hover:text-[#0F172A] transition-all cursor-pointer shadow-xs ml-1"
-          >
-            {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-          </button>
-        </div>
+        {/* Play / Pause Rotation Control */}
+        <button
+          onClick={() => setIsPlaying(!isPlaying)}
+          title={isPlaying ? "Pause rotation" : "Resume auto-play"}
+          className="btn-icon w-8 h-8"
+          aria-label={isPlaying ? "Pause rotation" : "Resume auto-play"}
+        >
+          {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+        </button>
       </div>
 
       {/* Main Content Area: 2-Column Showcase */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center p-6 sm:p-10 gap-8 lg:gap-12 min-h-[440px]">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center p-6 sm:p-10 gap-8 lg:gap-12 min-h-[420px]">
         
-        {/* LEFT COLUMN: Service Details & Clinical Assurance (5 cols) */}
-        <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
+        {/* LEFT COLUMN: Specialty Tabs Directly Above Content & Clear Focus (6 cols) */}
+        <div className="lg:col-span-6 space-y-4 text-left order-2 lg:order-1">
+          {/* Specialty Selector Tabs: Direct Triggers Grouped with Content */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {HERO_SERVICES.map((srv, idx) => {
+              const isActive = idx === activeIndex;
+              return (
+                <button
+                  key={srv.id}
+                  onClick={() => handleSelectService(idx)}
+                  className={`btn-pill relative overflow-hidden transition-all duration-300 ${
+                    isActive ? 'btn-pill-active' : 'btn-pill-inactive'
+                  }`}
+                >
+                  {/* Live progress indicator filling up on the active pill */}
+                  {isActive && isPlaying && (
+                    <div 
+                      className="absolute left-0 top-0 bottom-0 bg-[#C5A059]/40 transition-all ease-linear"
+                      style={{ width: `${progress}%` }}
+                    />
+                  )}
+                  <span className="relative z-10 opacity-70">{srv.step}</span>
+                  <span className="relative z-10">
+                    {srv.id === 'dental' && '🦷 Dental'}
+                    {srv.id === 'skin' && '✨ Skin'}
+                    {srv.id === 'hair' && '🌿 Hair'}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
           {/* Sub-badge */}
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white border border-[#EAE4DC] shadow-xs">
             <span 
-              className="text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-sm text-white"
+              className={`text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${activeService.id === 'skin' ? 'text-[#090D14]' : 'text-white'}`}
               style={{ backgroundColor: activeService.themeColor }}
             >
               {activeService.step}
@@ -249,49 +248,33 @@ export const Hero3DAestheticExperience = () => {
             {activeService.description}
           </p>
 
-          {/* Clinical Advantage Pills */}
+          {/* Streamlined Advantage Badges */}
           <div className="flex flex-wrap gap-2 pt-1">
             {activeService.badges.map((badge, bIdx) => (
               <div 
                 key={bIdx}
-                className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/90 border border-[#E8E2D9] text-xs font-medium text-[#1E293B] shadow-xs"
+                className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/90 border border-[#E8E2D9] text-xs font-medium text-[#0F172A] shadow-xs"
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059]" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E]" />
                 <span>{badge}</span>
               </div>
             ))}
           </div>
 
-          {/* Doctor Signature & CTA Row */}
-          <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#EAE4DC]">
-            <div className="flex items-center space-x-3">
-              <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-[#C5A059] shadow-xs shrink-0 bg-white">
-                <img 
-                  src={activeService.doctorImg} 
-                  alt={activeService.doctor} 
-                  className="w-full h-full object-cover object-top"
-                  onError={(e) => { e.target.src = '/images/dna_logo.png'; }}
-                />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#0F172A]">
-                  {activeService.doctor}
-                </div>
-                <div className="text-[11px] text-[#64748B]">
-                  {activeService.doctorRole}
-                </div>
-              </div>
-            </div>
-
+          {/* Clear, Uncluttered CTA & Trust Note */}
+          <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={() => openBookingModal(activeService.serviceKey)}
-              className="px-5 py-2.5 rounded-full text-xs font-semibold text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer group shrink-0"
-              style={{ backgroundColor: activeService.themeColor }}
+              className="btn-gold px-6 py-3 rounded-full text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center space-x-2 cursor-pointer group"
             >
               <Calendar className="w-3.5 h-3.5" />
               <span>{activeService.ctaText}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
+            <span className="text-xs text-[#475569] font-medium flex items-center space-x-1">
+              <ShieldCheck className="w-4 h-4 text-[#85611E]" />
+              <span>Lead: {activeService.doctor} ({activeService.doctorRole})</span>
+            </span>
           </div>
         </div>
 
@@ -334,16 +317,16 @@ export const Hero3DAestheticExperience = () => {
             {/* Floating Trust Card Top-Right */}
             <div className="absolute -top-2 right-2 sm:right-6 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-[#E2D9CE] shadow-lg flex items-center space-x-2.5 animate-[bounce_4s_ease-in-out_infinite]">
               <div 
-                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-xs"
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-xs ${activeService.id === 'skin' ? 'text-[#090D14]' : 'text-white'}`}
                 style={{ backgroundColor: activeService.themeColor }}
               >
                 {activeService.stat.value}
               </div>
               <div className="text-left">
-                <div className="text-[10px] font-bold text-[#0F172A] leading-tight">
+                <div className="text-xs font-bold text-[#0F172A] leading-tight">
                   Clinical Benchmark
                 </div>
-                <div className="text-[9px] text-[#64748B]">
+                <div className="text-xs text-[#475569]">
                   {activeService.stat.label}
                 </div>
               </div>
@@ -351,12 +334,12 @@ export const Hero3DAestheticExperience = () => {
 
             {/* Floating Trust Card Bottom-Left */}
             <div className="absolute -bottom-2 left-2 sm:left-4 z-30 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-[#E2D9CE] shadow-lg flex items-center space-x-2.5">
-              <ShieldCheck className="w-5 h-5 text-[#C5A059]" />
+              <ShieldCheck className="w-5 h-5 text-[#85611E]" />
               <div className="text-left">
-                <div className="text-[10px] font-bold text-[#0F172A] leading-tight">
+                <div className="text-xs font-bold text-[#0F172A] leading-tight">
                   US-FDA Approved Tech
                 </div>
-                <div className="text-[9px] text-[#64748B]">
+                <div className="text-xs text-[#475569]">
                   Sterile & Pain-Free Setup
                 </div>
               </div>
@@ -366,14 +349,14 @@ export const Hero3DAestheticExperience = () => {
             <button
               onClick={handlePrev}
               aria-label="Previous treatment"
-              className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 border border-[#E2D9CE] text-[#0F172A] flex items-center justify-center shadow-md hover:scale-110 hover:bg-white transition-all cursor-pointer"
+              className="btn-icon absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-30"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
               aria-label="Next treatment"
-              className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-white/95 border border-[#E2D9CE] text-[#0F172A] flex items-center justify-center shadow-md hover:scale-110 hover:bg-white transition-all cursor-pointer"
+              className="btn-icon absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-30"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -391,14 +374,14 @@ export const Hero3DAestheticExperience = () => {
             <button
               key={srv.id}
               onClick={() => handleSelectService(idx)}
-              className={`p-2.5 sm:p-3 rounded-xl text-left transition-all duration-300 flex items-center space-x-2.5 sm:space-x-3 cursor-pointer border ${
+              className={`btn-ghost p-2.5 sm:p-3 rounded-2xl text-left transition-all duration-300 flex items-center space-x-2.5 sm:space-x-3 cursor-pointer border ${
                 isActive 
                   ? 'bg-white border-[#C5A059] shadow-sm' 
                   : 'bg-white/50 border-transparent hover:bg-white/80 hover:border-[#E2D9CE]'
               }`}
             >
               {/* Mini thumbnail preview of user's image */}
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-[#FAF8F5] border border-[#EAE4DC] overflow-hidden shrink-0 flex items-center justify-center p-0.5">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-[#FAF8F5] border border-[#EAE4DC] overflow-hidden shrink-0 flex items-center justify-center p-0.5">
                 <img 
                   src={srv.image} 
                   alt={srv.category} 
@@ -410,18 +393,18 @@ export const Hero3DAestheticExperience = () => {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center space-x-1.5">
                   <span 
-                    className="text-[9px] font-bold px-1 rounded-xs uppercase text-white"
+                    className={`text-xs font-bold px-1.5 py-0.2 rounded-full uppercase ${srv.id === 'skin' ? 'text-[#090D14]' : 'text-white'}`}
                     style={{ backgroundColor: srv.themeColor }}
                   >
                     {srv.step}
                   </span>
-                  <span className={`text-[11px] sm:text-xs font-bold truncate ${isActive ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+                  <span className={`text-xs font-bold truncate ${isActive ? 'text-[#0F172A]' : 'text-[#475569]'}`}>
                     {srv.id === 'dental' && 'Dental Care'}
                     {srv.id === 'skin' && 'Skin Glow'}
                     {srv.id === 'hair' && 'Hair Restoration'}
                   </span>
                 </div>
-                <div className="text-[10px] text-[#94A3B8] truncate hidden sm:block">
+                <div className="text-xs text-[#475569] truncate hidden sm:block">
                   {srv.category}
                 </div>
               </div>

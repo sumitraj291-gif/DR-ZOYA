@@ -24,8 +24,8 @@ import {
   Layers
 } from 'lucide-react';
 
-export const Sidebar = ({ isMobile = false }) => {
-  const { activeTab, setActiveTab, setMobileMenuOpen, adminProfile, notifications, followups } = useApp();
+export const Sidebar = ({ isMobile = false, onLogout }) => {
+  const { activeTab, setActiveTab, setMobileMenuOpen, adminProfile, notifications, followups, logout } = useApp();
 
   const unreadCount = notifications ? notifications.filter((n) => !n.read).length : 0;
   const overdueFollowupsCount = followups ? followups.filter((f) => f.status === 'Due Today' || f.status === 'Overdue').length : 0;
@@ -100,7 +100,19 @@ export const Sidebar = ({ isMobile = false }) => {
   };
 
   const handleGoToWebsite = () => {
-    window.location.hash = '#/home';
+    window.location.href = '/';
+  };
+
+  const handleSignOut = () => {
+    if (onLogout) {
+      onLogout();
+    } else if (logout) {
+      logout();
+    } else {
+      localStorage.removeItem('dna_admin_token');
+      localStorage.removeItem('dna_admin_user');
+      window.location.href = '/admin';
+    }
   };
 
   return (
@@ -198,13 +210,22 @@ export const Sidebar = ({ isMobile = false }) => {
               <p className="text-[10px] text-slate-400 truncate">{adminProfile.role}</p>
             </div>
           </div>
-          <button
-            onClick={() => setActiveTab('settings')}
-            title="Clinic Settings"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-gold hover:bg-slate-900 transition-colors"
-          >
-            <Settings className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <button
+              onClick={() => setActiveTab('settings')}
+              title="Clinic Settings"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-gold hover:bg-slate-900 transition-colors"
+            >
+              <Settings className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={handleSignOut}
+              title="Sign Out of Admin"
+              className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </aside>

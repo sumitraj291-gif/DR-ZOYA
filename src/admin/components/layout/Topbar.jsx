@@ -12,10 +12,11 @@ import {
   Calendar,
   CreditCard,
   Sparkles,
-  Globe
+  Globe,
+  LogOut
 } from 'lucide-react';
 
-export const Topbar = () => {
+export const Topbar = ({ onLogout }) => {
   const {
     activeTab,
     setActiveTab,
@@ -23,6 +24,7 @@ export const Topbar = () => {
     setGlobalSearch,
     setMobileMenuOpen,
     adminProfile,
+    logout,
     notifications,
     markNotificationRead,
     patients,
@@ -119,7 +121,20 @@ export const Topbar = () => {
   };
 
   const handleGoToWebsite = () => {
-    window.location.hash = '#/home';
+    window.location.href = '/';
+  };
+
+  const handleSignOut = () => {
+    setProfileDropdownOpen(false);
+    if (onLogout) {
+      onLogout();
+    } else if (logout) {
+      logout();
+    } else {
+      localStorage.removeItem('dna_admin_token');
+      localStorage.removeItem('dna_admin_user');
+      window.location.href = '/admin';
+    }
   };
 
   const pageTitles = {
@@ -317,6 +332,13 @@ export const Topbar = () => {
                 >
                   <User className="w-3.5 h-3.5 text-gold" />
                   <span>Admin Profile & Settings</span>
+                </button>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl text-left transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-red-400" />
+                  <span>Sign Out</span>
                 </button>
               </div>
             </div>

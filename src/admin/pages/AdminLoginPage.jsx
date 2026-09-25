@@ -9,10 +9,11 @@ import {
   Mail,
   AlertCircle,
   Loader,
-  CheckCircle2
+  CheckCircle2,
+  ArrowLeft
 } from 'lucide-react';
 
-export const AdminLoginPage = ({ onLoginSuccess }) => {
+export const AdminLoginPage = ({ onLoginSuccess, onBackToWebsite }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,9 +21,23 @@ export const AdminLoginPage = ({ onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const performSuccessfulLogin = (user, token) => {
+    localStorage.setItem('dna_admin_token', token);
+    localStorage.setItem('dna_admin_user', JSON.stringify(user || {}));
+    setSuccess(true);
+    setTimeout(() => {
+      if (onLoginSuccess) {
+        onLoginSuccess(user, token);
+      }
+    }, 700);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPassword = password.trim();
+
+    if (!cleanEmail || !cleanPassword) {
       setError('Please enter your email and password.');
       return;
     }
@@ -30,24 +45,14 @@ export const AdminLoginPage = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const res = await adminLogin(email.trim(), password);
+      const res = await adminLogin(cleanEmail, cleanPassword);
       if (res?.token) {
-        // Save JWT token — all admin API calls will now use this
-        localStorage.setItem('dna_admin_token', res.token);
-        localStorage.setItem('dna_admin_user', JSON.stringify(res.user || {}));
-        setSuccess(true);
-        setTimeout(() => onLoginSuccess(res.user, res.token), 900);
+        performSuccessfulLogin(res.user, res.token);
       } else {
-        setError('Login failed. Invalid response from server.');
+        setError(res?.message || 'Login failed. Invalid response from server.');
       }
     } catch (err) {
-      if (err.message?.toLowerCase().includes('401') || err.message?.toLowerCase().includes('unauthorized') || err.message?.toLowerCase().includes('invalid')) {
-        setError('Incorrect email or password. Please try again.');
-      } else if (err.message?.toLowerCase().includes('network') || err.message?.toLowerCase().includes('fetch')) {
-        setError('Cannot connect to server. Please check your internet connection.');
-      } else {
-        setError(err.message || 'Login failed. Please try again.');
-      }
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -67,6 +72,23 @@ export const AdminLoginPage = ({ onLoginSuccess }) => {
       />
 
       <div className="relative w-full max-w-md">
+
+        {/* Top Back-To-Website Navigation */}
+        <div className="flex items-center justify-between mb-5">
+          {onBackToWebsite && (
+            <button
+              type="button"
+              onClick={onBackToWebsite}
+              className="inline-flex items-center space-x-2 text-xs font-semibold text-[#94A3B8] hover:text-[#C5A059] transition-all py-1.5 px-3 rounded-xl bg-white/[0.06] border border-white/10 hover:border-[#C5A059]/40 hover:bg-white/[0.1]"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Public Website</span>
+            </button>
+          )}
+          <span className="text-[11px] text-[#64748B] font-mono tracking-wider ml-auto">
+            ADMIN SECURE v2.0
+          </span>
+        </div>
 
         {/* Brand Header */}
         <div className="text-center mb-8">
@@ -122,7 +144,7 @@ export const AdminLoginPage = ({ onLoginSuccess }) => {
                     type="email"
                     value={email}
                     onChange={e => { setEmail(e.target.value); setError(''); }}
-                    placeholder="admin@dnaclinicindia.com"
+                    placeholder="dr.zoya@clinic.com"
                     autoComplete="email"
                     required
                     className="w-full bg-white/5 border border-white/10 text-white placeholder-[#334155] rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5A059]/50 focus:border-[#C5A059]/50 transition-all"
@@ -176,7 +198,7 @@ export const AdminLoginPage = ({ onLoginSuccess }) => {
               </button>
 
               {/* Security Note */}
-              <div className="flex items-center justify-center space-x-2 pt-2">
+              <div className="flex items-center justify-center space-x-2 pt-1">
                 <Lock className="w-3 h-3 text-[#334155]" />
                 <p className="text-[#334155] text-[10px]">
                   256-bit SSL encrypted · JWT secured session

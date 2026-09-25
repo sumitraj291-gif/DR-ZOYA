@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useClinic } from '../context/ClinicContext';
 import { ToastProvider } from './context/ToastContext';
 import { AppProvider, useApp } from './context/AppContext';
 import { AdminLayout } from './components/layout/AdminLayout';
+import { AdminLoginPage } from './pages/AdminLoginPage';
 
 // Pages for All 18 Modules + Website CMS
 import { Dashboard } from './pages/Dashboard';
@@ -80,10 +82,35 @@ const MainContentSwitcher = () => {
 };
 
 export const AdminApp = () => {
+  const { navigateTo } = useClinic();
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(localStorage.getItem('dna_admin_token'));
+  });
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('dna_admin_token');
+    localStorage.removeItem('dna_admin_user');
+    setIsAuthenticated(false);
+  };
+
+  // If user is not authenticated, require Admin Sign In first
+  if (!isAuthenticated) {
+    return (
+      <AdminLoginPage
+        onLoginSuccess={handleLoginSuccess}
+        onBackToWebsite={() => navigateTo('home')}
+      />
+    );
+  }
+
   return (
     <ToastProvider>
-      <AppProvider>
-        <AdminLayout>
+      <AppProvider onLogout={handleLogout}>
+        <AdminLayout onLogout={handleLogout}>
           <MainContentSwitcher />
 
           {/* Global Modals & Drawers */}

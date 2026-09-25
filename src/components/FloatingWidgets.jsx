@@ -157,7 +157,7 @@ export const FloatingWidgets = () => {
               </div>
               <button 
                 onClick={toggleWhatsAppBot}
-                className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10"
+                className="btn-ghost text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -193,7 +193,7 @@ export const FloatingWidgets = () => {
                     <button
                       key={faq.query}
                       onClick={() => handleQuickQuestion(faq.query)}
-                      className="bg-white border border-[#C5A059]/40 hover:bg-[#FAF6EE] text-gray-800 text-[11px] font-medium px-2.5 py-1.5 rounded-full transition-colors flex items-center space-x-1 text-left"
+                      className="btn-pill btn-pill-inactive text-[11px] font-medium px-2.5 py-1.5"
                     >
                       <span>{faq.label}</span>
                     </button>
@@ -267,7 +267,7 @@ export const FloatingWidgets = () => {
               />
               <button 
                 onClick={() => setLeadFormActive(true)}
-                className="p-2 bg-[#0F172A] text-[#C5A059] rounded-full hover:bg-black"
+                className="btn-obsidian p-2 rounded-full"
                 title="Send"
               >
                 <Send className="w-3.5 h-3.5" />
@@ -283,7 +283,7 @@ export const FloatingWidgets = () => {
           aria-label="Open Smart WhatsApp Bot"
         >
           <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C5A059] text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow">
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C5A059] text-[#090D14] text-[9px] font-extrabold rounded-full flex items-center justify-center shadow">
             1
           </span>
           <div className="absolute right-full mr-3 bg-[#0F172A] text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-lg hidden sm:group-hover:block transition-all border border-[#C5A059]/40">
@@ -296,15 +296,15 @@ export const FloatingWidgets = () => {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#E2E8F0] px-4 py-2 flex items-center justify-between shadow-2xl">
         <a 
           href={`tel:${clinicData.profile.contact.phone.replace(/[^0-9+]/g, '')}`}
-          className="flex flex-col items-center justify-center text-gray-700 hover:text-[#C5A059] text-[10px] font-medium py-1 px-2"
+          className="flex flex-col items-center justify-center text-gray-700 hover:text-[#85611E] text-[10px] font-medium py-1 px-2"
         >
-          <Phone className="w-4 h-4 text-[#C5A059] mb-0.5" />
+          <Phone className="w-4 h-4 text-[#85611E] mb-0.5" />
           <span>Call Clinic</span>
         </a>
 
         <button 
           onClick={toggleWhatsAppBot}
-          className="flex flex-col items-center justify-center text-gray-700 hover:text-emerald-600 text-[10px] font-medium py-1 px-2"
+          className="btn-ghost flex flex-col items-center justify-center text-gray-700 hover:text-emerald-600 text-[10px] font-medium py-1 px-2"
         >
           <MessageCircle className="w-4 h-4 text-emerald-600 mb-0.5" />
           <span>WhatsApp</span>

@@ -160,8 +160,8 @@ body {
 /* Button & Interactive styles */
 .btn-gold {
   background: var(--gold-gradient);
-  color: #FFFFFF;
-  font-weight: 600;
+  color: #090D14;
+  font-weight: 700;
   transition: all 0.25s ease;
   box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
 }
@@ -175,12 +175,93 @@ body {
   background: var(--obsidian);
   color: #FAF8F5;
   transition: all 0.25s ease;
+  border-radius: 9999px;
+  border: 1px solid rgba(197, 160, 89, 0.4);
 }
 
 .btn-obsidian:hover {
   background: #1E293B;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid rgba(197, 160, 89, 0.5);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.btn-outline:hover {
+  background: #F5EFE6;
+  border-color: #C5A059;
+  transform: translateY(-1px);
+}
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.375rem 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-pill-active {
+  background: #0F172A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #0F172A !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+}
+
+.btn-pill-inactive {
+  background: #FFFFFF !important;
+  color: #475569 !important;
+  border: 1px solid #E2D9CE !important;
+}
+
+.btn-pill-inactive:hover {
+  background: #FAF8F5 !important;
+  color: #0F172A !important;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  border: 1px solid #E2D9CE;
+  color: #0F172A;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  background: #FAF8F5;
+  transform: scale(1.05);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 /* Modal animation */

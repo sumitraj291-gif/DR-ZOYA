@@ -179,15 +179,15 @@ export const HomePage = () => {
               {/* Luxury Badge */}
               <div className="inline-flex items-center space-x-2 bg-white/95 border border-[#C5A059]/50 px-3.5 py-1.5 rounded-full shadow-xs">
                 <img src="/images/dna_logo.png" alt="DNA Clinic" className="w-4 h-4 object-contain" />
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
-                  DNA CLINICS • DEHRADUN & MUZAFFARNAGAR
+                <span className="text-xs font-bold text-[#0F172A]">
+                  DNA Clinics • Dehradun & Muzaffarnagar
                 </span>
               </div>
 
               {/* Main Headline */}
               <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#0F172A] leading-[1.12] font-semibold tracking-tight">
                 {clinicData.hero.titlePrimary}{' '}
-                <span className="italic font-normal text-[#C5A059] font-serif block sm:inline">
+                <span className="italic font-normal text-[#85611E] font-serif block sm:inline">
                   {clinicData.hero.titleHighlight}
                 </span>
               </h1>
@@ -202,7 +202,7 @@ export const HomePage = () => {
             <div className="flex flex-wrap items-center gap-3 shrink-0">
               <button
                 onClick={() => openBookingModal()}
-                className="btn-gold px-6 sm:px-7 py-3.5 rounded-full text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                className="btn-gold px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Book Consultation (₹500 / ₹1,000)</span>
@@ -210,9 +210,9 @@ export const HomePage = () => {
 
               <button
                 onClick={() => navigateTo('ai-analyzer')}
-                className="px-5 sm:px-6 py-3.5 rounded-full text-xs sm:text-sm font-semibold bg-white border border-[#C5A059]/50 text-[#0F172A] hover:bg-[#F5EFE6] transition-all flex items-center space-x-2 shadow-xs"
+                className="btn-outline px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2"
               >
-                <Camera className="w-4 h-4 text-[#C5A059]" />
+                <Camera className="w-4 h-4 text-[#85611E]" />
                 <span>Try AI Smile & Skin Scan</span>
               </button>
             </div>
@@ -228,7 +228,7 @@ export const HomePage = () => {
                 <div className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
                   {stat.value}
                 </div>
-                <div className="text-[11px] text-[#64748B] font-medium leading-tight">
+                <div className="text-xs text-[#475569] font-medium leading-tight">
                   {stat.label}
                 </div>
               </div>
@@ -241,13 +241,13 @@ export const HomePage = () => {
       {/* 2. SPECIALTY PILLARS (Real Live DNA Clinic Services) */}
       <section className="clinic-container">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
             Our Clinical Services
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
             Your Destination for Advanced & Complete Care
           </h2>
-          <p className="text-xs sm:text-sm text-[#64748B]">
+          <p className="text-xs sm:text-sm text-[#475569]">
             Certified specialists, modern clinical infrastructure, and ethical practices under one trusted roof.
           </p>
         </div>
@@ -272,30 +272,30 @@ export const HomePage = () => {
 
               <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div>
-                  <p className="text-xs text-[#576579] leading-relaxed mb-4">
+                  <p className="text-xs text-[#475569] leading-relaxed mb-4">
                     {spec.tagline}
                   </p>
-                  <ul className="space-y-2 text-xs text-[#1E293B]">
+                  <ul className="space-y-2 text-xs text-[#0F172A]">
                     {spec.procedures.map((p, idx) => (
                       <li key={idx} className="flex items-center space-x-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E] flex-shrink-0" />
                         <span>{p}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+                <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
                   <button
                     onClick={() => navigateTo(spec.route)}
-                    className="text-xs font-bold text-[#0F172A] hover:text-[#C5A059] flex items-center space-x-1 transition-colors"
+                    className="btn-outline px-4 py-2 rounded-full text-xs font-bold flex items-center space-x-1"
                   >
                     <span>Explore Treatments</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => openBookingModal()}
-                    className="btn-gold px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-xs"
+                    className="btn-gold px-4 py-2 rounded-full text-xs font-bold shadow-xs"
                   >
                     Book Slot
                   </button>
@@ -310,13 +310,13 @@ export const HomePage = () => {
       <section className="bg-[#FAF8F5] py-16 border-y border-[#EAE4DC]">
         <div className="clinic-container">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
               The DNA Standard
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
               "Precision, Care, Confidence and Integrity"
             </h2>
-            <p className="text-xs sm:text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-[#475569]">
               Why thousands of patients in Dehradun & Muzaffarnagar trust DNA Clinic.
             </p>
           </div>
@@ -324,7 +324,7 @@ export const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {clinicData.whyChooseUs?.map((item, idx) => (
               <div key={idx} className="bg-white p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-2.5 text-left hover:border-[#C5A059] transition-colors">
-                <div className="w-8 h-8 rounded-full bg-[#FAF6EE] text-[#C5A059] flex items-center justify-center font-bold text-xs border border-[#C5A059]/30">
+                <div className="w-8 h-8 rounded-full bg-[#FAF6EE] text-[#85611E] flex items-center justify-center font-bold text-xs border border-[#C5A059]/30">
                   {idx + 1}
                 </div>
                 <h3 className="font-serif text-lg font-bold text-[#0F172A]">{item.title}</h3>
@@ -338,13 +338,13 @@ export const HomePage = () => {
       {/* 4. MEET THE EXPERTS (Real 3 Doctors from DNA Clinic) */}
       <section className="clinic-container">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
             Best Specialists
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
             Meet the Experts
           </h2>
-          <p className="text-xs sm:text-sm text-[#64748B]">
+          <p className="text-xs sm:text-sm text-[#475569]">
             Our panel of certified doctors dedicated to your skin, hair, and smile.
           </p>
         </div>
@@ -353,7 +353,7 @@ export const HomePage = () => {
           {clinicData.profile.team?.map((doc) => (
             <div 
               key={doc.id}
-              className="bg-white rounded-3xl border border-[#E8E2D9] shadow-subtle overflow-hidden flex flex-col justify-between hover:shadow-card transition-all"
+              className="bg-white rounded-2xl border border-[#E8E2D9] shadow-subtle overflow-hidden flex flex-col justify-between hover:shadow-card transition-all"
             >
               <div className="relative aspect-square overflow-hidden bg-gray-100">
                 <img 
@@ -361,7 +361,7 @@ export const HomePage = () => {
                   alt={doc.name}
                   className="w-full h-full object-cover object-top hover:scale-103 transition-transform duration-500"
                 />
-                <div className="absolute bottom-3 left-3 bg-[#090D14]/85 backdrop-blur-sm px-3 py-1 rounded-full text-white text-[11px] font-semibold border border-[#C5A059]/40">
+                <div className="absolute bottom-3 left-3 bg-[#090D14]/85 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-semibold border border-[#C5A059]/40">
                   {doc.role}
                 </div>
               </div>
@@ -369,18 +369,18 @@ export const HomePage = () => {
               <div className="p-6 text-left space-y-3">
                 <div>
                   <h3 className="font-serif text-xl font-bold text-[#0F172A]">{doc.name}</h3>
-                  <div className="text-xs text-[#C5A059] font-medium mt-0.5">{doc.qualification}</div>
+                  <div className="text-xs text-[#85611E] font-medium mt-0.5">{doc.qualification}</div>
                 </div>
 
-                <p className="text-xs text-[#576579] leading-relaxed">
+                <p className="text-xs text-[#475569] leading-relaxed">
                   Specialty: <strong>{doc.specialty}</strong>
                 </p>
 
                 <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
-                  <span className="text-[11px] text-gray-500">Dehradun / Muzaffarnagar</span>
+                  <span className="text-xs text-[#475569]">Dehradun / Muzaffarnagar</span>
                   <button
                     onClick={() => openBookingModal()}
-                    className="btn-gold px-3.5 py-1.5 rounded-lg text-xs font-semibold"
+                    className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
                   >
                     Consult Doctor
                   </button>
@@ -395,30 +395,30 @@ export const HomePage = () => {
       <section className="bg-[#FAF6EE] py-16 border-y border-[#EAE4DC]">
         <div className="clinic-container">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
               Real Transformations
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
               See the Difference in Your Smile & Skin
             </h2>
-            <p className="text-xs sm:text-sm text-[#64748B]">
+            <p className="text-xs sm:text-sm text-[#475569]">
               Actual before and after clinical cases performed by Dr. Zoya Rana and team.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Smile Transformation */}
-            <div className="bg-white p-6 rounded-3xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            <div className="bg-white p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#C5A059] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
+                <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
                   Smile Transformation
                 </span>
-                <span className="text-xs text-gray-500">2 Clinical Visits</span>
+                <span className="text-xs text-[#475569]">2 Clinical Visits</span>
               </div>
               <h3 className="font-serif text-xl font-bold text-[#0F172A]">
                 See the Difference in Your Smile
               </h3>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-[#475569]">
                 Our advanced dental treatments restore damaged or missing teeth, enhance aesthetics, and improve overall oral health.
               </p>
 
@@ -426,11 +426,11 @@ export const HomePage = () => {
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
                   <img src="/images/ba_smile_before.png" alt="Smile Before" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-[10px] font-bold px-2 py-0.5 rounded">Before</span>
+                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
                   <img src="/images/ba_smile_after.png" alt="Smile After" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-white text-[10px] font-bold px-2 py-0.5 rounded">After</span>
+                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
                 </div>
               </div>
 
@@ -438,7 +438,7 @@ export const HomePage = () => {
                 <span className="text-xs font-semibold text-emerald-700">Ceramic Veneers & Whitening</span>
                 <button
                   onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 rounded-xl text-xs font-semibold"
+                  className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
                 >
                   Get Your Smile
                 </button>
@@ -446,17 +446,17 @@ export const HomePage = () => {
             </div>
 
             {/* Skin Transformation */}
-            <div className="bg-white p-6 rounded-3xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            <div className="bg-white p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#C5A059] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
+                <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
                   Skin Transformation
                 </span>
-                <span className="text-xs text-gray-500">6 Weeks Protocol</span>
+                <span className="text-xs text-[#475569]">6 Weeks Protocol</span>
               </div>
               <h3 className="font-serif text-xl font-bold text-[#0F172A]">
                 See the Difference in Your Skin
               </h3>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-[#475569]">
                 Advanced dermatology treatments designed to reduce acne, pigmentation, and signs of ageing while restoring healthy, glowing skin.
               </p>
 
@@ -464,11 +464,11 @@ export const HomePage = () => {
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
                   <img src="/images/ba_skin_before.png" alt="Skin Before" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-[10px] font-bold px-2 py-0.5 rounded">Before</span>
+                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
                   <img src="/images/ba_skin_after.png" alt="Skin After" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-white text-[10px] font-bold px-2 py-0.5 rounded">After</span>
+                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
                 </div>
               </div>
 
@@ -476,7 +476,7 @@ export const HomePage = () => {
                 <span className="text-xs font-semibold text-emerald-700">Acne & Pore Revision</span>
                 <button
                   onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 rounded-xl text-xs font-semibold"
+                  className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
                 >
                   Get Your Glow
                 </button>
@@ -489,14 +489,14 @@ export const HomePage = () => {
       {/* 5B. CLINICAL GALLERY & OUTCOMES SHOWCASE */}
       <section className="clinic-container">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center space-x-2 bg-[#FAF6EE] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#C5A059] uppercase tracking-wider">
+          <div className="inline-flex items-center space-x-2 bg-[#FAF6EE] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#85611E] uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Documented Clinic Gallery</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
             Real Patient Cases & Modern Facilities
           </h2>
-          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
             From Hollywood smile architecture to advanced clinical laser suites at Dehradun and Muzaffarnagar.
           </p>
 
@@ -506,10 +506,10 @@ export const HomePage = () => {
               <button
                 key={filter}
                 onClick={() => setHomeGalleryFilter(filter)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                className={`btn-pill ${
                   homeGalleryFilter === filter
-                    ? 'bg-[#0F172A] text-[#C5A059] shadow-xs'
-                    : 'bg-[#FAF8F5] text-gray-600 hover:bg-gray-100'
+                    ? 'btn-pill-active'
+                    : 'btn-pill-inactive'
                 }`}
               >
                 {filter}
@@ -518,7 +518,7 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid - Improved vertical spacing, typography, and comfortable layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {(clinicData.gallery || [])
             .filter(item => homeGalleryFilter === 'All' || item.category === homeGalleryFilter)
@@ -526,18 +526,18 @@ export const HomePage = () => {
             .map(item => (
               <div
                 key={item.id}
-                className="bg-white rounded-3xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden flex flex-col justify-between group"
               >
                 {item.type === 'before_after' || (item.beforeImage && item.afterImage) ? (
-                  <div className="p-3.5 bg-[#FAF8F5] border-b border-[#EAE4DC]">
-                    <div className="grid grid-cols-2 gap-2">
+                  <div className="p-4 bg-[#FAF8F5] border-b border-[#EAE4DC]">
+                    <div className="grid grid-cols-2 gap-3">
                       <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100">
                         <img src={item.beforeImage} alt={`${item.title} - Before`} className="w-full h-full object-cover" />
-                        <span className="absolute top-2 left-2 bg-black/75 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">Before</span>
+                        <span className="absolute top-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
                       </div>
                       <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-gray-100 border border-[#C5A059]">
                         <img src={item.afterImage} alt={`${item.title} - After`} className="w-full h-full object-cover" />
-                        <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[9px] font-extrabold px-1.5 py-0.5 rounded">After</span>
+                        <span className="absolute top-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
                       </div>
                     </div>
                   </div>
@@ -549,35 +549,35 @@ export const HomePage = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <span className="absolute bottom-2.5 left-3 text-[10px] font-bold uppercase tracking-wider bg-black/60 text-white px-2 py-0.5 rounded-full">
+                    <span className="absolute bottom-2.5 left-3 text-xs font-bold uppercase tracking-wider bg-black/60 text-white px-2.5 py-0.5 rounded-full">
                       {item.category}
                     </span>
                   </div>
                 )}
 
-                <div className="p-5 space-y-2 text-left">
-                  <div className="flex items-center justify-between text-[11px] text-gray-400">
-                    <span className="font-bold text-[#C5A059] uppercase">{item.category}</span>
+                <div className="p-6 space-y-3 text-left">
+                  <div className="flex items-center justify-between text-xs text-[#475569]">
+                    <span className="font-bold text-[#85611E] uppercase">{item.category}</span>
                     {item.timeline && <span>{item.timeline}</span>}
                   </div>
-                  <h4 className="font-serif text-base font-bold text-[#0F172A] leading-snug group-hover:text-[#C5A059] transition-colors">
+                  <h3 className="font-serif text-lg font-bold text-[#0F172A] leading-snug group-hover:text-[#85611E] transition-colors">
                     {item.title}
-                  </h4>
-                  <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                  </h3>
+                  <p className="text-xs text-[#475569] line-clamp-2 leading-relaxed">
                     {item.description}
                   </p>
                 </div>
 
-                <div className="p-3.5 bg-[#FAF8F5] border-t border-[#EAE4DC] flex items-center justify-between text-xs">
-                  <span className="text-[11px] text-gray-500 truncate max-w-[160px]">
+                <div className="p-4 bg-[#FAF8F5] border-t border-[#EAE4DC] flex items-center justify-between text-xs">
+                  <span className="text-xs text-[#475569] truncate max-w-[160px]">
                     {item.clinician || "Dr. Zoya Rana"}
                   </span>
                   <button
                     onClick={() => navigateTo('gallery')}
-                    className="text-[#C5A059] hover:underline font-bold text-xs flex items-center space-x-1"
+                    className="btn-ghost text-[#85611E] hover:underline font-bold text-xs flex items-center space-x-1"
                   >
                     <span>View Details</span>
-                    <ArrowRight className="w-3 h-3" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -587,7 +587,7 @@ export const HomePage = () => {
         <div className="text-center pt-8">
           <button
             onClick={() => navigateTo('gallery')}
-            className="btn-obsidian px-8 py-3.5 rounded-full text-xs font-bold inline-flex items-center space-x-2 shadow-md hover:shadow-lg"
+            className="btn-obsidian px-6 py-3 rounded-full text-xs font-bold inline-flex items-center space-x-2"
           >
             <span>Explore Complete DNA Gallery ({clinicData.gallery?.length || 13} Cases & Suites)</span>
             <ArrowRight className="w-4 h-4 text-[#C5A059]" />
@@ -597,12 +597,12 @@ export const HomePage = () => {
 
       {/* 6. AI SCANNER PROMOTIONAL BANNER (Phase 2 Feature) */}
       <section className="clinic-container">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#121E2C] via-[#0E1724] to-[#1A2634] text-white p-8 sm:p-12 border border-[#C5A059]/40 shadow-2xl">
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#121E2C] via-[#0E1724] to-[#1A2634] text-white p-8 sm:p-12 border border-[#C5A059]/40 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             <div className="lg:col-span-8 space-y-4 text-left">
-              <div className="inline-flex items-center space-x-2 bg-[#C5A059]/20 border border-[#C5A059]/50 text-[#C5A059] px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">
-                <Camera className="w-3 h-3" />
+              <div className="inline-flex items-center space-x-2 bg-[#C5A059]/20 border border-[#C5A059]/50 text-[#C5A059] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                <Camera className="w-3.5 h-3.5" />
                 <span>Phase 2 Web AR / AI Experience</span>
               </div>
 
@@ -622,7 +622,7 @@ export const HomePage = () => {
                   <Camera className="w-4 h-4" />
                   <span>Start Instant AI Analysis</span>
                 </button>
-                <span className="text-[11px] text-gray-400">
+                <span className="text-xs text-[#CBD5E1]">
                   *Non-diagnostic preliminary guidance only.
                 </span>
               </div>
@@ -637,7 +637,7 @@ export const HomePage = () => {
                 <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
                   <div className="bg-[#C5A059] h-full w-2/3 animate-pulse" />
                 </div>
-                <span className="text-[10px] text-gray-400">Smile & Dermal Detection</span>
+                <span className="text-xs text-[#CBD5E1]">Smile & Dermal Detection</span>
               </div>
             </div>
 
@@ -648,14 +648,14 @@ export const HomePage = () => {
       {/* 7. INSTAGRAM SHOWCASE REEL (@dnaclinicindia) */}
       <section className="clinic-container">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <div className="inline-flex items-center space-x-2 text-[#C5A059] font-bold text-xs uppercase tracking-wider">
+          <div className="inline-flex items-center space-x-2 text-[#85611E] font-bold text-xs uppercase tracking-wider">
             <InstagramIcon className="w-4 h-4" />
             <span>Follow Our Live Work</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
             Instagram : @dnaclinicindia
           </h2>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#475569]">
             Real patient results, clinical demonstrations, and skincare insights.
           </p>
         </div>
@@ -688,7 +688,7 @@ export const HomePage = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 bg-[#FAF8F5] hover:bg-[#F1ECE5] border border-[#C5A059] text-[#0F172A] px-5 py-2.5 rounded-full text-xs font-bold transition-all"
           >
-            <InstagramIcon className="w-4 h-4 text-[#C5A059]" />
+            <InstagramIcon className="w-4 h-4 text-[#85611E]" />
             <span>View @dnaclinicindia on Instagram</span>
           </a>
         </div>
@@ -706,7 +706,7 @@ export const HomePage = () => {
             <h2 className="font-serif text-3xl sm:text-4xl font-semibold text-[#0F172A]">
               Hear From Our Happy Clients
             </h2>
-            <p className="text-xs sm:text-sm text-[#64748B]">
+            <p className="text-xs sm:text-sm text-[#475569]">
               Real verified Google reviews from patients treated by Dr. Zoya Rana and Dr. Varsha Jha.
             </p>
           </div>
@@ -724,17 +724,17 @@ export const HomePage = () => {
                         <Star key={i} className="w-3.5 h-3.5 fill-[#C5A059]" />
                       ))}
                     </div>
-                    <span className="text-[10px] text-gray-400">{rev.date}</span>
+                    <span className="text-xs text-[#475569]">{rev.date}</span>
                   </div>
-                  <p className="text-xs text-gray-700 italic leading-relaxed">
+                  <p className="text-xs text-[#475569] italic leading-relaxed">
                     "{rev.text}"
                   </p>
                 </div>
 
                 <div className="pt-3 border-t border-gray-100">
                   <div className="font-semibold text-xs text-[#0F172A]">{rev.name}</div>
-                  <div className="text-[10px] text-[#C5A059] font-medium">{rev.verifiedProcedure}</div>
-                  <div className="text-[9px] text-gray-400">{rev.location}</div>
+                  <div className="text-xs text-[#85611E] font-medium">{rev.verifiedProcedure}</div>
+                  <div className="text-xs text-[#475569]">{rev.location}</div>
                 </div>
               </div>
             ))}
@@ -743,39 +743,41 @@ export const HomePage = () => {
       </section>
 
       {/* 9. FREQUENTLY ASKED QUESTIONS */}
-      <section className="clinic-container max-w-3xl">
-        <div className="text-center space-y-3 mb-10">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
-            Got Questions?
-          </span>
-          <h2 className="font-serif text-3xl font-semibold text-[#0F172A]">
-            Patient FAQs & Clinical Inquiries
-          </h2>
-        </div>
+      <section className="clinic-container">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center space-y-3 mb-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
+              Got Questions?
+            </span>
+            <h2 className="font-serif text-3xl font-semibold text-[#0F172A]">
+              Patient FAQs & Clinical Inquiries
+            </h2>
+          </div>
 
-        <div className="space-y-3">
-          {clinicData.faqs.map((faq, index) => {
-            const isOpen = openFaqIndex === index;
-            return (
-              <div 
-                key={index}
-                className="bg-white rounded-xl border border-[#EAE4DC] overflow-hidden transition-all"
-              >
-                <button
-                  onClick={() => setOpenFaqIndex(isOpen ? -1 : index)}
-                  className="w-full p-4 text-left flex items-center justify-between text-sm font-semibold text-[#0F172A] hover:text-[#C5A059] transition-colors"
+          <div className="space-y-3">
+            {clinicData.faqs.map((faq, index) => {
+              const isOpen = openFaqIndex === index;
+              return (
+                <div 
+                  key={index}
+                  className="bg-white rounded-2xl border border-[#EAE4DC] overflow-hidden transition-all shadow-subtle"
                 >
-                  <span>{faq.question}</span>
-                  {isOpen ? <ChevronUp className="w-4 h-4 text-[#C5A059]" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                </button>
-                {isOpen && (
-                  <div className="px-4 pb-4 text-xs text-[#576579] leading-relaxed border-t border-gray-50 pt-2">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? -1 : index)}
+                    className="btn-ghost w-full p-4 text-left flex items-center justify-between text-sm font-semibold text-[#0F172A] hover:text-[#85611E]"
+                  >
+                    <span>{faq.question}</span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-[#85611E]" /> : <ChevronDown className="w-4 h-4 text-[#475569]" />}
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 pb-4 text-xs text-[#475569] leading-relaxed border-t border-gray-50 pt-2">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -795,7 +797,7 @@ export const HomePage = () => {
             <div className="pt-3 flex flex-wrap justify-center gap-3">
               <button
                 onClick={() => openBookingModal()}
-                className="btn-gold px-8 py-3.5 rounded-full text-sm font-semibold flex items-center space-x-2 shadow-lg cursor-pointer"
+                className="btn-gold px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Book Appointment (₹500 / ₹1,000)</span>

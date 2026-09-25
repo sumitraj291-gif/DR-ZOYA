@@ -80,7 +80,7 @@ export const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="font-serif text-sm font-semibold tracking-wider uppercase text-[#C5A059]">
+            <h4 className="font-serif text-sm font-semibold text-[#C5A059]">
               Clinic Navigation
             </h4>
             <ul className="space-y-2 text-xs text-gray-400">
@@ -95,28 +95,28 @@ export const Footer = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('smile-makeover')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('smile-makeover')} className="btn-ghost hover:text-white transition-colors">
                   Smile Makeover & Aligners
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('about')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('about')} className="btn-ghost hover:text-white transition-colors">
                   About Dr. Zoya
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('ai-analyzer')} className="hover:text-white transition-colors flex items-center space-x-1">
+                <button onClick={() => navigateTo('ai-analyzer')} className="btn-ghost hover:text-white transition-colors flex items-center space-x-1">
                   <span>AI Smile & Skin Scanner</span>
-                  <span className="bg-[#C5A059] text-white text-[9px] px-1 rounded font-bold">NEW</span>
+                  <span className="bg-[#C5A059] text-[#090D14] text-xs px-1.5 py-0.5 rounded font-bold">NEW</span>
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('gallery')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('gallery')} className="btn-ghost hover:text-white transition-colors">
                   Before & After Results
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('contact')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('contact')} className="btn-ghost hover:text-white transition-colors">
                   Location & Contact
                 </button>
               </li>
@@ -125,37 +125,37 @@ export const Footer = () => {
 
           {/* Treatments Highlights */}
           <div className="space-y-3">
-            <h4 className="font-serif text-sm font-semibold tracking-wider uppercase text-[#C5A059]">
+            <h4 className="font-serif text-sm font-semibold text-[#C5A059]">
               Specialties
             </h4>
-            <ul className="space-y-2 text-xs text-gray-400">
+            <ul className="space-y-2 text-xs text-gray-300">
               <li>
-                <button onClick={() => navigateTo('treatments')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('treatments')} className="btn-ghost hover:text-white transition-colors">
                   HydraFacial Elite MD®
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('treatments')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('treatments')} className="btn-ghost hover:text-white transition-colors">
                   PicoSure® Melasma Laser
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('smile-makeover')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('smile-makeover')} className="btn-ghost hover:text-white transition-colors">
                   Invisalign® Clear Aligners
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('smile-makeover')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('smile-makeover')} className="btn-ghost hover:text-white transition-colors">
                   Ultra-Thin Ceramic Veneers
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('treatments')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('treatments')} className="btn-ghost hover:text-white transition-colors">
                   Baby Botox & Dermal Fillers
                 </button>
               </li>
               <li>
-                <button onClick={() => navigateTo('treatments')} className="hover:text-white transition-colors">
+                <button onClick={() => navigateTo('treatments')} className="btn-ghost hover:text-white transition-colors">
                   GFC Hair Regrowth Protocol
                 </button>
               </li>
@@ -164,10 +164,10 @@ export const Footer = () => {
 
           {/* Contact & Hours */}
           <div className="space-y-3">
-            <h4 className="font-serif text-sm font-semibold tracking-wider uppercase text-[#C5A059]">
+            <h4 className="font-serif text-sm font-semibold text-[#C5A059]">
               Clinic Concierge
             </h4>
-            <div className="space-y-2.5 text-xs text-gray-400">
+            <div className="space-y-2.5 text-xs text-gray-300">
               <div className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-0.5" />
                 <span className="leading-snug">{clinicData.profile.contact.address}</span>
@@ -189,7 +189,7 @@ export const Footer = () => {
             <div className="pt-2">
               <button
                 onClick={() => navigateTo('admin')}
-                className="w-full bg-white/5 hover:bg-white/10 border border-gray-700 text-[#C5A059] py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition-colors"
+                className="w-full btn-obsidian py-2 px-3 text-xs font-semibold flex items-center justify-center space-x-1.5"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span>Open Clinic CMS / CRM</span>
@@ -200,14 +200,14 @@ export const Footer = () => {
         </div>
 
         {/* Medical & Legal Disclaimer (Mandated in Phase 2 PDF) */}
-        <div className="pt-8 pb-4 text-[11px] text-gray-500 border-b border-gray-800 space-y-2">
+        <div className="pt-8 pb-4 text-xs text-[#94A3B8] border-b border-gray-800 space-y-2">
           <p className="leading-relaxed">
-            <strong className="text-gray-400">Medical & Diagnostic Disclaimer:</strong> The information, AI Smile & Skin analyzer simulations, and before-and-after results presented on this platform are for informational, preliminary guidance, and educational purposes only. They do not constitute formal medical or dental diagnosis or replace a personalized clinical examination by Dr. Zoya. Individual outcomes may vary based on skin type, anatomical structure, and biological response.
+            <strong className="text-slate-200">Medical & Diagnostic Disclaimer:</strong> The information, AI Smile & Skin analyzer simulations, and before-and-after results presented on this platform are for informational, preliminary guidance, and educational purposes only. They do not constitute formal medical or dental diagnosis or replace a personalized clinical examination by Dr. Zoya. Individual outcomes may vary based on skin type, anatomical structure, and biological response.
           </p>
         </div>
 
         {/* Copyright & Live Status */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-3">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#94A3B8] gap-3">
           <p>
             © {new Date().getFullYear()} Dr. Zoya Aesthetic & Smile Studio. All rights reserved.
           </p>
@@ -217,7 +217,7 @@ export const Footer = () => {
               <span>Clinic Online & Accepting Appointments</span>
             </span>
             <span>•</span>
-            <button onClick={() => navigateTo('admin')} className="text-gray-400 hover:text-white underline">
+            <button onClick={() => navigateTo('admin')} className="btn-ghost text-gray-300 hover:text-white underline">
               Admin CMS
             </button>
           </div>

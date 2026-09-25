@@ -17,6 +17,28 @@ const ClinicContext = createContext();
 const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_gallery_v5';
 const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
 
+const VALID_PAGES = ['home', 'treatments', 'smile-makeover', 'about', 'ai-analyzer', 'gallery', 'book', 'contact', 'admin'];
+
+const getPageFromLocation = () => {
+  // 1. Direct path check (e.g. /about, /admin)
+  const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  if (VALID_PAGES.includes(pathname)) {
+    return pathname;
+  }
+
+  // 2. Legacy hash check (e.g. /#/about or #/about)
+  if (window.location.hash) {
+    const hashClean = window.location.hash.replace(/^#\/?/, '').replace(/\/+$/, '');
+    if (VALID_PAGES.includes(hashClean)) {
+      const targetPath = hashClean === 'home' ? '/' : `/${hashClean}`;
+      window.history.replaceState(null, '', targetPath);
+      return hashClean;
+    }
+  }
+
+  return 'home';
+};
+
 export const ClinicProvider = ({ children }) => {
   // 1. Persistent Clinic Content Data (CMS)
   const [clinicData, setClinicData] = useState(() => {
@@ -59,12 +81,8 @@ export const ClinicProvider = ({ children }) => {
     return initialSeedAppointments;
   });
 
-  // 3. Navigation State (Multi-page router with back/forward support)
-  const [activePage, setActivePage] = useState(() => {
-    const hash = window.location.hash.replace('#/', '').replace('#', '');
-    const validPages = ['home', 'treatments', 'smile-makeover', 'about', 'ai-analyzer', 'gallery', 'book', 'contact', 'admin'];
-    return validPages.includes(hash) ? hash : 'home';
-  });
+  // 3. Navigation State (Clean path router with back/forward history support)
+  const [activePage, setActivePage] = useState(() => getPageFromLocation());
 
   // 4. Modal & Widget States
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
@@ -183,23 +201,27 @@ export const ClinicProvider = ({ children }) => {
     }
   }, [appointments]);
 
-  // Listen to browser hash changes (back/forward button support)
+  // Listen to browser URL navigation (popstate for history & hashchange for legacy)
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#/', '').replace('#', '');
-      const validPages = ['home', 'treatments', 'smile-makeover', 'about', 'ai-analyzer', 'gallery', 'book', 'contact', 'admin'];
-      if (validPages.includes(hash)) {
-        setActivePage(hash);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+    const handleLocationChange = () => {
+      const page = getPageFromLocation();
+      setActivePage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   const navigateTo = (page, data = null) => {
-    window.location.hash = `#/${page}`;
+    const targetPath = page === 'home' ? '/' : `/${page}`;
+    if (window.location.pathname !== targetPath || window.location.hash) {
+      window.history.pushState({ page }, '', targetPath);
+    }
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (data?.treatment) {

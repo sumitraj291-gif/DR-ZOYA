@@ -18,7 +18,7 @@ import { useToast } from './ToastContext';
 
 const AppContext = createContext(null);
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children, onLogout }) => {
   const { addToast } = useToast();
 
   // Navigation & UI state
@@ -298,6 +298,7 @@ export const AppProvider = ({ children }) => {
         setAdminProfile,
         clinicInfo,
         setClinicInfo,
+        logout: onLogout,
       }}
     >
       {children}
