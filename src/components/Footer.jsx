@@ -21,7 +21,7 @@ export const Footer = () => {
       <div className="clinic-container">
         
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 xl:gap-14 pb-12 border-b border-gray-800">
           
           {/* Brand & Doctor Bio */}
           <div className="lg:col-span-2 space-y-4">

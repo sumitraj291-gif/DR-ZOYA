@@ -31,7 +31,7 @@ export const Navbar = () => {
     { id: 'home', label: t('nav.home', 'Home') },
     { id: 'treatments', label: t('nav.treatments', 'Treatments') },
     { id: 'smile-makeover', label: t('nav.smileMakeover', 'Smile Makeover') },
-    { id: 'about', label: t('nav.about', 'About Dr. Zoya') },
+    { id: 'about', label: t('nav.about', 'About') },
     { id: 'ai-analyzer', label: t('nav.aiAnalyzer', 'AI Analyzer'), badge: 'AI' },
     { id: 'gallery', label: t('nav.gallery', 'Gallery') },
     { id: 'contact', label: t('nav.contact', 'Contact') },
@@ -46,47 +46,50 @@ export const Navbar = () => {
     <header className="sticky top-0 z-50 w-full transition-all duration-300">
       {/* Main Navigation Bar */}
       <nav className={`w-full transition-all duration-300 ${scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-[#E2E8F0]'
-          : 'bg-[#FAF8F5]/90 backdrop-blur-sm py-4 border-b border-[#EAE4DC]'
+          ? 'bg-white/95 backdrop-blur-md shadow-sm py-2.5 border-b border-[#E2E8F0]'
+          : 'bg-[#FAF8F5]/95 backdrop-blur-sm py-3 border-b border-[#EAE4DC]'
         }`}>
         <div className="clinic-container flex items-center justify-between">
           {/* Logo & Brand Identity */}
           <button
             onClick={() => handleNavClick('home')}
-            className="btn-ghost flex items-center space-x-3 text-left group focus:outline-none"
+            className="flex items-center space-x-2 sm:space-x-3 text-left group focus:outline-none shrink-0 cursor-pointer"
             aria-label="Dr. Zoya DNA Clinic Home"
           >
-            <div className="w-12 h-12 rounded-2xl bg-white border border-[#C5A059]/50 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all">
-              <img src="/images/dna_logo.webp" alt="DNA Clinic Logo" width="48" height="48" className="w-full h-full object-contain" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-white border border-[#C5A059]/40 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all shrink-0">
+              <img src="/images/dna_logo.webp" alt="DNA Clinic Logo" width="44" height="44" className="w-full h-full object-contain" />
             </div>
-            <div>
-              <div className="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#0F172A] leading-none flex items-center space-x-1.5">
-                <span>DR. ZOYA</span>
-                <span className="text-[10px] text-[#85611E] font-sans font-bold bg-[#C5A059]/20 px-1.5 py-0.5 rounded">DNA CLINIC</span>
+            <div className="flex flex-col justify-center min-w-0">
+              <div className="font-serif text-sm sm:text-xl font-bold tracking-wider text-[#0F172A] leading-none flex items-center space-x-1.5">
+                <span className="whitespace-nowrap">DR. ZOYA</span>
+                <span className="text-[8px] sm:text-[9px] text-[#85611E] font-sans font-bold bg-[#FAF6EE] border border-[#C5A059]/40 px-1.5 py-0.5 rounded-full uppercase tracking-wider leading-none shrink-0">
+                  DNA CLINIC
+                </span>
               </div>
-              <div className="text-[10px] sm:text-[11px] tracking-wider uppercase text-[#475569] font-medium mt-1">
+              <div className="text-[8px] sm:text-[10px] tracking-widest uppercase text-[#576579] font-medium mt-1 truncate">
                 Skin • Hair • Dental Care
               </div>
             </div>
           </button>
 
           {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+          <div className="hidden lg:flex items-center space-x-0.5 xl:space-x-2 2xl:space-x-3 justify-center flex-1 px-1 xl:px-4">
             {navLinks.map((link) => {
               const isActive = activePage === link.id;
               return (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`btn-ghost px-3 py-2 text-sm font-medium rounded-full transition-all relative ${isActive
+                  className={`px-2 xl:px-3.5 py-1 xl:py-1.5 text-xs xl:text-sm font-medium rounded-full transition-all relative whitespace-nowrap cursor-pointer ${
+                    isActive
                       ? 'text-[#0F172A] font-semibold bg-[#EFE9DF]'
                       : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#F4EFEB]'
-                    }`}
+                  }`}
                 >
-                  <span className="flex items-center space-x-1.5">
+                  <span className="flex items-center space-x-1">
                     <span>{link.label}</span>
                     {link.badge && (
-                      <span className="bg-[#C5A059] text-[#090D14] text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="bg-[#C5A059] text-[#090D14] text-[8px] xl:text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider">
                         {link.badge}
                       </span>
                     )}
@@ -99,32 +102,26 @@ export const Navbar = () => {
             })}
           </div>
 
-          {/* Right Action Button */}
-          <div className="hidden sm:flex items-center space-x-3">
+          {/* Right Action Button & Language */}
+          <div className="hidden sm:flex items-center space-x-2 xl:space-x-3.5 flex-shrink-0">
+            <LanguageSelector variant="header" />
             <button
               onClick={() => openBookingModal()}
-              className="btn-gold px-5 py-2.5 rounded-full text-xs font-bold flex items-center space-x-2"
+              className="btn-gold px-3.5 sm:px-4 xl:px-6 py-2 sm:py-2.5 rounded-full text-xs xl:text-sm font-bold flex items-center space-x-1.5 whitespace-nowrap shadow-sm hover:shadow-md transition-all cursor-pointer"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-3.5 h-3.5" />
               <span>Book Consultation</span>
             </button>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="flex items-center space-x-2 lg:hidden">
-            <button
-              onClick={() => openBookingModal()}
-              className="sm:hidden btn-gold px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1"
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Book</span>
-            </button>
+          <div className="flex items-center lg:hidden shrink-0 ml-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="btn-icon"
+              className="p-1.5 rounded-xl text-[#0F172A] hover:bg-black/5 transition-colors cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>

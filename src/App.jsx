@@ -137,7 +137,7 @@ const PageContent = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen relative selection:bg-[#C5A059] selection:text-white">
+    <div className="flex flex-col min-h-screen relative selection:bg-[#C5A059] selection:text-white overflow-x-hidden">
       <SEO {...currentMeta} />
       {/* Toast Notification Banner */}
       {toastMessage && (

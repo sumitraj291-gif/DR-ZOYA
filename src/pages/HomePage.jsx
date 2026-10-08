@@ -167,15 +167,15 @@ export const HomePage = () => {
   ];
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <div className="flex flex-col w-full overflow-x-hidden">
       
-      {/* 1. HERO SECTION: 3D AESTHETIC CLINICAL SANCTUARY */}
-      <section className="relative overflow-hidden pt-6 sm:pt-10 pb-14 sm:pb-20 bg-gradient-to-b from-[#FAF8F5] via-[#F5EFE6]/40 to-[#FAF8F5] border-b border-[#EAE4DC]">
-        <div className="clinic-container space-y-8 sm:space-y-10">
-          
-          {/* Top Hero Bar: Headline, Intro Value Prop & Quick Booking */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="space-y-3 max-w-2xl text-left">
+      {/* 1. HERO SECTION: BALANCED TWO-COLUMN CLINICAL SANCTUARY */}
+      <section className="relative overflow-hidden pt-8 sm:pt-10 pb-8 sm:pb-10 bg-gradient-to-b from-[#FAF8F5] via-[#F5EFE6]/40 to-[#FAF8F5] border-b border-[#EAE4DC]">
+        <div className="clinic-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
+            
+            {/* Left Column: Headlines, Copy & Actions (lg:col-span-7) */}
+            <div className="lg:col-span-7 text-left space-y-4 xl:space-y-5">
               {/* Luxury Badge */}
               <div className="inline-flex items-center space-x-2 bg-white/95 border border-[#C5A059]/50 px-3.5 py-1.5 rounded-full shadow-xs">
                 <img src="/images/dna_logo.webp" alt="DNA Clinic" width="16" height="16" className="w-4 h-4 object-contain" />
@@ -185,61 +185,112 @@ export const HomePage = () => {
               </div>
 
               {/* Main Headline */}
-              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#0F172A] leading-[1.12] font-semibold tracking-tight">
+              <h1 className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-[52px] xl:text-[58px] 2xl:text-[62px] text-[#0F172A] leading-[1.18] sm:leading-[1.14] font-semibold tracking-tight max-w-[700px] xl:max-w-[760px]">
                 {clinicData.hero.titlePrimary}{' '}
-                <span className="italic font-normal text-[#85611E] font-serif block sm:inline">
+                <span className="italic font-normal text-[#85611E] font-serif">
                   {clinicData.hero.titleHighlight}
                 </span>
               </h1>
 
-              {/* Subtext */}
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed max-w-xl">
+              {/* Subtext Paragraph */}
+              <p className="text-sm sm:text-base xl:text-lg text-[#475569] leading-[1.65] max-w-[650px] xl:max-w-[720px]">
                 {clinicData.hero.description}
               </p>
+
+              {/* Aligned CTAs in Consistent Row (Stacked on Mobile, Row on Desktop) */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1 w-full sm:w-auto">
+                <button
+                  onClick={() => openBookingModal()}
+                  className="btn-gold h-11 sm:h-12 px-6 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 whitespace-nowrap shadow-sm hover:shadow-md transition-all cursor-pointer"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <span>Book Consultation</span>
+                </button>
+
+                <button
+                  onClick={() => navigateTo('ai-analyzer')}
+                  className="btn-outline h-11 sm:h-12 px-6 rounded-full text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 whitespace-nowrap shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                >
+                  <Camera className="w-4 h-4 text-[#85611E]" />
+                  <span>Try AI Smile & Skin Scan</span>
+                </button>
+              </div>
+
+              {/* Supporting Clinical Trust Badges */}
+              <div className="pt-2 flex flex-wrap items-center gap-2 text-xs text-[#576579]">
+                <span className="inline-flex items-center space-x-1.5 bg-white/80 px-3 py-1 rounded-full border border-[#E8E2D9] text-xs font-medium text-[#0F172A]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E] shrink-0" />
+                  <span>Certified Specialists</span>
+                </span>
+                <span className="inline-flex items-center space-x-1.5 bg-white/80 px-3 py-1 rounded-full border border-[#E8E2D9] text-xs font-medium text-[#0F172A]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E] shrink-0" />
+                  <span>US-FDA Tech</span>
+                </span>
+                <span className="inline-flex items-center space-x-1.5 bg-white/80 px-3 py-1 rounded-full border border-[#E8E2D9] text-xs font-medium text-[#0F172A]">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E] shrink-0" />
+                  <span>Zero-Downtime Protocols</span>
+                </span>
+              </div>
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <button
-                onClick={() => openBookingModal()}
-                className="btn-gold px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2"
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Book Consultation (₹500 / ₹1,000)</span>
-              </button>
+            {/* Right Column: Hero Clinical Visual (lg:col-span-5) */}
+            <div className="lg:col-span-5 relative flex items-center justify-center w-full">
+              {/* Subtle gold glow behind card */}
+              <div className="absolute w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#C5A059]/15 via-[#F5EFE6] to-transparent blur-2xl -z-10" />
 
-              <button
-                onClick={() => navigateTo('ai-analyzer')}
-                className="btn-outline px-6 py-3 rounded-full text-xs sm:text-sm font-bold flex items-center space-x-2"
-              >
-                <Camera className="w-4 h-4 text-[#85611E]" />
-                <span>Try AI Smile & Skin Scan</span>
-              </button>
+              <div className="relative w-full max-w-[500px] xl:max-w-[580px] 2xl:max-w-[620px] aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-[#E8E2D9] bg-white group">
+                <img 
+                  src="/images/clinic_interior.webp" 
+                  alt="Dr. Zoya Aesthetic & Smile Studio Clinic Suites" 
+                  className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700" 
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090D14]/85 via-black/15 to-transparent" />
+                
+                {/* Doctor Lead Badge */}
+                <div className="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#C5A059]/40 shadow-sm flex items-center space-x-2">
+                  <img src="/images/dr_zoya_portrait.webp" alt="Dr. Zoya Rana" className="w-5 h-5 rounded-full object-cover border border-[#C5A059]" />
+                  <span className="text-[11px] font-bold text-[#0F172A]">Dr. Zoya Rana & Medical Team</span>
+                </div>
+
+                {/* Bottom Bar inside visual */}
+                <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-white">
+                  <div className="text-left">
+                    <div className="font-serif font-bold text-sm tracking-wide text-white">Advanced Clinical Suites</div>
+                    <div className="text-[11px] text-[#CBD5E1]">Dehradun & Muzaffarnagar</div>
+                  </div>
+                  <span className="text-[11px] text-[#C5A059] font-bold bg-[#090D14]/80 px-2.5 py-1 rounded-full border border-[#C5A059]/40 backdrop-blur-xs">
+                    100% Ethical Care
+                  </span>
+                </div>
+              </div>
             </div>
+
           </div>
 
-          {/* Grand Centerpiece: 3D Aesthetic Experience with Before/After Drag Slider */}
-          <Hero3DAestheticExperience />
-
           {/* Key Trust Stats Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#E8E2D9]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-10 xl:gap-14 pt-8 mt-8 lg:mt-10 border-t border-[#E8E2D9]">
             {clinicData.hero.stats.map((stat, idx) => (
-              <div key={idx} className="space-y-0.5">
-                <div className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
+              <div key={idx} className="space-y-1 text-left">
+                <div className="font-serif text-2xl sm:text-3xl xl:text-4xl font-bold text-[#0F172A]">
                   {stat.value}
                 </div>
-                <div className="text-xs text-[#475569] font-medium leading-tight">
+                <div className="text-xs sm:text-sm text-[#475569] font-medium leading-normal">
                   {stat.label}
                 </div>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
+      {/* 1B. CLINICAL SHOWCASE: INTERACTIVE SPECIALTIES EXPERIENCE */}
+      <section className="clinic-container pt-8 sm:pt-10 pb-12 sm:pb-16">
+        <Hero3DAestheticExperience />
+      </section>
+
       {/* 2. SPECIALTY PILLARS (Real Live DNA Clinic Services) */}
-      <section className="clinic-container">
+      <section className="clinic-container py-14 sm:py-20">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
             Our Clinical Services
@@ -252,30 +303,30 @@ export const HomePage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
           {specialties.map((spec, i) => (
             <div 
               key={i}
               className="bg-white rounded-2xl overflow-hidden border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 flex flex-col group"
             >
-              <div className="relative h-52 overflow-hidden bg-gray-100">
+              <div className="relative h-52 sm:h-56 xl:h-64 overflow-hidden bg-gray-100">
                 <img 
                   src={spec.image} 
-                  alt={spec.title}
+                  alt={spec.title} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 <div className="absolute bottom-3 left-4 text-white">
-                  <span className="font-serif font-bold text-base tracking-wide">{spec.title}</span>
+                  <span className="font-serif font-bold text-base sm:text-lg tracking-wide">{spec.title}</span>
                 </div>
               </div>
 
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div className="p-5 xl:p-7 flex-1 flex flex-col justify-between space-y-4">
                 <div>
-                  <p className="text-xs text-[#475569] leading-relaxed mb-4">
+                  <p className="text-xs sm:text-sm text-[#475569] leading-relaxed mb-4">
                     {spec.tagline}
                   </p>
-                  <ul className="space-y-2 text-xs text-[#0F172A]">
+                  <ul className="space-y-2 text-xs sm:text-sm text-[#0F172A]">
                     {spec.procedures.map((p, idx) => (
                       <li key={idx} className="flex items-center space-x-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#85611E] flex-shrink-0" />
@@ -288,14 +339,14 @@ export const HomePage = () => {
                 <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
                   <button
                     onClick={() => navigateTo(spec.route)}
-                    className="btn-outline px-4 py-2 rounded-full text-xs font-bold flex items-center space-x-1"
+                    className="btn-outline px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold flex items-center space-x-1"
                   >
                     <span>Explore Treatments</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => openBookingModal()}
-                    className="btn-gold px-4 py-2 rounded-full text-xs font-bold shadow-xs"
+                    className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs"
                   >
                     Book Slot
                   </button>
@@ -307,7 +358,7 @@ export const HomePage = () => {
       </section>
 
       {/* 3. WHY CHOOSE DNA CLINIC (From Live dnaclinicindia.com) */}
-      <section className="bg-[#FAF8F5] py-16 border-y border-[#EAE4DC]">
+      <section className="bg-[#FAF8F5] py-14 sm:py-20 border-y border-[#EAE4DC]">
         <div className="clinic-container">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
@@ -336,7 +387,7 @@ export const HomePage = () => {
       </section>
 
       {/* 4. MEET THE EXPERTS (Real 3 Doctors from DNA Clinic) */}
-      <section className="clinic-container">
+      <section className="clinic-container py-14 sm:py-20">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
             Best Specialists
@@ -392,7 +443,7 @@ export const HomePage = () => {
       </section>
 
       {/* 5. SEE THE DIFFERENCE: BEFORE & AFTER SHOWCASE */}
-      <section className="bg-[#FAF6EE] py-16 border-y border-[#EAE4DC]">
+      <section className="bg-[#FAF6EE] py-14 sm:py-20 border-y border-[#EAE4DC]">
         <div className="clinic-container">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
@@ -406,24 +457,24 @@ export const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10">
             {/* Smile Transformation */}
-            <div className="bg-white p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            <div className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
                   Smile Transformation
                 </span>
                 <span className="text-xs text-[#475569]">2 Clinical Visits</span>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#0F172A]">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
                 See the Difference in Your Smile
               </h3>
-              <p className="text-xs text-[#475569]">
+              <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                 Our advanced dental treatments restore damaged or missing teeth, enhance aesthetics, and improve overall oral health.
               </p>
 
               {/* Real Before/After Images side-by-side */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
                   <img src="/images/ba_smile_before.webp" alt="Smile Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
@@ -435,10 +486,10 @@ export const HomePage = () => {
               </div>
 
               <div className="pt-2 flex items-center justify-between">
-                <span className="text-xs font-semibold text-emerald-700">Ceramic Veneers & Whitening</span>
+                <span className="text-xs sm:text-sm font-semibold text-emerald-700">Ceramic Veneers & Whitening</span>
                 <button
                   onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
+                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs"
                 >
                   Get Your Smile
                 </button>
@@ -446,22 +497,22 @@ export const HomePage = () => {
             </div>
 
             {/* Skin Transformation */}
-            <div className="bg-white p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            <div className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
                   Skin Transformation
                 </span>
                 <span className="text-xs text-[#475569]">6 Weeks Protocol</span>
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#0F172A]">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
                 See the Difference in Your Skin
               </h3>
-              <p className="text-xs text-[#475569]">
+              <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                 Advanced dermatology treatments designed to reduce acne, pigmentation, and signs of ageing while restoring healthy, glowing skin.
               </p>
 
               {/* Real Before/After Images side-by-side */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
                   <img src="/images/ba_skin_before.webp" alt="Skin Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
@@ -473,10 +524,10 @@ export const HomePage = () => {
               </div>
 
               <div className="pt-2 flex items-center justify-between">
-                <span className="text-xs font-semibold text-emerald-700">Acne & Pore Revision</span>
+                <span className="text-xs sm:text-sm font-semibold text-emerald-700">Acne & Pore Revision</span>
                 <button
                   onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
+                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs"
                 >
                   Get Your Glow
                 </button>
@@ -487,7 +538,7 @@ export const HomePage = () => {
       </section>
 
       {/* 5B. CLINICAL GALLERY & OUTCOMES SHOWCASE */}
-      <section className="clinic-container">
+      <section className="clinic-container py-14 sm:py-20">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center space-x-2 bg-[#FAF6EE] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#85611E] uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
@@ -519,7 +570,7 @@ export const HomePage = () => {
         </div>
 
         {/* Gallery Grid - Improved vertical spacing, typography, and comfortable layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-8">
           {(clinicData.gallery || [])
             .filter(item => homeGalleryFilter === 'All' || item.category === homeGalleryFilter)
             .slice(0, 6)
@@ -596,7 +647,7 @@ export const HomePage = () => {
       </section>
 
       {/* 6. AI SCANNER PROMOTIONAL BANNER (Phase 2 Feature) */}
-      <section className="clinic-container">
+      <section className="clinic-container py-10 sm:py-16">
         <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#121E2C] via-[#0E1724] to-[#1A2634] text-white p-8 sm:p-12 border border-[#C5A059]/40 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
@@ -646,7 +697,7 @@ export const HomePage = () => {
       </section>
 
       {/* 7. INSTAGRAM SHOWCASE REEL (@dnaclinicindia) */}
-      <section className="clinic-container">
+      <section className="clinic-container py-14 sm:py-20">
         <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
           <div className="inline-flex items-center space-x-2 text-[#85611E] font-bold text-xs uppercase tracking-wider">
             <InstagramIcon className="w-4 h-4" />
@@ -695,7 +746,7 @@ export const HomePage = () => {
       </section>
 
       {/* 8. REAL GOOGLE REVIEWS FROM PATIENTS */}
-      <section className="bg-[#FAF6EE] py-16 border-y border-[#EAE4DC]">
+      <section className="bg-[#FAF6EE] py-14 sm:py-20 border-y border-[#EAE4DC]">
         <div className="clinic-container">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
             <div className="inline-flex items-center space-x-1 text-[#C5A059]">
@@ -711,11 +762,11 @@ export const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 xl:gap-7">
             {clinicData.testimonials.map((rev) => (
               <div 
                 key={rev.id} 
-                className="bg-white p-5 rounded-2xl border border-[#E8E2D9] shadow-subtle flex flex-col justify-between space-y-4"
+                className="bg-white p-5 xl:p-6 rounded-2xl border border-[#E8E2D9] shadow-subtle flex flex-col justify-between space-y-4"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -726,7 +777,7 @@ export const HomePage = () => {
                     </div>
                     <span className="text-xs text-[#475569]">{rev.date}</span>
                   </div>
-                  <p className="text-xs text-[#475569] italic leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#475569] italic leading-relaxed">
                     "{rev.text}"
                   </p>
                 </div>
@@ -743,8 +794,8 @@ export const HomePage = () => {
       </section>
 
       {/* 9. FREQUENTLY ASKED QUESTIONS */}
-      <section className="clinic-container">
-        <div className="max-w-2xl mx-auto">
+      <section className="clinic-container py-14 sm:py-20">
+        <div className="max-w-2xl lg:max-w-3xl mx-auto">
           <div className="text-center space-y-3 mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
               Got Questions?
@@ -782,13 +833,13 @@ export const HomePage = () => {
       </section>
 
       {/* 10. BOTTOM BOOKING CTA BANNER */}
-      <section className="clinic-container pb-6">
-        <div className="bg-[#0A111C] rounded-3xl p-8 sm:p-12 text-center text-white border border-[#C5A059]/30 shadow-2xl relative overflow-hidden">
-          <div className="max-w-2xl mx-auto space-y-4">
+      <section className="clinic-container pb-14 sm:pb-20">
+        <div className="bg-[#0A111C] rounded-3xl p-8 sm:p-12 xl:p-16 text-center text-white border border-[#C5A059]/30 shadow-2xl relative overflow-hidden">
+          <div className="max-w-3xl mx-auto space-y-4">
             <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">
               Start Your Transformation
             </span>
-            <h3 className="font-serif text-3xl sm:text-4xl font-semibold text-white">
+            <h3 className="font-serif text-3xl sm:text-4xl xl:text-5xl font-semibold text-white">
               Reserve Your Private Consultation with Dr. Zoya & Team
             </h3>
             <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
