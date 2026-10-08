@@ -10,6 +10,14 @@ import {
   deleteDoctorOnServer,
   updateClinicProfile as updateClinicProfileAPI,
   updateHeroSection as updateHeroSectionAPI,
+  createTreatmentAPI,
+  updateTreatmentAPI,
+  deleteTreatmentAPI,
+  createGalleryItemAPI,
+  updateGalleryItemAPI,
+  deleteGalleryItemAPI,
+  createTestimonialAPI,
+  deleteTestimonialAPI,
 } from '../services/api';
 
 const ClinicContext = createContext();
@@ -91,94 +99,98 @@ export const ClinicProvider = ({ children }) => {
   const [toastMessage, setToastMessage] = useState(null);
   const [backendLoaded, setBackendLoaded] = useState(false);
 
-  // ── Fetch from backend on app load (non-blocking, graceful fallback) ────────
+  // ── Sync clinic content from real backend ───────────────────────────────────
+  const syncClinicDataFromServer = async () => {
+    try {
+      const res = await fetchClinicData();
+      if (!res?.data) return false;
+      const { settings, team, treatments, testimonials, gallery } = res.data;
+      if (!settings) return false;
+
+      const backendProfile = {
+        clinicName: settings.clinicName,
+        brandAlias: settings.brandAlias || 'Dr. Zoya\'s DNA Clinic India',
+        tagline: settings.tagline || '',
+        doctorName: settings.doctorName,
+        doctorTitle: settings.doctorTitle,
+        doctorRole: settings.doctorRole,
+        doctorBio: settings.doctorBio,
+        doctorExperienceYears: settings.doctorExperienceYears || 12,
+        patientCount: settings.patientCount || '15,000+',
+        rating: settings.rating || '4.9',
+        reviewCount: settings.reviewCount || '1,240+',
+        instagram: settings.instagram || 'https://www.instagram.com/dnaclinicindia/',
+        instagramHandle: settings.instagramHandle || '@dnaclinicindia',
+        certifications: settings.certifications || [],
+        whyChooseUs: settings.whyChooseUs || [],
+        contact: {
+          phone: settings.phone,
+          altPhone: settings.altPhone || settings.phone,
+          whatsapp: settings.whatsapp,
+          email: settings.email,
+          address: settings.address,
+          dehradunAddress: settings.dehradunAddress || '',
+          muzaffarnagarAddress: settings.muzaffarnagarAddress || '',
+          timings: settings.timings,
+          emergencyHelpline: settings.phone,
+        },
+        team: (team || []).filter(d => d.isActive !== false),
+      };
+
+      const backendHero = {
+        badge: settings.heroBadge,
+        titlePrimary: settings.heroTitlePrimary,
+        titleHighlight: settings.heroTitleHighlight,
+        description: settings.heroDescription,
+        stats: settings.heroStats || [],
+      };
+
+      const backendTreatments = (treatments || []).map(t => ({
+        id: t.slug || t.id,
+        _serverId: t.id,
+        title: t.title,
+        category: t.category,
+        subCategory: t.subCategory || '',
+        duration: t.duration,
+        price: t.priceDisplay,
+        advanceFee: t.advanceFee,
+        description: t.description,
+        benefits: t.benefits || [],
+        isPopular: t.isPopular,
+        image: t.imageUrl || '/images/advanced_facials.png',
+      }));
+
+      const backendTestimonials = (testimonials || []).map(t => ({
+        id: t.id,
+        name: t.patientName,
+        location: t.location,
+        verifiedProcedure: t.verifiedProcedure,
+        rating: t.rating,
+        date: t.reviewDate,
+        text: t.reviewText,
+      }));
+
+      setClinicData(prev => ({
+        ...prev,
+        profile: backendProfile,
+        hero: backendHero,
+        treatments: backendTreatments.length > 0 ? backendTreatments : prev.treatments,
+        testimonials: backendTestimonials.length > 0 ? backendTestimonials : prev.testimonials,
+        gallery: (gallery && gallery.length > 0) ? gallery : (res.data.gallery && res.data.gallery.length > 0 ? res.data.gallery : prev.gallery),
+      }));
+
+      setBackendLoaded(true);
+      return true;
+    } catch (err) {
+      console.warn('[DNA Clinic] ⚠️ Backend unavailable, using cached/default data.', err.message);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    if (backendLoaded) return;
-    fetchClinicData()
-      .then(res => {
-        if (!res?.data) return;
-        const { settings, team, treatments, testimonials } = res.data;
-        if (!settings) return;
-
-        // Build profile from backend settings + team
-        const backendProfile = {
-          clinicName: settings.clinicName,
-          brandAlias: settings.brandAlias || 'Dr. Zoya\'s DNA Clinic India',
-          tagline: settings.tagline || '',
-          doctorName: settings.doctorName,
-          doctorTitle: settings.doctorTitle,
-          doctorRole: settings.doctorRole,
-          doctorBio: settings.doctorBio,
-          doctorExperienceYears: settings.doctorExperienceYears || 12,
-          patientCount: settings.patientCount || '15,000+',
-          rating: settings.rating || '4.9',
-          reviewCount: settings.reviewCount || '1,240+',
-          instagram: settings.instagram || 'https://www.instagram.com/dnaclinicindia/',
-          instagramHandle: settings.instagramHandle || '@dnaclinicindia',
-          certifications: settings.certifications || [],
-          whyChooseUs: settings.whyChooseUs || [],
-          contact: {
-            phone: settings.phone,
-            altPhone: settings.altPhone || settings.phone,
-            whatsapp: settings.whatsapp,
-            email: settings.email,
-            address: settings.address,
-            dehradunAddress: settings.dehradunAddress || '',
-            muzaffarnagarAddress: settings.muzaffarnagarAddress || '',
-            timings: settings.timings,
-            emergencyHelpline: settings.phone,
-          },
-          team: (team || []).filter(d => d.isActive !== false),
-        };
-
-        const backendHero = {
-          badge: settings.heroBadge,
-          titlePrimary: settings.heroTitlePrimary,
-          titleHighlight: settings.heroTitleHighlight,
-          description: settings.heroDescription,
-          stats: settings.heroStats || [],
-        };
-
-        const backendTreatments = (treatments || []).map(t => ({
-          id: t.slug || t.id,
-          _serverId: t.id,
-          title: t.title,
-          category: t.category,
-          subCategory: t.subCategory || '',
-          duration: t.duration,
-          price: t.priceDisplay,
-          advanceFee: t.advanceFee,
-          description: t.description,
-          benefits: t.benefits || [],
-          isPopular: t.isPopular,
-          image: t.imageUrl || '/images/advanced_facials.png',
-        }));
-
-        const backendTestimonials = (testimonials || []).map(t => ({
-          id: t.id,
-          name: t.patientName,
-          location: t.location,
-          verifiedProcedure: t.verifiedProcedure,
-          rating: t.rating,
-          date: t.reviewDate,
-          text: t.reviewText,
-        }));
-
-        setClinicData(prev => ({
-          ...prev,
-          profile: backendProfile,
-          hero: backendHero,
-          treatments: backendTreatments.length > 0 ? backendTreatments : prev.treatments,
-          testimonials: backendTestimonials.length > 0 ? backendTestimonials : prev.testimonials,
-          gallery: (res.data.gallery?.length > 0) ? res.data.gallery : prev.gallery,
-        }));
-
-        setBackendLoaded(true);
-        console.log('[DNA Clinic] ✅ Backend data synced successfully.');
-      })
-      .catch(err => {
-        console.warn('[DNA Clinic] ⚠️ Backend unavailable, using cached/default data.', err.message);
-      });
+    if (!backendLoaded) {
+      syncClinicDataFromServer();
+    }
   }, []);
 
   // Sync clinicData changes to localStorage
@@ -236,45 +248,90 @@ export const ClinicProvider = ({ children }) => {
     }, 3800);
   };
 
-  // CMS Mutators
-  const updateProfile = (updatedProfile) => {
-    setClinicData(prev => ({
-      ...prev,
-      profile: { ...prev.profile, ...updatedProfile }
-    }));
-    showToast('Clinic Profile & Contact details updated successfully!');
+  // CMS Mutators (Connected to Backend REST APIs)
+  const updateProfile = async (updatedProfile) => {
+    try {
+      await updateClinicProfileAPI(updatedProfile);
+      setClinicData(prev => ({
+        ...prev,
+        profile: { ...prev.profile, ...updatedProfile }
+      }));
+      showToast('Clinic Profile & Contact details saved to server!');
+      await syncClinicDataFromServer();
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to save profile:', err);
+      showToast(err.message || 'Failed to save profile to server.', 'error');
+      throw err;
+    }
   };
 
-  const updateHero = (updatedHero) => {
-    setClinicData(prev => ({
-      ...prev,
-      hero: { ...prev.hero, ...updatedHero }
-    }));
-    showToast('Hero section content updated!');
+  const updateHero = async (updatedHero) => {
+    try {
+      await updateHeroSectionAPI(updatedHero);
+      setClinicData(prev => ({
+        ...prev,
+        hero: { ...prev.hero, ...updatedHero }
+      }));
+      showToast('Hero section content saved to server!');
+      await syncClinicDataFromServer();
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to save hero:', err);
+      showToast(err.message || 'Failed to save hero section to server.', 'error');
+      throw err;
+    }
   };
 
-  const addTreatment = (newTreatment) => {
-    setClinicData(prev => ({
-      ...prev,
-      treatments: [newTreatment, ...prev.treatments]
-    }));
-    showToast(`Treatment "${newTreatment.title}" added to catalog!`);
+  const addTreatment = async (newTreatment) => {
+    try {
+      const res = await createTreatmentAPI(newTreatment);
+      const created = res?.data || { ...newTreatment, id: res?.id || `trt-${Date.now()}` };
+      setClinicData(prev => ({
+        ...prev,
+        treatments: [created, ...prev.treatments]
+      }));
+      showToast(`Treatment "${newTreatment.title}" saved to server!`);
+      await syncClinicDataFromServer();
+      return created;
+    } catch (err) {
+      console.error('[CMS] Failed to add treatment:', err);
+      showToast(err.message || 'Failed to add treatment on server.', 'error');
+      throw err;
+    }
   };
 
-  const updateTreatment = (id, updatedFields) => {
-    setClinicData(prev => ({
-      ...prev,
-      treatments: prev.treatments.map(item => item.id === id ? { ...item, ...updatedFields } : item)
-    }));
-    showToast('Treatment details updated successfully!');
+  const updateTreatment = async (id, updatedFields) => {
+    try {
+      await updateTreatmentAPI(id, updatedFields);
+      setClinicData(prev => ({
+        ...prev,
+        treatments: prev.treatments.map(item => item.id === id ? { ...item, ...updatedFields } : item)
+      }));
+      showToast('Treatment details updated on server!');
+      await syncClinicDataFromServer();
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to update treatment:', err);
+      showToast(err.message || 'Failed to update treatment on server.', 'error');
+      throw err;
+    }
   };
 
-  const deleteTreatment = (id) => {
-    setClinicData(prev => ({
-      ...prev,
-      treatments: prev.treatments.filter(item => item.id !== id)
-    }));
-    showToast('Treatment removed from catalog.');
+  const deleteTreatment = async (id) => {
+    try {
+      await deleteTreatmentAPI(id);
+      setClinicData(prev => ({
+        ...prev,
+        treatments: prev.treatments.filter(item => item.id !== id)
+      }));
+      showToast('Treatment removed from catalog.');
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to delete treatment:', err);
+      showToast(err.message || 'Failed to delete treatment on server.', 'error');
+      throw err;
+    }
   };
 
   const updateTestimonial = (id, updatedFields) => {
@@ -285,81 +342,130 @@ export const ClinicProvider = ({ children }) => {
     showToast('Testimonial updated!');
   };
 
-  const addTestimonial = (newReview) => {
-    setClinicData(prev => ({
-      ...prev,
-      testimonials: [newReview, ...prev.testimonials]
-    }));
-    showToast('New patient review added!');
+  const addTestimonial = async (newReview) => {
+    try {
+      const res = await createTestimonialAPI(newReview);
+      const created = res?.data || { ...newReview, id: res?.id || `rev-${Date.now()}` };
+      setClinicData(prev => ({
+        ...prev,
+        testimonials: [created, ...prev.testimonials]
+      }));
+      showToast('New patient review saved to server!');
+      return created;
+    } catch (err) {
+      console.error('[CMS] Failed to add review:', err);
+      showToast(err.message || 'Failed to add review on server.', 'error');
+      throw err;
+    }
   };
 
-  const deleteTestimonial = (id) => {
-    setClinicData(prev => ({
-      ...prev,
-      testimonials: prev.testimonials.filter(item => item.id !== id)
-    }));
-    showToast('Patient review deleted.');
+  const deleteTestimonial = async (id) => {
+    try {
+      await deleteTestimonialAPI(id);
+      setClinicData(prev => ({
+        ...prev,
+        testimonials: prev.testimonials.filter(item => item.id !== id)
+      }));
+      showToast('Patient review removed from server.');
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to delete review:', err);
+      showToast(err.message || 'Failed to delete review on server.', 'error');
+      throw err;
+    }
   };
 
   // Gallery & Media CMS Mutators
-  const addGalleryItem = (newItem) => {
+  const addGalleryItem = async (newItem) => {
     const item = {
       id: `gal-${Date.now()}`,
       ...newItem
     };
-    setClinicData(prev => ({
-      ...prev,
-      gallery: [item, ...(prev.gallery || [])]
-    }));
-    showToast('New gallery media added!');
-    return item;
+    try {
+      const res = await createGalleryItemAPI(item);
+      const created = res?.data || item;
+      setClinicData(prev => ({
+        ...prev,
+        gallery: [created, ...(prev.gallery || [])]
+      }));
+      showToast('New gallery item saved to server!');
+      await syncClinicDataFromServer();
+      return created;
+    } catch (err) {
+      console.error('[CMS] Failed to add gallery item:', err);
+      showToast(err.message || 'Failed to save gallery item to server.', 'error');
+      throw err;
+    }
   };
 
-  const updateGalleryItem = (id, updatedFields) => {
-    setClinicData(prev => ({
-      ...prev,
-      gallery: (prev.gallery || []).map(item => item.id === id ? { ...item, ...updatedFields } : item)
-    }));
-    showToast('Gallery item updated successfully!');
+  const updateGalleryItem = async (id, updatedFields) => {
+    try {
+      await updateGalleryItemAPI(id, updatedFields);
+      setClinicData(prev => ({
+        ...prev,
+        gallery: (prev.gallery || []).map(item => item.id === id ? { ...item, ...updatedFields } : item)
+      }));
+      showToast('Gallery item updated on server!');
+      await syncClinicDataFromServer();
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to update gallery item:', err);
+      showToast(err.message || 'Failed to update gallery item on server.', 'error');
+      throw err;
+    }
   };
 
-  const deleteGalleryItem = (id) => {
-    setClinicData(prev => ({
-      ...prev,
-      gallery: (prev.gallery || []).filter(item => item.id !== id)
-    }));
-    showToast('Gallery item removed from clinic showcase.');
+  const deleteGalleryItem = async (id) => {
+    try {
+      await deleteGalleryItemAPI(id);
+      setClinicData(prev => ({
+        ...prev,
+        gallery: (prev.gallery || []).filter(item => item.id !== id)
+      }));
+      showToast('Gallery item removed from clinic showcase.');
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to delete gallery item:', err);
+      showToast(err.message || 'Failed to delete gallery item on server.', 'error');
+      throw err;
+    }
   };
 
   // Doctors Team CMS Mutators
-  const updateDoctor = (id, updatedFields) => {
-    setClinicData(prev => {
-      const currentTeam = prev.profile?.team || [];
-      const updatedTeam = currentTeam.map(doc => doc.id === id ? { ...doc, ...updatedFields } : doc);
-      
-      let updatedProfile = { ...prev.profile, team: updatedTeam };
-      
-      // If lead doctor is updated, sync lead profile credentials
-      const updatedDoc = updatedTeam.find(d => d.id === id);
-      if (updatedDoc && (updatedDoc.id === 'doc-1' || updatedFields.isLead || updatedDoc.role?.toLowerCase().includes('director') || updatedDoc.role?.toLowerCase().includes('founder'))) {
-        updatedProfile.doctorName = updatedDoc.name;
-        if (updatedDoc.qualification) updatedProfile.doctorTitle = updatedDoc.qualification;
-        if (updatedDoc.role) updatedProfile.doctorRole = updatedDoc.role;
-        if (updatedDoc.image) updatedProfile.doctorImage = updatedDoc.image;
-        if (updatedDoc.bio) updatedProfile.doctorBio = updatedDoc.bio;
-      }
+  const updateDoctor = async (id, updatedFields) => {
+    try {
+      await updateDoctorOnServer(id, updatedFields);
+      setClinicData(prev => {
+        const currentTeam = prev.profile?.team || [];
+        const updatedTeam = currentTeam.map(doc => doc.id === id ? { ...doc, ...updatedFields } : doc);
+        
+        let updatedProfile = { ...prev.profile, team: updatedTeam };
+        
+        const updatedDoc = updatedTeam.find(d => d.id === id);
+        if (updatedDoc && (updatedDoc.id === 'doc-1' || updatedFields.isLead || updatedDoc.role?.toLowerCase().includes('director') || updatedDoc.role?.toLowerCase().includes('founder'))) {
+          updatedProfile.doctorName = updatedDoc.name;
+          if (updatedDoc.qualification) updatedProfile.doctorTitle = updatedDoc.qualification;
+          if (updatedDoc.role) updatedProfile.doctorRole = updatedDoc.role;
+          if (updatedDoc.image) updatedProfile.doctorImage = updatedDoc.image;
+          if (updatedDoc.bio) updatedProfile.doctorBio = updatedDoc.bio;
+        }
 
-      return {
-        ...prev,
-        profile: updatedProfile
-      };
-    });
-    // Sync to backend silently
-    updateDoctorOnServer(id, updatedFields).catch(err => console.warn('[API] updateDoctor failed:', err.message));
-    showToast('Doctor details and photo updated! Changes are live on the website.');
+        return {
+          ...prev,
+          profile: updatedProfile
+        };
+      });
+      showToast('Doctor details and photo updated on server!');
+      await syncClinicDataFromServer();
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to update doctor:', err);
+      showToast(err.message || 'Failed to update doctor on server.', 'error');
+      throw err;
+    }
   };
 
-  const addDoctor = (newDoctor) => {
+  const addDoctor = async (newDoctor) => {
     const doc = {
       id: `doc-${Date.now()}`,
       name: newDoctor.name || 'New Doctor',
@@ -370,30 +476,42 @@ export const ClinicProvider = ({ children }) => {
       location: newDoctor.location || 'Dehradun & Muzaffarnagar Clinics',
       ...newDoctor
     };
-    setClinicData(prev => ({
-      ...prev,
-      profile: {
-        ...prev.profile,
-        team: [...(prev.profile?.team || []), doc]
-      }
-    }));
-    // Sync to backend silently
-    addDoctorOnServer(doc).catch(err => console.warn('[API] addDoctor failed:', err.message));
-    showToast(`Doctor "${doc.name}" added to specialist panel!`);
-    return doc;
+    try {
+      await addDoctorOnServer(doc);
+      setClinicData(prev => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          team: [...(prev.profile?.team || []), doc]
+        }
+      }));
+      showToast(`Doctor "${doc.name}" added to specialist panel on server!`);
+      await syncClinicDataFromServer();
+      return doc;
+    } catch (err) {
+      console.error('[CMS] Failed to add doctor:', err);
+      showToast(err.message || 'Failed to add doctor on server.', 'error');
+      throw err;
+    }
   };
 
-  const deleteDoctor = (id) => {
-    setClinicData(prev => ({
-      ...prev,
-      profile: {
-        ...prev.profile,
-        team: (prev.profile?.team || []).filter(doc => doc.id !== id)
-      }
-    }));
-    // Sync to backend silently
-    deleteDoctorOnServer(id).catch(err => console.warn('[API] deleteDoctor failed:', err.message));
-    showToast('Doctor removed from specialist panel.');
+  const deleteDoctor = async (id) => {
+    try {
+      await deleteDoctorOnServer(id);
+      setClinicData(prev => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          team: (prev.profile?.team || []).filter(doc => doc.id !== id)
+        }
+      }));
+      showToast('Doctor removed from specialist panel on server.');
+      return true;
+    } catch (err) {
+      console.error('[CMS] Failed to delete doctor:', err);
+      showToast(err.message || 'Failed to delete doctor on server.', 'error');
+      throw err;
+    }
   };
 
   const updateDoctorTeam = (newTeam) => {
@@ -459,6 +577,7 @@ export const ClinicProvider = ({ children }) => {
     <ClinicContext.Provider
       value={{
         clinicData,
+        syncClinicDataFromServer,
         updateProfile,
         updateHero,
         addTreatment,

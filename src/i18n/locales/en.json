@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "home": "Home",
+    "treatments": "Treatments",
+    "smileMakeover": "Smile Makeover",
+    "about": "About Dr. Zoya",
+    "aiAnalyzer": "AI Analyzer",
+    "gallery": "Cases & Gallery",
+    "book": "Book Appointment",
+    "contact": "Contact"
+  },
+  "common": {
+    "bookAppointment": "Book Appointment",
+    "callClinic": "Call Reception",
+    "whatsapp": "WhatsApp Concierge",
+    "language": "Language",
+    "emergency": "24/7 Helpline",
+    "operatingHours": "Operating Hours",
+    "address": "Clinic Locations",
+    "onlineAccepting": "Clinic Online & Accepting Appointments",
+    "allRightsReserved": "All rights reserved.",
+    "loading": "Loading experience...",
+    "readMore": "Explore More",
+    "viewDetails": "View Details"
+  },
+  "hero": {
+    "badge": "DNA Clinics • Dehradun & Muzaffarnagar",
+    "bookCta": "Book Consultation",
+    "viewCases": "View Transformations",
+    "verifiedClearance": "Verified Clinical Clearance"
+  },
+  "booking": {
+    "title": "Book Clinical Consultation",
+    "subtitle": "Select your preferred date, time, and clinical department.",
+    "patientName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "department": "Select Department",
+    "date": "Appointment Date",
+    "time": "Preferred Slot",
+    "submit": "Confirm & Submit Appointment Request",
+    "submitting": "Submitting Request...",
+    "successTitle": "Appointment Request Submitted",
+    "payAtClinic": "Pay at Clinic (Due on Arrival)"
+  }
+}

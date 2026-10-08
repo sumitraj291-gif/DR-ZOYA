@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import {
+  fetchAppointments,
+  updateAppointmentStatusAPI,
+  deleteAppointmentRecord
+} from '../../services/api';
 import {
   INITIAL_LEADS,
   INITIAL_APPOINTMENTS,
@@ -29,6 +34,8 @@ export const AppProvider = ({ children, onLogout }) => {
   // Entities Data State
   const [leads, setLeads] = useState(INITIAL_LEADS);
   const [appointments, setAppointments] = useState(INITIAL_APPOINTMENTS);
+  const [loadingAppointments, setLoadingAppointments] = useState(false);
+  const [appointmentsError, setAppointmentsError] = useState(null);
   const [patients, setPatients] = useState(INITIAL_PATIENTS);
   const [payments, setPayments] = useState(INITIAL_PAYMENTS);
   const [followups, setFollowups] = useState(INITIAL_FOLLOWUPS);
@@ -39,6 +46,28 @@ export const AppProvider = ({ children, onLogout }) => {
   const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const [adminProfile, setAdminProfile] = useState(MOCK_ADMIN_PROFILE);
   const [clinicInfo, setClinicInfo] = useState(MOCK_CLINIC_INFO);
+
+  // Synchronize appointments with real backend
+  const refreshAppointments = async () => {
+    setLoadingAppointments(true);
+    setAppointmentsError(null);
+    try {
+      const res = await fetchAppointments();
+      const list = res?.data || res?.appointments || (Array.isArray(res) ? res : null);
+      if (Array.isArray(list)) {
+        setAppointments(list);
+      }
+    } catch (err) {
+      console.warn('[Admin CRM] Could not fetch appointments from server:', err.message);
+      setAppointmentsError(err.message || 'Failed to fetch appointments from server.');
+    } finally {
+      setLoadingAppointments(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshAppointments();
+  }, []);
 
   // Active Modals & Selected Item States
   const [selectedLead, setSelectedLead] = useState(null);
@@ -112,16 +141,28 @@ export const AppProvider = ({ children, onLogout }) => {
     setIsNewAppointmentModalOpen(false);
   };
 
-  const updateAppointmentStatus = (id, newStatus) => {
+  const updateAppointmentStatus = async (id, newStatus, staffNotes = '') => {
     setAppointments((prev) =>
       prev.map((apt) => (apt.id === id ? { ...apt, status: newStatus } : apt))
     );
-    addToast(`Appointment ${id} status set to ${newStatus}`);
+    try {
+      await updateAppointmentStatusAPI(id, newStatus, staffNotes);
+      addToast(`Appointment ${id} status set to ${newStatus}`);
+    } catch (err) {
+      console.warn('[Admin CRM] Backend status update failed:', err.message);
+      addToast(`Status updated in view (Server note: ${err.message})`, 'info');
+    }
   };
 
-  const deleteAppointment = (id) => {
+  const deleteAppointment = async (id) => {
     setAppointments((prev) => prev.filter((apt) => apt.id !== id));
-    addToast(`Appointment ${id} deleted`);
+    try {
+      await deleteAppointmentRecord(id);
+      addToast(`Appointment ${id} deleted`);
+    } catch (err) {
+      console.warn('[Admin CRM] Backend delete failed:', err.message);
+      addToast(`Record removed from view (Server note: ${err.message})`, 'info');
+    }
   };
 
   // Handlers for Patients
@@ -247,6 +288,9 @@ export const AppProvider = ({ children, onLogout }) => {
         setIsNewLeadModalOpen,
 
         appointments,
+        loadingAppointments,
+        appointmentsError,
+        refreshAppointments,
         addAppointment,
         updateAppointmentStatus,
         deleteAppointment,

@@ -25,8 +25,8 @@ export const AppointmentDetailModal = () => {
           </div>
           <div className="text-right">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PAYMENT</span>
-            <div className="mt-1 font-bold text-emerald-800">
-              {selectedAppointment.paymentStatus || 'Paid'}
+            <div className="mt-1 font-bold text-slate-700">
+              {selectedAppointment.paymentStatus || 'Pay at Clinic (Pending)'}
             </div>
           </div>
         </div>

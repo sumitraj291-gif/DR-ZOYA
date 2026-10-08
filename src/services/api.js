@@ -5,13 +5,56 @@
  * Admin endpoints require a JWT Bearer token.
  */
 
-export const API_BASE = 'https://dr-zoya-backend.onrender.com/api/v1';
+export const API_BASE =
+  import.meta.env.VITE_API_BASE || 'https://dr-zoya-backend.onrender.com/api/v1';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+export const isValidToken = (token) => {
+  if (!token || typeof token !== 'string') return false;
+  const clean = token.trim();
+  if (['true', 'false', 'null', 'undefined', '1', '[object object]'].includes(clean.toLowerCase())) {
+    return false;
+  }
+  if (clean.length < 20 || /\s/.test(clean)) return false;
+  // A standard JWT has three base64url segments separated by dots
+  const parts = clean.split('.');
+  if (parts.length === 3 && parts.every(p => p.length > 0)) {
+    return true;
+  }
+  return clean.length >= 25;
+};
+
 const getAuthHeader = () => {
   const token = localStorage.getItem('dna_admin_token');
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  return isValidToken(token) ? { Authorization: `Bearer ${token}` } : {};
+};
+
+const sanitizeErrorMessage = (status, serverMsg) => {
+  if (status === 401) {
+    return 'Your admin session has expired. Please sign in again.';
+  }
+  if (status === 403) {
+    return 'Access denied. You do not have permission for this clinical action.';
+  }
+  if (status === 404) {
+    return 'The requested clinic resource was not found.';
+  }
+  if (status === 422) {
+    return serverMsg && !serverMsg.includes('SQL') && !serverMsg.includes('Error:')
+      ? serverMsg
+      : 'Validation error: Please verify the submitted clinical details.';
+  }
+  if (status === 429) {
+    return 'Too many requests. Please wait a moment before trying again.';
+  }
+  if (status >= 500) {
+    return 'Clinic server is temporarily unavailable. Please try again shortly.';
+  }
+  if (serverMsg && typeof serverMsg === 'string' && !serverMsg.includes('node_modules') && !serverMsg.includes('Traceback')) {
+    return serverMsg;
+  }
+  return `Server request failed (Status ${status}).`;
 };
 
 const request = async (method, path, body = null, authRequired = false) => {
@@ -20,20 +63,45 @@ const request = async (method, path, body = null, authRequired = false) => {
     ...(authRequired ? getAuthHeader() : {}),
   };
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s network timeout
+
   const config = {
     method,
     headers,
+    signal: controller.signal,
     ...(body ? { body: JSON.stringify(body) } : {}),
   };
 
   try {
     const res = await fetch(`${API_BASE}${path}`, config);
-    const json = await res.json();
+    clearTimeout(timeoutId);
+
+    if (authRequired && (res.status === 401 || res.status === 403)) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('dna_admin_token');
+        localStorage.removeItem('dna_admin_user');
+        window.dispatchEvent(new CustomEvent('dna_admin_unauthorized'));
+      }
+    }
+
+    let json = {};
+    try {
+      json = await res.json();
+    } catch {
+      json = {};
+    }
+
     if (!res.ok) {
-      throw new Error(json?.message || json?.error || `HTTP ${res.status}`);
+      const sanitized = sanitizeErrorMessage(res.status, json?.message || json?.error);
+      throw new Error(sanitized);
     }
     return json;
   } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('Clinic server request timed out. Please check your connection and try again.');
+    }
     console.error(`[API] ${method} ${path}`, err.message);
     throw err;
   }

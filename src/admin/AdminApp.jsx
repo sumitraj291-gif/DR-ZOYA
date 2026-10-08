@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useClinic } from '../context/ClinicContext';
+import { getAdminProfile, isValidToken } from '../services/api';
+import { Shield, Loader } from 'lucide-react';
 import { ToastProvider } from './context/ToastContext';
 import { AppProvider, useApp } from './context/AppContext';
 import { AdminLayout } from './components/layout/AdminLayout';
@@ -83,12 +85,67 @@ const MainContentSwitcher = () => {
 
 export const AdminApp = () => {
   const { navigateTo } = useClinic();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return Boolean(localStorage.getItem('dna_admin_token'));
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const storedToken = localStorage.getItem('dna_admin_token');
+
+    if (!isValidToken(storedToken)) {
+      // Purge invalid/fake tokens immediately
+      localStorage.removeItem('dna_admin_token');
+      localStorage.removeItem('dna_admin_user');
+      if (isMounted) {
+        setIsAuthenticated(false);
+        setIsVerifying(false);
+      }
+      return;
+    }
+
+    // Verify stored token with backend /auth/me
+    getAdminProfile()
+      .then((res) => {
+        if (!isMounted) return;
+        if (res?.success !== false && (res?.user || res?.data || res?.email)) {
+          const userData = res.user || res.data || res;
+          localStorage.setItem('dna_admin_user', JSON.stringify(userData));
+          setIsAuthenticated(true);
+        } else {
+          throw new Error(res?.message || 'Authentication check failed.');
+        }
+      })
+      .catch((err) => {
+        console.warn('[Admin Security] Stored session invalid or expired:', err.message);
+        localStorage.removeItem('dna_admin_token');
+        localStorage.removeItem('dna_admin_user');
+        if (isMounted) {
+          setIsAuthenticated(false);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsVerifying(false);
+        }
+      });
+
+    const handleUnauthorized = () => {
+      if (isMounted) {
+        setIsAuthenticated(false);
+        setIsVerifying(false);
+      }
+    };
+    window.addEventListener('dna_admin_unauthorized', handleUnauthorized);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('dna_admin_unauthorized', handleUnauthorized);
+    };
+  }, []);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
+    setIsVerifying(false);
   };
 
   const handleLogout = () => {
@@ -97,7 +154,23 @@ export const AdminApp = () => {
     setIsAuthenticated(false);
   };
 
-  // If user is not authenticated, require Admin Sign In first
+  // 1. Session verification loading state
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-[#080C14] flex flex-col items-center justify-center p-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C5A059] to-[#9D7C3A] mb-4 shadow-lg shadow-[#C5A059]/30 flex items-center justify-center">
+          <Shield className="w-8 h-8 text-white" />
+        </div>
+        <div className="flex items-center space-x-2 text-white font-serif text-lg font-semibold mt-2">
+          <Loader className="w-4 h-4 animate-spin text-[#C5A059]" />
+          <span>Verifying Secure Session...</span>
+        </div>
+        <p className="text-[#64748B] text-xs mt-1">Connecting to clinic operations server</p>
+      </div>
+    );
+  }
+
+  // 2. Unauthenticated: require Admin Sign In
   if (!isAuthenticated) {
     return (
       <AdminLoginPage

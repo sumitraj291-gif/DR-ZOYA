@@ -76,40 +76,87 @@ export const BookingModal = () => {
       setStep(1);
       setBookingSuccess(null);
       setIsProcessingPayment(false);
+      setSubmitError('');
     }
   }, [bookingModalOpen, preselectedTreatment, clinicData.treatments]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && bookingModalOpen) {
+        closeBookingModal();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [bookingModalOpen, closeBookingModal]);
+
+  const [submitError, setSubmitError] = useState('');
 
   if (!bookingModalOpen) return null;
 
   const handleNextStep = (e) => {
     if (e) e.preventDefault();
+    setSubmitError('');
+
     if (step === 1 && !selectedTreatment) {
-      alert('Please select a treatment.');
+      setSubmitError('Please select a treatment procedure.');
       return;
     }
-    if (step === 2 && (!selectedDate || !selectedSlot)) {
-      alert('Please select both a date and preferred time slot.');
-      return;
+    if (step === 2) {
+      if (!selectedDate || !selectedSlot) {
+        setSubmitError('Please select both a date and preferred time slot.');
+        return;
+      }
+      if (new Date(selectedDate) < new Date(new Date().toDateString())) {
+        setSubmitError('Please select an appointment date from today or in the future.');
+        return;
+      }
     }
     if (step === 3) {
       if (!formData.fullName.trim() || !formData.phone.trim()) {
-        alert('Please enter your full name and phone number.');
+        setSubmitError('Please enter your full name and phone number.');
         return;
       }
-      if (formData.phone.replace(/[^0-9]/g, '').length < 10) {
-        alert('Please enter a valid 10-digit phone number.');
+      const cleanPhone = formData.phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+        setSubmitError('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).');
+        return;
+      }
+      if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        setSubmitError('Please enter a valid email address.');
         return;
       }
     }
     setStep(prev => prev + 1);
   };
 
-  const handleSimulatePayment = () => {
+  const handleSubmitBooking = async () => {
+    if (isProcessingPayment) return;
     setIsProcessingPayment(true);
+    setSubmitError('');
 
-    // Simulate payment gateway verification (Razorpay / Stripe webhook hook for team)
-    setTimeout(() => {
+    const payload = {
+      name: formData.fullName,
+      patientName: formData.fullName,
+      phone: formData.phone,
+      email: formData.email || '',
+      treatment: selectedTreatment?.title || 'General Aesthetic Consultation',
+      treatmentName: selectedTreatment?.title || 'General Aesthetic Consultation',
+      category: selectedTreatment?.category || 'General',
+      appointmentDate: selectedDate,
+      timeSlot: selectedSlot,
+      feeAmount: feeOption,
+      leadSource: 'WEBSITE_BOOKING',
+      notes: formData.notes ? `${formData.notes} | Consultation Fee (Pay at Clinic): ₹${feeOption}` : `Consultation Fee (Pay at Clinic): ₹${feeOption}`,
+      message: `Appointment requested for ${selectedTreatment?.title || 'Consultation'} on ${selectedDate} (${selectedSlot}). Selected Tier: ₹${feeOption} (Pay at Clinic).`,
+    };
+
+    try {
+      const res = await submitBookingLead(payload);
+      const serverId = res?.appointmentId || `APT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
       const createdRecord = addAppointment({
+        id: serverId,
         patientName: formData.fullName,
         phone: formData.phone,
         email: formData.email || 'N/A',
@@ -118,53 +165,46 @@ export const BookingModal = () => {
         date: selectedDate,
         timeSlot: selectedSlot,
         feeAmount: feeOption,
-        paymentStatus: 'Paid (Advance Verified)',
-        leadSource: 'Website Pre-Paid Booking',
-        notes: formData.notes ? `${formData.notes} | Consultation Fee: ₹${feeOption}` : `Consultation Fee: ₹${feeOption}`,
+        paymentStatus: 'Pay at Clinic (Due on Arrival)',
+        leadSource: 'Website Booking Portal',
+        notes: payload.notes,
+        status: 'Request Submitted'
       });
 
-      // Also submit to backend API
-      submitBookingLead({
-        patientName: formData.fullName,
-        phone: formData.phone,
-        email: formData.email || '',
-        treatmentName: selectedTreatment?.title || 'General Aesthetic Consultation',
-        category: selectedTreatment?.category || 'General',
-        appointmentDate: selectedDate,
-        timeSlot: selectedSlot,
-        feeAmount: feeOption,
-        leadSource: 'WEBSITE_BOOKING',
-        notes: formData.notes || '',
-      }).catch(err => console.warn('[API] Booking submission failed:', err.message));
-
-      setIsProcessingPayment(false);
       setBookingSuccess(createdRecord);
 
-      // Trigger celebratory confetti
       try {
         confetti({
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 }
         });
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
 
-      showToast(`Appointment confirmed! Booking ID: ${createdRecord.id}`);
-    }, 1400);
+      showToast(`Appointment request registered! Ref: ${createdRecord.id}`);
+    } catch (err) {
+      console.error('[Booking Submission Error]', err);
+      setSubmitError(err.message || 'Unable to submit appointment to clinic server. Please try again or book directly via WhatsApp.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   const getWhatsAppConfirmationUrl = () => {
     if (!bookingSuccess) return '#';
     const text = encodeURIComponent(
-      `Hello Dr. Zoya's Clinic, I have completed my pre-paid appointment booking on your website.\n\nBooking ID: ${bookingSuccess.id}\nPatient: ${bookingSuccess.patientName}\nPhone: ${bookingSuccess.phone}\nTreatment: ${bookingSuccess.treatment}\nDate: ${bookingSuccess.date} (${bookingSuccess.timeSlot})\nAdvance Fee Paid: ₹${bookingSuccess.feeAmount}\n\nPlease confirm my slot!`
+      `Hello Dr. Zoya's Clinic, I have submitted an appointment request on your website.\n\nBooking Ref: ${bookingSuccess.id}\nPatient: ${bookingSuccess.patientName}\nPhone: ${bookingSuccess.phone}\nTreatment: ${bookingSuccess.treatment}\nDate: ${bookingSuccess.date} (${bookingSuccess.timeSlot})\nConsultation Tier: ₹${bookingSuccess.feeAmount} (Pay at Clinic)\n\nPlease confirm my slot!`
     );
     return `https://wa.me/${clinicData.profile.contact.whatsapp.replace(/[^0-9]/g, '')}?text=${text}`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div 
+      role="dialog" 
+      aria-modal="true" 
+      aria-labelledby="booking-modal-title" 
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
+    >
       <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-[#C5A059]/30 overflow-hidden modal-enter my-auto">
         
         {/* Header */}
@@ -174,16 +214,17 @@ export const BookingModal = () => {
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-white">
+              <h3 id="booking-modal-title" className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-white">
                 Book Consultation
               </h3>
               <p className="text-xs text-[#94A3B8]">
-                Dr. Zoya Aesthetic & Smile Studio • Phase 2 Pre-Paid Priority
+                Dr. Zoya Aesthetic & Smile Studio • Clinical Booking
               </p>
             </div>
           </div>
           <button 
             onClick={closeBookingModal}
+            aria-label="Close consultation booking modal"
             className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"
           >
             <X className="w-6 h-6" />
@@ -217,6 +258,19 @@ export const BookingModal = () => {
 
         {/* Body Content */}
         <div className="p-5 sm:p-7 max-h-[72vh] overflow-y-auto">
+          {submitError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-center justify-between">
+              <span>{submitError}</span>
+              <button 
+                type="button" 
+                onClick={() => setSubmitError('')} 
+                aria-label="Dismiss error"
+                className="text-red-500 hover:text-red-800 text-sm font-bold ml-2 cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+          )}
           
           {/* STEP 1: Select Treatment */}
           {step === 1 && !bookingSuccess && (
@@ -360,6 +414,7 @@ export const BookingModal = () => {
                   <input
                     type="text"
                     required
+                    autoComplete="name"
                     placeholder="e.g. Radhika Sharma"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -376,6 +431,7 @@ export const BookingModal = () => {
                     <input
                       type="tel"
                       required
+                      autoComplete="tel"
                       placeholder="+91 98765 43210"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -390,6 +446,7 @@ export const BookingModal = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      autoComplete="email"
                       placeholder="radhika@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -430,15 +487,23 @@ export const BookingModal = () => {
             </form>
           )}
 
-          {/* STEP 4: Pre-Paid Advance Consultation Fee Selection */}
+          {/* STEP 4: Consultation Fee Selection & Confirmation */}
           {step === 4 && !bookingSuccess && (
             <div className="space-y-5">
               <div>
-                <h4 className="text-base font-semibold text-[#0F172A]">Phase 2 Pre-Paid Booking & EMI</h4>
+                <h4 className="text-base font-semibold text-[#0F172A]">Confirm Consultation Details</h4>
                 <p className="text-xs text-[#64748B]">
-                  As per clinic protocol, an advance consultation fee confirms your dedicated VIP slot with Dr. Zoya.
+                  Select your consultation tier. Fees are payable at the clinic on arrival and 100% adjustable against treatment cost.
                 </p>
               </div>
+
+              {/* Error banner if submission failed */}
+              {submitError && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-start space-x-2">
+                  <span className="font-bold">Error:</span>
+                  <span>{submitError}</span>
+                </div>
+              )}
 
               {/* Booking Summary Box */}
               <div className="bg-[#FAF8F5] p-4 rounded-xl border border-[#EAE4DC] text-xs space-y-2">
@@ -458,7 +523,7 @@ export const BookingModal = () => {
 
               {/* Fee Options (500 vs 1000) */}
               <div className="space-y-3">
-                <label className="block text-xs font-semibold text-gray-700">Select Advance Consultation Fee Tier</label>
+                <label className="block text-xs font-semibold text-gray-700">Select Consultation Tier (Pay at Clinic)</label>
                 
                 <div 
                   onClick={() => setFeeOption(500)}
@@ -514,7 +579,7 @@ export const BookingModal = () => {
                   <span>100% Fee Adjustment Policy</span>
                 </div>
                 <p className="text-emerald-700">
-                  The advance consultation fee (₹{feeOption}) is fully deducted from your procedure bill. 0% EMI plans available on clinic packages.
+                  The consultation fee (₹{feeOption}) is fully deducted from your procedure bill upon arrival. No advance payment required online.
                 </p>
               </div>
 
@@ -529,19 +594,19 @@ export const BookingModal = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={handleSimulatePayment}
+                  onClick={handleSubmitBooking}
                   disabled={isProcessingPayment}
                   className="btn-gold px-7 py-3 rounded-xl text-sm font-semibold flex items-center space-x-2 disabled:opacity-75 shadow-lg"
                 >
                   {isProcessingPayment ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Verifying Payment...</span>
+                      <span>Submitting Request...</span>
                     </>
                   ) : (
                     <>
-                      <CreditCard className="w-4 h-4" />
-                      <span>Pay ₹{feeOption} & Confirm Slot</span>
+                      <Calendar className="w-4 h-4" />
+                      <span>Submit Appointment Request</span>
                     </>
                   )}
                 </button>
@@ -557,12 +622,12 @@ export const BookingModal = () => {
               </div>
 
               <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">Booking Confirmed</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-[#C5A059]">Request Submitted</span>
                 <h3 className="font-serif text-2xl font-bold text-[#0F172A] mt-1">
                   We look forward to welcoming you, {bookingSuccess.patientName.split(' ')[0]}!
                 </h3>
                 <p className="text-xs text-[#64748B] mt-1 max-w-md mx-auto">
-                  Your advance consultation payment of <strong>₹{bookingSuccess.feeAmount}</strong> was verified and logged into our clinic CRM.
+                  Your appointment request has been logged into our clinic system. Consultation fee of <strong>₹{bookingSuccess.feeAmount}</strong> is payable at the clinic on arrival.
                 </p>
               </div>
 
@@ -582,7 +647,7 @@ export const BookingModal = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Payment Status:</span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
                     {bookingSuccess.paymentStatus}
                   </span>
                 </div>

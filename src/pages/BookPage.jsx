@@ -14,6 +14,7 @@ import {
   Mail
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { submitBookingLead } from '../services/api';
 
 export const BookPage = () => {
   const { clinicData, addAppointment, showToast } = useClinic();
@@ -35,49 +36,91 @@ export const BookPage = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [submitError, setSubmitError] = useState('');
 
   const slots = ['10:30 AM', '11:45 AM', '02:00 PM', '03:30 PM', '05:00 PM', '06:30 PM'];
 
-  const handleConfirm = (e) => {
+  const handleConfirm = async (e) => {
     e.preventDefault();
-    if (!patientForm.fullName || !patientForm.phone) {
-      alert("Please provide your full name and phone number.");
+    setSubmitError('');
+
+    if (!patientForm.fullName.trim() || !patientForm.phone.trim()) {
+      setSubmitError("Please provide your full name and phone number.");
       return;
     }
+    const cleanPhone = patientForm.phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+      setSubmitError("Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).");
+      return;
+    }
+    if (patientForm.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patientForm.email.trim())) {
+      setSubmitError("Please enter a valid email address.");
+      return;
+    }
+    if (new Date(selectedDate) < new Date(new Date().toDateString())) {
+      setSubmitError("Please select an appointment date from today or in the future.");
+      return;
+    }
+    if (isProcessing) return;
 
     setIsProcessing(true);
+    setSubmitError('');
 
-    setTimeout(() => {
+    const payload = {
+      name: patientForm.fullName.trim(),
+      patientName: patientForm.fullName.trim(),
+      phone: patientForm.phone.trim(),
+      email: patientForm.email?.trim() || '',
+      treatment: selectedTreatment?.title || 'Aesthetic Assessment',
+      treatmentName: selectedTreatment?.title || 'Aesthetic Assessment',
+      category: selectedTreatment?.category || 'General',
+      appointmentDate: selectedDate,
+      timeSlot: selectedSlot,
+      feeAmount: feeTier,
+      leadSource: 'Full Page Booking Portal',
+      notes: patientForm.notes ? `${patientForm.notes} | Consultation Fee (Pay at Clinic): ₹${feeTier}` : `Consultation Fee (Pay at Clinic): ₹${feeTier}`,
+      message: `Appointment request submitted via Book Page for ${selectedTreatment?.title || 'Assessment'} on ${selectedDate} (${selectedSlot}). Selected Tier: ₹${feeTier} (Pay at Clinic).`,
+    };
+
+    try {
+      const res = await submitBookingLead(payload);
+      const serverId = res?.appointmentId || `APT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
       const record = addAppointment({
-        patientName: patientForm.fullName,
-        phone: patientForm.phone,
-        email: patientForm.email || 'N/A',
+        id: serverId,
+        patientName: patientForm.fullName.trim(),
+        phone: patientForm.phone.trim(),
+        email: patientForm.email?.trim() || 'N/A',
         treatment: selectedTreatment?.title || 'Aesthetic Assessment',
         category: selectedTreatment?.category || 'General',
         date: selectedDate,
         timeSlot: selectedSlot,
         feeAmount: feeTier,
-        paymentStatus: 'Paid (Advance Verified)',
+        paymentStatus: 'Pay at Clinic (Due on Arrival)',
         leadSource: 'Full Page Booking Portal',
-        notes: patientForm.notes ? `${patientForm.notes} | Advance: ₹${feeTier}` : `Advance: ₹${feeTier}`,
-        status: 'Confirmed'
+        notes: payload.notes,
+        status: 'Request Submitted'
       });
 
-      setIsProcessing(false);
       setConfirmedBooking(record);
 
       try {
         confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
       } catch (err) {}
 
-      showToast(`Appointment confirmed! Booking ID: ${record.id}`);
-    }, 1200);
+      showToast(`Appointment request submitted! Reference: ${record.id}`);
+    } catch (err) {
+      console.error('[BookPage Submission Error]', err);
+      setSubmitError(err.message || 'Unable to submit appointment to clinic server. Please try again or reach out on WhatsApp.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const getWhatsAppConfirmationUrl = () => {
     if (!confirmedBooking) return '#';
     const text = encodeURIComponent(
-      `Hi Dr. Zoya Clinic! I booked an appointment on your website.\n\nBooking ID: ${confirmedBooking.id}\nPatient: ${confirmedBooking.patientName}\nPhone: ${confirmedBooking.phone}\nTreatment: ${confirmedBooking.treatment}\nDate: ${confirmedBooking.date} (${confirmedBooking.timeSlot})\nAdvance Paid: ₹${confirmedBooking.feeAmount}\n\nPlease confirm!`
+      `Hi Dr. Zoya Clinic! I submitted an appointment request on your website.\n\nBooking Reference: ${confirmedBooking.id}\nPatient: ${confirmedBooking.patientName}\nPhone: ${confirmedBooking.phone}\nTreatment: ${confirmedBooking.treatment}\nDate: ${confirmedBooking.date} (${confirmedBooking.timeSlot})\nConsultation Tier: ₹${confirmedBooking.feeAmount} (Pay at Clinic)\n\nPlease confirm my slot!`
     );
     return `https://wa.me/${clinicData.profile.contact.whatsapp.replace(/[^0-9]/g, '')}?text=${text}`;
   };
@@ -108,12 +151,12 @@ export const BookPage = () => {
             </div>
 
             <div>
-              <span className="text-xs font-bold text-[#C5A059] uppercase tracking-widest">Booking Confirmed</span>
+              <span className="text-xs font-bold text-[#C5A059] uppercase tracking-widest">Request Submitted</span>
               <h3 className="font-serif text-2xl font-bold text-[#0F172A] mt-1">
                 We're Excited to Meet You, {confirmedBooking.patientName}!
               </h3>
               <p className="text-xs text-gray-500 mt-1">
-                Your appointment ID is <strong>{confirmedBooking.id}</strong>.
+                Your appointment reference ID is <strong>{confirmedBooking.id}</strong>. Our reception team will call to confirm your dedicated slot.
               </p>
             </div>
 
@@ -128,7 +171,7 @@ export const BookPage = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Fee Status:</span>
-                <span className="font-bold text-emerald-800">₹{confirmedBooking.feeAmount} Verified</span>
+                <span className="font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">₹{confirmedBooking.feeAmount} (Payable at Clinic)</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-gray-200 text-[11px]">
                 <span className="text-gray-500">Address:</span>
@@ -232,9 +275,13 @@ export const BookPage = () => {
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <label htmlFor="patient-fullname" className="sr-only">Full Name</label>
                   <input
+                    id="patient-fullname"
                     type="text"
                     required
+                    autoComplete="name"
+                    aria-label="Full Name"
                     placeholder="Your Full Name *"
                     value={patientForm.fullName}
                     onChange={e => setPatientForm({ ...patientForm, fullName: e.target.value })}
@@ -242,9 +289,13 @@ export const BookPage = () => {
                   />
                 </div>
                 <div>
+                  <label htmlFor="patient-phone" className="sr-only">Phone Number</label>
                   <input
+                    id="patient-phone"
                     type="tel"
                     required
+                    autoComplete="tel"
+                    aria-label="Phone Number"
                     placeholder="Phone / WhatsApp Number *"
                     value={patientForm.phone}
                     onChange={e => setPatientForm({ ...patientForm, phone: e.target.value })}
@@ -252,8 +303,12 @@ export const BookPage = () => {
                   />
                 </div>
                 <div className="sm:col-span-2">
+                  <label htmlFor="patient-email" className="sr-only">Email Address</label>
                   <input
+                    id="patient-email"
                     type="email"
+                    autoComplete="email"
+                    aria-label="Email Address"
                     placeholder="Email Address (Optional)"
                     value={patientForm.email}
                     onChange={e => setPatientForm({ ...patientForm, email: e.target.value })}
@@ -263,11 +318,20 @@ export const BookPage = () => {
               </div>
             </div>
 
-            {/* 4. Advance Fee Selection */}
+            {/* 4. Consultation Fee Selection */}
             <div className="space-y-3">
               <label className="block text-xs font-bold text-gray-800 uppercase tracking-wider">
-                4. Select Advance Consultation Fee (Phase 2 Pre-Paid Gateway)
+                4. Select Consultation Tier (Pay at Clinic on Arrival)
               </label>
+
+              {/* Error banner if submission failed */}
+              {submitError && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-start space-x-2">
+                  <span className="font-bold">Error:</span>
+                  <span>{submitError}</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div
                   onClick={() => setFeeTier(500)}
@@ -282,7 +346,7 @@ export const BookPage = () => {
                     <span className="font-serif text-lg font-bold text-[#0F172A]">₹500</span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    45-min detailed clinical skin & smile assessment. 100% deductible against treatment.
+                    45-min detailed clinical skin & smile assessment. 100% deductible against treatment cost.
                   </p>
                 </div>
 
@@ -309,23 +373,23 @@ export const BookPage = () => {
             <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-2 text-xs text-emerald-800">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>100% Adjustable Against Treatment Cost • Free Rescheduling</span>
+                <span>100% Fee Deductible Against Procedure • Pay at Clinic</span>
               </div>
 
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="w-full sm:w-auto btn-gold px-8 py-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg cursor-pointer"
+                className="w-full sm:w-auto btn-gold px-8 py-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg cursor-pointer disabled:opacity-70"
               >
                 {isProcessing ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Processing Payment...</span>
+                    <span>Submitting Request...</span>
                   </>
                 ) : (
                   <>
-                    <CreditCard className="w-4 h-4" />
-                    <span>Pay ₹{feeTier} & Confirm Appointment</span>
+                    <Calendar className="w-4 h-4" />
+                    <span>Submit Appointment Request (Pay at Clinic)</span>
                   </>
                 )}
               </button>

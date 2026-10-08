@@ -24,42 +24,65 @@ export const ContactPage = () => {
     treatment: 'Aesthetic Dermatology Consultation',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.phone) {
-      alert('Please fill in your name and phone number.');
+    setSubmitError('');
+
+    if (!form.name.trim() || !form.phone.trim()) {
+      setSubmitError('Please fill in your name and phone number.');
       return;
     }
+    const cleanPhone = form.phone.replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+      setSubmitError('Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).');
+      return;
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setSubmitError('Please enter a valid email address.');
+      return;
+    }
+    if (submitting) return;
 
-    // Save to local CRM
-    addAppointment({
-      patientName: form.name,
-      phone: form.phone,
-      email: form.email || 'N/A',
-      treatment: form.treatment,
-      category: 'Contact Form Inquiry',
-      date: 'Pending',
-      timeSlot: 'Pending',
-      feeAmount: 0,
-      paymentStatus: 'Pending (Inquiry)',
-      leadSource: 'Website Contact Page',
-      notes: form.message,
-      status: 'New'
-    });
+    setSubmitting(true);
 
-    // Also submit to backend API
-    submitContactInquiry({
-      name: form.name,
-      phone: form.phone,
-      email: form.email || '',
-      treatment: form.treatment,
-      message: form.message
-    }).catch(err => console.warn('[API] Contact inquiry submission failed:', err.message));
+    try {
+      // Submit to backend API
+      await submitContactInquiry({
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        email: form.email?.trim() || '',
+        treatment: form.treatment,
+        message: form.message
+      });
 
-    setSubmitted(true);
-    showToast('Inquiry received! Dr. Zoya’s clinic concierge will call you shortly.');
+      // Save to local context CRM
+      addAppointment({
+        patientName: form.name.trim(),
+        phone: form.phone.trim(),
+        email: form.email?.trim() || 'N/A',
+        treatment: form.treatment,
+        category: 'Contact Form Inquiry',
+        date: 'Pending',
+        timeSlot: 'Pending',
+        feeAmount: 0,
+        paymentStatus: 'Pending (Inquiry)',
+        leadSource: 'Website Contact Page',
+        notes: form.message,
+        status: 'New'
+      });
+
+      setSubmitted(true);
+      showToast('Inquiry received! Dr. Zoya’s clinic concierge will call you shortly.');
+    } catch (err) {
+      console.warn('[API] Contact inquiry submission failed:', err.message);
+      setSubmitError(err.message || 'Unable to submit inquiry. Please try again or WhatsApp our clinic desk.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -219,12 +242,20 @@ export const ContactPage = () => {
                   </p>
                 </div>
 
+                {submitError && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Your Name *</label>
+                    <label htmlFor="contact-name" className="block text-xs font-semibold text-gray-700 mb-1">Your Name *</label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
+                      autoComplete="name"
                       placeholder="e.g. Priya Kapoor"
                       value={form.name}
                       onChange={e => setForm({ ...form, name: e.target.value })}
@@ -233,10 +264,12 @@ export const ContactPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Phone Number (WhatsApp) *</label>
+                    <label htmlFor="contact-phone" className="block text-xs font-semibold text-gray-700 mb-1">Phone Number (WhatsApp) *</label>
                     <input
+                      id="contact-phone"
                       type="tel"
                       required
+                      autoComplete="tel"
                       placeholder="+91 98765 43210"
                       value={form.phone}
                       onChange={e => setForm({ ...form, phone: e.target.value })}
@@ -247,9 +280,11 @@ export const ContactPage = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+                    <label htmlFor="contact-email" className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
                     <input
+                      id="contact-email"
                       type="email"
+                      autoComplete="email"
                       placeholder="priya@example.com"
                       value={form.email}
                       onChange={e => setForm({ ...form, email: e.target.value })}
@@ -289,10 +324,11 @@ export const ContactPage = () => {
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <button
                     type="submit"
-                    className="w-full sm:w-auto btn-gold px-8 py-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md cursor-pointer"
+                    disabled={submitting}
+                    className="w-full sm:w-auto btn-gold px-8 py-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md cursor-pointer disabled:opacity-50"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>Submit Inquiry</span>
+                    <span>{submitting ? 'Submitting...' : 'Submit Inquiry'}</span>
                   </button>
 
                   <button

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useClinic } from '../../context/ClinicContext';
 import { PageHeader } from '../components/common/PageHeader';
 import {
@@ -14,7 +14,9 @@ import {
   Trash2,
   ExternalLink,
   CheckCircle2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  RefreshCw,
+  Loader
 } from 'lucide-react';
 
 export const WebsiteCMS = () => {
@@ -25,6 +27,7 @@ export const WebsiteCMS = () => {
     addGalleryItem,
     deleteGalleryItem,
     resetToDefaults,
+    syncClinicDataFromServer,
     showToast
   } = useClinic();
 
@@ -32,6 +35,16 @@ export const WebsiteCMS = () => {
 
   const [profileForm, setProfileForm] = useState(clinicData?.profile || {});
   const [heroForm, setHeroForm] = useState(clinicData?.hero || {});
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingHero, setSavingHero] = useState(false);
+  const [savingGallery, setSavingGallery] = useState(false);
+  const [syncingServer, setSyncingServer] = useState(false);
+
+  // Synchronize local form inputs when clinicData updates from server
+  useEffect(() => {
+    if (clinicData?.profile) setProfileForm(clinicData.profile);
+    if (clinicData?.hero) setHeroForm(clinicData.hero);
+  }, [clinicData]);
 
   // Gallery New Item State
   const [newGalleryTitle, setNewGalleryTitle] = useState('');
@@ -41,33 +54,59 @@ export const WebsiteCMS = () => {
   const [newGalleryAfter, setNewGalleryAfter] = useState('/images/ba_smile_after.png');
   const [newGalleryDescription, setNewGalleryDescription] = useState('');
 
-  const handleProfileSave = (e) => {
+  const handleProfileSave = async (e) => {
     e.preventDefault();
-    updateProfile(profileForm);
+    setSavingProfile(true);
+    try {
+      await updateProfile(profileForm);
+    } finally {
+      setSavingProfile(false);
+    }
   };
 
-  const handleHeroSave = (e) => {
+  const handleHeroSave = async (e) => {
     e.preventDefault();
-    updateHero(heroForm);
+    setSavingHero(true);
+    try {
+      await updateHero(heroForm);
+    } finally {
+      setSavingHero(false);
+    }
   };
 
-  const handleAddGallery = (e) => {
+  const handleAddGallery = async (e) => {
     e.preventDefault();
     if (!newGalleryTitle.trim()) return;
-    addGalleryItem({
-      title: newGalleryTitle,
-      category: newGalleryCategory,
-      type: newGalleryType,
-      beforeImage: newGalleryBefore,
-      afterImage: newGalleryAfter,
-      singleImage: newGalleryAfter,
-      procedure: newGalleryTitle,
-      timeframe: '2 Visits / 7 Days',
-      doctorNotes: newGalleryDescription || 'Completed at DNA Clinic',
-      tags: [newGalleryCategory, 'Aesthetics']
-    });
-    setNewGalleryTitle('');
-    setNewGalleryDescription('');
+    setSavingGallery(true);
+    try {
+      const ok = await addGalleryItem({
+        title: newGalleryTitle,
+        category: newGalleryCategory,
+        type: newGalleryType,
+        beforeImage: newGalleryBefore,
+        afterImage: newGalleryAfter,
+        singleImage: newGalleryAfter,
+        procedure: newGalleryTitle,
+        timeframe: '2 Visits / 7 Days',
+        doctorNotes: newGalleryDescription || 'Completed at DNA Clinic',
+        tags: [newGalleryCategory, 'Aesthetics']
+      });
+      if (ok) {
+        setNewGalleryTitle('');
+        setNewGalleryDescription('');
+      }
+    } finally {
+      setSavingGallery(false);
+    }
+  };
+
+  const handleSyncServer = async () => {
+    setSyncingServer(true);
+    try {
+      await syncClinicDataFromServer();
+    } finally {
+      setSyncingServer(false);
+    }
   };
 
   return (
@@ -77,13 +116,24 @@ export const WebsiteCMS = () => {
         title="Website Live CMS"
         subtitle="Directly modify public website content, hero tagline, contact phone numbers, and before/after gallery showcase."
         actionBtn={
-          <button
-            onClick={resetToDefaults}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Website Defaults</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSyncServer}
+              disabled={syncingServer}
+              className="px-4 py-2 bg-white hover:bg-slate-50 border border-[#E8E2D9] text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
+              title="Sync latest CMS data from backend"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${syncingServer ? 'animate-spin text-gold' : ''}`} />
+              <span>{syncingServer ? 'Syncing...' : 'Sync Server'}</span>
+            </button>
+            <button
+              onClick={resetToDefaults}
+              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Website Defaults</span>
+            </button>
+          </div>
         }
       />
 
@@ -185,9 +235,13 @@ export const WebsiteCMS = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn-gold-primary px-6 py-2.5 text-xs font-bold flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            <span>Publish Live Identity</span>
+          <button
+            type="submit"
+            disabled={savingProfile}
+            className="btn-gold-primary px-6 py-2.5 text-xs font-bold flex items-center gap-2 disabled:opacity-60"
+          >
+            {savingProfile ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <span>{savingProfile ? 'Publishing...' : 'Publish Live Identity'}</span>
           </button>
         </form>
       )}
@@ -244,9 +298,13 @@ export const WebsiteCMS = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn-gold-primary px-6 py-2.5 text-xs font-bold flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            <span>Publish Hero Banner</span>
+          <button
+            type="submit"
+            disabled={savingHero}
+            className="btn-gold-primary px-6 py-2.5 text-xs font-bold flex items-center gap-2 disabled:opacity-60"
+          >
+            {savingHero ? <Loader className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            <span>{savingHero ? 'Publishing...' : 'Publish Hero Banner'}</span>
           </button>
         </form>
       )}
@@ -317,9 +375,13 @@ export const WebsiteCMS = () => {
               />
             </div>
 
-            <button type="submit" className="btn-gold-primary px-5 py-2 font-bold flex items-center gap-1.5">
-              <Plus className="w-4 h-4" />
-              <span>Add to Live Showcase</span>
+            <button
+              type="submit"
+              disabled={savingGallery}
+              className="btn-gold-primary px-5 py-2 font-bold flex items-center gap-1.5 disabled:opacity-60"
+            >
+              {savingGallery ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+              <span>{savingGallery ? 'Adding...' : 'Add to Live Showcase'}</span>
             </button>
           </form>
 

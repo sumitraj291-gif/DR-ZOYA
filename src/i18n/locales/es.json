@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "treatments": "Tratamientos",
+    "smileMakeover": "Diseño de Sonrisa",
+    "about": "Dra. Zoya",
+    "aiAnalyzer": "Analizador IA",
+    "gallery": "Casos y Galería",
+    "book": "Reservar Cita",
+    "contact": "Contacto"
+  },
+  "common": {
+    "bookAppointment": "Reservar Cita",
+    "callClinic": "Llamar a Recepción",
+    "whatsapp": "WhatsApp",
+    "language": "Idioma",
+    "emergency": "Línea 24/7",
+    "operatingHours": "Horarios de Atención",
+    "address": "Sedes de la Clínica",
+    "onlineAccepting": "Clínica abierta y aceptando citas",
+    "allRightsReserved": "Todos los derechos reservados.",
+    "loading": "Cargando...",
+    "readMore": "Saber Más",
+    "viewDetails": "Ver Detalles"
+  },
+  "hero": {
+    "badge": "Clínicas DNA • Dehradun y Muzaffarnagar",
+    "bookCta": "Reservar Consulta",
+    "viewCases": "Ver Transformaciones",
+    "verifiedClearance": "Resultados Clínicos Verificados"
+  },
+  "booking": {
+    "title": "Reservar Consulta Clínica",
+    "subtitle": "Seleccione fecha, hora y departamento clínico.",
+    "patientName": "Nombre Completo",
+    "phone": "Teléfono",
+    "email": "Correo Electrónico",
+    "department": "Seleccionar Departamento",
+    "date": "Fecha de la Cita",
+    "time": "Horario Preferido",
+    "submit": "Confirmar y Enviar Solicitud",
+    "submitting": "Enviando Solicitud...",
+    "successTitle": "Solicitud de Cita Enviada",
+    "payAtClinic": "Pago en Clínica"
+  }
+}

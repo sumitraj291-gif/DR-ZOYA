@@ -1,0 +1,7 @@
+# Robots.txt for Dr. Zoya DNA Dental, Skin & Hair Clinic
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://dnaclinicindia.com/sitemap.xml

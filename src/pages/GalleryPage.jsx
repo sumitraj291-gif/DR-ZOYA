@@ -94,6 +94,9 @@ export const GalleryPage = () => {
                         <img 
                           src={item.beforeImage} 
                           alt={`${item.title} - Before`} 
+                          loading="lazy"
+                          width="400"
+                          height="300"
                           className="w-full h-full object-cover"
                         />
                         <span className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
@@ -104,6 +107,9 @@ export const GalleryPage = () => {
                         <img 
                           src={item.afterImage} 
                           alt={`${item.title} - After`} 
+                          loading="lazy"
+                          width="400"
+                          height="300"
                           className="w-full h-full object-cover"
                         />
                         <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[9px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
@@ -126,6 +132,9 @@ export const GalleryPage = () => {
                     <img
                       src={item.image}
                       alt={item.title}
+                      loading="lazy"
+                      width="600"
+                      height="375"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

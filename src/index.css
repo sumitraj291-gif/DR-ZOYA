@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Luxury Clinical Aesthetic Design System for Dr. Zoya Clinic */
 :root {
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;

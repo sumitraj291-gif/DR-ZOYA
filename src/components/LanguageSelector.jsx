@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Globe, ChevronDown, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useClinic } from '../context/ClinicContext';
 
 export const languages = [
@@ -18,13 +19,12 @@ export const languages = [
 ];
 
 export const LanguageSelector = ({ variant = 'header' }) => {
+  const { i18n } = useTranslation();
   const { showToast } = useClinic();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState(() => {
-    return localStorage.getItem('dr_zoya_preferred_language') || 'en';
-  });
-
   const dropdownRef = useRef(null);
+
+  const selectedLang = i18n.language || 'en';
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -37,44 +37,16 @@ export const LanguageSelector = ({ variant = 'header' }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Handle setting the cookie and triggering Google Translate combo
-  const triggerTranslation = (langCode) => {
-    // 1. Set cookie for Google Translate
-    const domain = window.location.hostname;
-    const cookieValue = `/en/${langCode}`;
-    
-    if (langCode === 'en') {
-      // Clear cookie for English
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${domain};`;
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${domain};`;
-    } else {
-      document.cookie = `googtrans=${cookieValue}; path=/;`;
-      document.cookie = `googtrans=${cookieValue}; path=/; domain=.${domain};`;
-      document.cookie = `googtrans=${cookieValue}; path=/; domain=${domain};`;
-    }
-
-    localStorage.setItem('dr_zoya_preferred_language', langCode);
-    setSelectedLang(langCode);
-
-    // 2. Handle RTL layout for Arabic, Urdu, Persian
-    const isRtl = ['ar', 'ur', 'fa'].includes(langCode);
-    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-
-    // 3. Trigger Google Translate combo element
-    const combo = document.querySelector('.goog-te-combo');
-    if (combo) {
-      combo.value = langCode;
-      combo.dispatchEvent(new Event('change'));
-    } else {
-      // If widget element hasn't loaded into DOM yet, reload with cookie
-      window.location.reload();
-    }
-  };
-
   const handleLanguageChange = (lang) => {
     setIsOpen(false);
-    triggerTranslation(lang.code);
+    i18n.changeLanguage(lang.code);
+    localStorage.setItem('dr_zoya_preferred_language', lang.code);
+
+    // Handle RTL layout for Arabic, Urdu, Persian
+    const isRtl = ['ar', 'ur', 'fa'].includes(lang.code);
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang.code;
+
     showToast(`Website language set to ${lang.native} (${lang.name})`);
   };
 
@@ -137,7 +109,7 @@ export const LanguageSelector = ({ variant = 'header' }) => {
           </div>
 
           <div className="p-2.5 bg-black/50 border-t border-gray-800 text-[10px] text-gray-400 text-center">
-            Instant translation for international & Indian patients.
+            Native multi-language localization for global & Indian patients.
           </div>
 
         </div>

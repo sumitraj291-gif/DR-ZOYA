@@ -75,7 +75,7 @@ export const HomePage = () => {
       badge: 'Advanced Dermatology',
       doctorName: 'Dr. Zoya Rana',
       doctorRole: 'Director & Chief Aesthetic Physician',
-      image: '/images/dr_zoya_rana.png',
+      image: '/images/dr_zoya_rana.webp',
       hudTitle: '3D Dermal Scanning Active',
       hudMetric1: 'Hydra Infusion: 99.4% Deep',
       hudMetric2: 'Dermal Barrier: Rejuvenated',
@@ -85,7 +85,7 @@ export const HomePage = () => {
         desc: 'US-FDA Laser & HydraFacial'
       },
       floatingBadge2: {
-        img: '/images/ba_skin_after.png',
+        img: '/images/ba_skin_after.webp',
         title: 'Acne & Texture Reset',
         desc: '6 Wks • Verified Clearance'
       },
@@ -98,7 +98,7 @@ export const HomePage = () => {
       badge: 'Cosmetic Dentistry',
       doctorName: 'Dr. Varsha Jha',
       doctorRole: 'Lead Dental Surgeon & Smile Specialist',
-      image: '/images/dr_varsha_jha.png',
+      image: '/images/dr_varsha_jha.webp',
       hudTitle: '3D Digital Smile Arch Calibration',
       hudMetric1: 'Ceramic Margins: 0.1mm Precision',
       hudMetric2: 'Bite Symmetry: 100% Harmonized',
@@ -108,7 +108,7 @@ export const HomePage = () => {
         desc: 'Hollywood Smile Pre-Visualized'
       },
       floatingBadge2: {
-        img: '/images/ba_smile_after.png',
+        img: '/images/ba_smile_after.webp',
         title: 'Ceramic Veneers Result',
         desc: '2 Visits • Lifetime Durability'
       },
@@ -121,7 +121,7 @@ export const HomePage = () => {
       badge: 'Trichology & Scalp Clinic',
       doctorName: 'Dr. Zoya Talat',
       doctorRole: 'Associate Specialist & Laser Cosmetologist',
-      image: '/images/dr_zoya_talat.png',
+      image: '/images/dr_zoya_talat.webp',
       hudTitle: 'Trichoscopy Scalp Follicle HUD',
       hudMetric1: 'Follicle Reactivation: Active',
       hudMetric2: 'GFC Nutrient Absorption: 98%',
@@ -131,7 +131,7 @@ export const HomePage = () => {
         desc: 'Concentrated Growth Factors'
       },
       floatingBadge2: {
-        img: '/images/hair_rejuvenation.png',
+        img: '/images/hair_rejuvenation.webp',
         title: 'Density Boost Protocol',
         desc: '45% Increase • Shedding Arrested'
       },
@@ -147,21 +147,21 @@ export const HomePage = () => {
       title: "Advanced Skin Care",
       tagline: "Clear, glowing skin with personalized dermatology solutions.",
       procedures: ["Medical HydraFacial", "Pigmentation & Melasma", "Acne & Scar Remodeling", "Anti-Aging Baby Botox"],
-      image: "/images/advanced_facials.png",
+      image: "/images/advanced_facials.webp",
       route: "treatments"
     },
     {
       title: "Complete Dental Care",
       tagline: "Bright, healthy smiles with expert dental care & precision treatments.",
       procedures: ["Painless Root Canal", "Invisible Braces & Aligners", "Smile Designing & Veneers", "Laser Teeth Whitening"],
-      image: "/images/general_dentistry.png",
+      image: "/images/general_dentistry.webp",
       route: "smile-makeover"
     },
     {
       title: "Hair Rejuvenation",
       tagline: "Healthy scalp and stronger hair with advanced clinical treatments.",
       procedures: ["Clinical PRP Therapy", "Growth Factor Concentrate (GFC)", "Hair Fall Arrest Protocol", "Hair Transplant Consult"],
-      image: "/images/hair_rejuvenation.png",
+      image: "/images/hair_rejuvenation.webp",
       route: "treatments"
     }
   ];
@@ -178,7 +178,7 @@ export const HomePage = () => {
             <div className="space-y-3 max-w-2xl text-left">
               {/* Luxury Badge */}
               <div className="inline-flex items-center space-x-2 bg-white/95 border border-[#C5A059]/50 px-3.5 py-1.5 rounded-full shadow-xs">
-                <img src="/images/dna_logo.png" alt="DNA Clinic" className="w-4 h-4 object-contain" />
+                <img src="/images/dna_logo.webp" alt="DNA Clinic" width="16" height="16" className="w-4 h-4 object-contain" />
                 <span className="text-xs font-bold text-[#0F172A]">
                   DNA Clinics • Dehradun & Muzaffarnagar
                 </span>
@@ -425,11 +425,11 @@ export const HomePage = () => {
               {/* Real Before/After Images side-by-side */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
-                  <img src="/images/ba_smile_before.png" alt="Smile Before" className="w-full h-full object-cover" />
+                  <img src="/images/ba_smile_before.webp" alt="Smile Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
-                  <img src="/images/ba_smile_after.png" alt="Smile After" className="w-full h-full object-cover" />
+                  <img src="/images/ba_smile_after.webp" alt="Smile After" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
                 </div>
               </div>
@@ -463,11 +463,11 @@ export const HomePage = () => {
               {/* Real Before/After Images side-by-side */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
-                  <img src="/images/ba_skin_before.png" alt="Skin Before" className="w-full h-full object-cover" />
+                  <img src="/images/ba_skin_before.webp" alt="Skin Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
-                  <img src="/images/ba_skin_after.png" alt="Skin After" className="w-full h-full object-cover" />
+                  <img src="/images/ba_skin_after.webp" alt="Skin After" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
                   <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
                 </div>
               </div>

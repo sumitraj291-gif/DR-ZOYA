@@ -13,13 +13,18 @@ import {
   Clock,
   Eye,
   Trash2,
-  FileText
+  FileText,
+  RefreshCw,
+  AlertCircle
 } from 'lucide-react';
 import { MOCK_DOCTORS, MOCK_SERVICES } from '../data/mockData';
 
 export const Appointments = () => {
   const {
     appointments,
+    loadingAppointments,
+    appointmentsError,
+    refreshAppointments,
     updateAppointmentStatus,
     setIsNewAppointmentModalOpen,
     setSelectedAppointment
@@ -47,17 +52,44 @@ export const Appointments = () => {
       <PageHeader
         category="CLINIC MANAGEMENT"
         title="Appointments"
-        subtitle="Manage and monitor all clinic consultations, procedures, and patient bookings."
+        subtitle="Manage and monitor all clinic consultations, procedures, and patient bookings synced with server."
         actionBtn={
-          <button
-            onClick={() => setIsNewAppointmentModalOpen(true)}
-            className="btn-gold-primary px-4 py-2.5 text-xs tracking-wider flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ New Appointment</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={refreshAppointments}
+              disabled={loadingAppointments}
+              className="px-3 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-[#E8E2D9] rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-60"
+              title="Refresh from server"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loadingAppointments ? 'animate-spin text-[#C5A059]' : ''}`} />
+              <span>{loadingAppointments ? 'Syncing...' : 'Sync Server'}</span>
+            </button>
+            <button
+              onClick={() => setIsNewAppointmentModalOpen(true)}
+              className="btn-gold-primary px-4 py-2.5 text-xs tracking-wider flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ New Appointment</span>
+            </button>
+          </div>
         }
       />
+
+      {/* Backend synchronization error banner */}
+      {appointmentsError && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-800">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+            <span>Could not reach live database: {appointmentsError}. Displaying cached/local records.</span>
+          </div>
+          <button
+            onClick={refreshAppointments}
+            className="underline font-bold text-amber-900 hover:text-black ml-4"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* Filter Bar */}
       <div className="bg-white p-5 rounded-2xl border border-[#E8E2D9] shadow-sm space-y-3">

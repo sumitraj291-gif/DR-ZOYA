@@ -46,8 +46,10 @@ export const AdminLoginPage = ({ onLoginSuccess, onBackToWebsite }) => {
 
     try {
       const res = await adminLogin(cleanEmail, cleanPassword);
-      if (res?.token) {
-        performSuccessfulLogin(res.user, res.token);
+      const token = res?.token || res?.data?.token;
+      const user = res?.user || res?.data?.user;
+      if (token) {
+        performSuccessfulLogin(user, token);
       } else {
         setError(res?.message || 'Login failed. Invalid response from server.');
       }

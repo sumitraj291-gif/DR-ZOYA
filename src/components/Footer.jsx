@@ -8,7 +8,6 @@ import {
   ShieldCheck, 
   Award, 
   Heart,
-  SlidersHorizontal,
   ChevronRight,
   MessageCircle,
   Share2
@@ -185,16 +184,6 @@ export const Footer = () => {
                 <span>{clinicData.profile.contact.timings}</span>
               </div>
             </div>
-
-            <div className="pt-2">
-              <button
-                onClick={() => navigateTo('admin')}
-                className="w-full btn-obsidian py-2 px-3 text-xs font-semibold flex items-center justify-center space-x-1.5"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>Open Clinic CMS / CRM</span>
-              </button>
-            </div>
           </div>
 
         </div>
@@ -216,10 +205,6 @@ export const Footer = () => {
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
               <span>Clinic Online & Accepting Appointments</span>
             </span>
-            <span>•</span>
-            <button onClick={() => navigateTo('admin')} className="btn-ghost text-gray-300 hover:text-white underline">
-              Admin CMS
-            </button>
           </div>
         </div>
 

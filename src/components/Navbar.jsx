@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useClinic } from '../context/ClinicContext';
 import { LanguageSelector } from './LanguageSelector';
 import {
@@ -9,11 +10,11 @@ import {
   Sparkles,
   ShieldCheck,
   ChevronRight,
-  MessageCircle,
-  SlidersHorizontal
+  MessageCircle
 } from 'lucide-react';
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const { clinicData, activePage, navigateTo, openBookingModal } = useClinic();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,13 +28,13 @@ export const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { id: 'home', label: 'Home' },
-    { id: 'treatments', label: 'Treatments' },
-    { id: 'smile-makeover', label: 'Smile Makeover' },
-    { id: 'about', label: 'About Dr. Zoya' },
-    { id: 'ai-analyzer', label: 'AI Analyzer', badge: 'AI' },
-    { id: 'gallery', label: 'Gallery' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'home', label: t('nav.home', 'Home') },
+    { id: 'treatments', label: t('nav.treatments', 'Treatments') },
+    { id: 'smile-makeover', label: t('nav.smileMakeover', 'Smile Makeover') },
+    { id: 'about', label: t('nav.about', 'About Dr. Zoya') },
+    { id: 'ai-analyzer', label: t('nav.aiAnalyzer', 'AI Analyzer'), badge: 'AI' },
+    { id: 'gallery', label: t('nav.gallery', 'Gallery') },
+    { id: 'contact', label: t('nav.contact', 'Contact') },
   ];
 
   const handleNavClick = (pageId) => {
@@ -53,9 +54,10 @@ export const Navbar = () => {
           <button
             onClick={() => handleNavClick('home')}
             className="btn-ghost flex items-center space-x-3 text-left group focus:outline-none"
+            aria-label="Dr. Zoya DNA Clinic Home"
           >
             <div className="w-12 h-12 rounded-2xl bg-white border border-[#C5A059]/50 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all">
-              <img src="/images/dna_logo.png" alt="DNA Clinic Logo" className="w-full h-full object-contain" />
+              <img src="/images/dna_logo.webp" alt="DNA Clinic Logo" width="48" height="48" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#0F172A] leading-none flex items-center space-x-1.5">
@@ -167,17 +169,6 @@ export const Navbar = () => {
                     <ChevronRight className="w-4 h-4 text-gray-400" />
                   </button>
                 ))}
-
-                <button
-                  onClick={() => handleNavClick('admin')}
-                  className="btn-obsidian flex items-center justify-between w-full px-4 py-3 rounded-xl text-left text-sm font-medium mt-2"
-                >
-                  <span className="flex items-center space-x-2">
-                    <SlidersHorizontal className="w-4 h-4" />
-                    <span>Clinic CMS & CRM Portal</span>
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-[#C5A059]" />
-                </button>
               </div>
             </div>
 
