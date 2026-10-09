@@ -54,6 +54,34 @@ export const initialClinicData = {
         qualification: "BDS, Cosmetic Dentistry & Smile Specialist",
         image: "/images/dr_varsha_jha.png",
         specialty: "Painless Extractions, Root Canals, Veneers & Aligners"
+      },
+      {
+        id: "doc-4",
+        name: "Dr. Nasida Fathima",
+        role: "Plastic & Reconstructive Surgeon",
+        qualification: "MBBS, MS, DNB, MCh, DrNB, MRCS (Edinburgh)",
+        image: "/images/dr_nasida_fathima.jpg",
+        scrubsImage: "/images/dr_nasida_fathima_scrubs.jpg",
+        specialty: "Plastic, Aesthetic & Reconstructive Surgery"
+      },
+      {
+        id: "doc-5",
+        name: "Dr. Rohan Goel",
+        role: "Plastic, Burns & Reconstructive Surgeon",
+        qualification: "MBBS, MS, M.Ch (Plastic Surgery - AIR 91), ISAPS Fellow (Spain)",
+        image: "/images/dr_rohan_portrait.jpg",
+        fellowshipImage: "/images/dr_rohan_goel.jpg",
+        otImage: "/images/dr_rohan_goel_ot.jpg",
+        specialty: "Burn Reconstruction, Microsurgery, Rhinoplasty, Body Contouring & Hair Restoration"
+      },
+      {
+        id: "doc-6",
+        name: "Dr. Amit Agarrwal",
+        role: "Prof & Head Maxillofacial Surgery",
+        qualification: "MDS, Ex-President AOMSI Uttarakhand, President NMO SDCH",
+        image: "/images/dr_amit_portrait.jpg",
+        bannerImage: "/images/dr_amit_agarrwal.jpg",
+        specialty: "Complex Jaw Reconstruction, TMJ, Orthognathic, Trauma & Cleft Lip/Palate"
       }
     ]
   },

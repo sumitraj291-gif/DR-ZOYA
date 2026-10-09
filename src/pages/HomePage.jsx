@@ -386,7 +386,7 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* 4. MEET THE EXPERTS (Real 3 Doctors from DNA Clinic) */}
+      {/* 4. MEET THE EXPERTS (Real Doctors from DNA Clinic) */}
       <section className="clinic-container py-14 sm:py-20">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-[#85611E]">
@@ -396,11 +396,11 @@ export const HomePage = () => {
             Meet the Experts
           </h2>
           <p className="text-xs sm:text-sm text-[#475569]">
-            Our panel of certified doctors dedicated to your skin, hair, and smile.
+            Our panel of certified doctors dedicated to skin, hair, smile, and reconstructive aesthetics.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {clinicData.profile.team?.map((doc) => (
             <div 
               key={doc.id}
@@ -412,26 +412,25 @@ export const HomePage = () => {
                   alt={doc.name}
                   className="w-full h-full object-cover object-top hover:scale-103 transition-transform duration-500"
                 />
-                <div className="absolute bottom-3 left-3 bg-[#090D14]/85 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-semibold border border-[#C5A059]/40">
+                <div className="absolute bottom-3 left-3 bg-[#090D14]/85 backdrop-blur-sm px-2.5 py-1 rounded-full text-white text-[11px] font-semibold border border-[#C5A059]/40">
                   {doc.role}
                 </div>
               </div>
 
-              <div className="p-6 text-left space-y-3">
+              <div className="p-5 text-left space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-serif text-xl font-bold text-[#0F172A]">{doc.name}</h3>
-                  <div className="text-xs text-[#85611E] font-medium mt-0.5">{doc.qualification}</div>
+                  <h3 className="font-serif text-lg font-bold text-[#0F172A] leading-snug">{doc.name}</h3>
+                  <div className="text-[11px] text-[#85611E] font-medium mt-1 leading-relaxed">{doc.qualification}</div>
+                  <p className="text-xs text-[#475569] leading-relaxed pt-2">
+                    Specialty: <strong className="text-slate-800">{doc.specialty}</strong>
+                  </p>
                 </div>
 
-                <p className="text-xs text-[#475569] leading-relaxed">
-                  Specialty: <strong>{doc.specialty}</strong>
-                </p>
-
-                <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
-                  <span className="text-xs text-[#475569]">Dehradun / Muzaffarnagar</span>
+                <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                  <span className="text-[11px] text-[#475569]">Dehradun / MZN</span>
                   <button
                     onClick={() => openBookingModal()}
-                    className="btn-gold px-4 py-2 rounded-full text-xs font-bold"
+                    className="btn-gold px-3.5 py-1.5 rounded-full text-xs font-bold"
                   >
                     Consult Doctor
                   </button>

@@ -102,9 +102,9 @@ export const AboutPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {clinicData.profile.team?.map((doc) => (
-              <div key={doc.id} className="bg-white p-6 rounded-3xl border border-[#E8E2D9] shadow-subtle flex flex-col justify-between space-y-4 text-left">
+              <div key={doc.id} className="bg-white p-5 sm:p-6 rounded-3xl border border-[#E8E2D9] shadow-subtle flex flex-col justify-between space-y-4 text-left">
                 <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
                   <img src={doc.image} alt={doc.name} className="w-full h-full object-cover object-top" />
                   <span className="absolute bottom-2 left-2 bg-[#090D14]/80 text-[#C5A059] text-[10px] font-bold px-2 py-0.5 rounded">
@@ -112,17 +112,17 @@ export const AboutPage = () => {
                   </span>
                 </div>
 
-                <div className="space-y-1">
-                  <h3 className="font-serif text-xl font-bold text-[#0F172A]">{doc.name}</h3>
-                  <div className="text-xs text-[#C5A059] font-medium">{doc.qualification}</div>
+                <div className="space-y-1 flex-1">
+                  <h3 className="font-serif text-lg font-bold text-[#0F172A] leading-snug">{doc.name}</h3>
+                  <div className="text-[11px] text-[#C5A059] font-medium leading-relaxed">{doc.qualification}</div>
                   <p className="text-xs text-[#576579] pt-1">Focused On: <strong>{doc.specialty}</strong></p>
                 </div>
 
                 <button
                   onClick={() => openBookingModal()}
-                  className="btn-gold w-full py-2 rounded-xl text-xs font-semibold"
+                  className="btn-gold w-full py-2.5 rounded-xl text-xs font-semibold"
                 >
-                  Book with {doc.name.split(' ')[0]}
+                  Consult {doc.name.replace('Dr. ', 'Dr. ')}
                 </button>
               </div>
             ))}

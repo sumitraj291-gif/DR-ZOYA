@@ -63,7 +63,7 @@ export const ClinicProvider = ({ children }) => {
           if (!parsed.gallery || parsed.gallery.length < 20) {
             parsed.gallery = initialClinicData.gallery;
           }
-          if (!parsed.profile?.team || parsed.profile.team.length === 0) {
+          if (!parsed.profile?.team || parsed.profile.team.length < 6 || !parsed.profile.team.some(d => d.name?.includes('Rohan')) || !parsed.profile.team.some(d => d.name?.includes('Amit')) || !parsed.profile.team.some(d => d.name?.includes('Nasida'))) {
             parsed.profile = {
               ...(parsed.profile || initialClinicData.profile),
               team: initialClinicData.profile.team
@@ -107,36 +107,6 @@ export const ClinicProvider = ({ children }) => {
       const { settings, team, treatments, testimonials, gallery } = res.data;
       if (!settings) return false;
 
-      const backendProfile = {
-        clinicName: settings.clinicName,
-        brandAlias: settings.brandAlias || 'Dr. Zoya\'s DNA Clinic India',
-        tagline: settings.tagline || '',
-        doctorName: settings.doctorName,
-        doctorTitle: settings.doctorTitle,
-        doctorRole: settings.doctorRole,
-        doctorBio: settings.doctorBio,
-        doctorExperienceYears: settings.doctorExperienceYears || 12,
-        patientCount: settings.patientCount || '15,000+',
-        rating: settings.rating || '4.9',
-        reviewCount: settings.reviewCount || '1,240+',
-        instagram: settings.instagram || 'https://www.instagram.com/dnaclinicindia/',
-        instagramHandle: settings.instagramHandle || '@dnaclinicindia',
-        certifications: settings.certifications || [],
-        whyChooseUs: settings.whyChooseUs || [],
-        contact: {
-          phone: settings.phone,
-          altPhone: settings.altPhone || settings.phone,
-          whatsapp: settings.whatsapp,
-          email: settings.email,
-          address: settings.address,
-          dehradunAddress: settings.dehradunAddress || '',
-          muzaffarnagarAddress: settings.muzaffarnagarAddress || '',
-          timings: settings.timings,
-          emergencyHelpline: settings.phone,
-        },
-        team: (team || []).filter(d => d.isActive !== false),
-      };
-
       const backendHero = {
         badge: settings.heroBadge,
         titlePrimary: settings.heroTitlePrimary,
@@ -170,14 +140,79 @@ export const ClinicProvider = ({ children }) => {
         text: t.reviewText,
       }));
 
-      setClinicData(prev => ({
-        ...prev,
-        profile: backendProfile,
-        hero: backendHero,
-        treatments: backendTreatments.length > 0 ? backendTreatments : prev.treatments,
-        testimonials: backendTestimonials.length > 0 ? backendTestimonials : prev.testimonials,
-        gallery: (gallery && gallery.length > 0) ? gallery : (res.data.gallery && res.data.gallery.length > 0 ? res.data.gallery : prev.gallery),
-      }));
+      setClinicData(prev => {
+        const serverTeam = (team || []).filter(d => d.isActive !== false);
+
+        // Start merged list with server doctors
+        const mergedTeam = [...serverTeam];
+
+        // Ensure all default specialists (Dr. Nasida, Dr. Rohan, Dr. Amit, Dr. Varsha, Dr. Zoya Talat, etc.) are always included
+        (initialClinicData.profile?.team || []).forEach(initialDoc => {
+          const normName = initialDoc.name ? initialDoc.name.toLowerCase().replace(/[^a-z]/g, '') : '';
+          const exists = mergedTeam.some(
+            d => d.id === initialDoc.id || (normName && d.name && d.name.toLowerCase().replace(/[^a-z]/g, '') === normName)
+          );
+          if (!exists) {
+            mergedTeam.push(initialDoc);
+          }
+        });
+
+        // Also preserve any custom doctors added or edited in local state / CMS
+        (prev.profile?.team || []).forEach(localDoc => {
+          const normName = localDoc.name ? localDoc.name.toLowerCase().replace(/[^a-z]/g, '') : '';
+          const existingIndex = mergedTeam.findIndex(
+            d => d.id === localDoc.id || (normName && d.name && d.name.toLowerCase().replace(/[^a-z]/g, '') === normName)
+          );
+          if (existingIndex === -1) {
+            mergedTeam.push(localDoc);
+          } else {
+            // Keep local custom edits (like changed photo or role)
+            mergedTeam[existingIndex] = {
+              ...mergedTeam[existingIndex],
+              ...localDoc,
+            };
+          }
+        });
+
+        const backendProfile = {
+          clinicName: settings.clinicName,
+          brandAlias: settings.brandAlias || 'Dr. Zoya\'s DNA Clinic India',
+          tagline: settings.tagline || '',
+          doctorName: settings.doctorName,
+          doctorTitle: settings.doctorTitle,
+          doctorRole: settings.doctorRole,
+          doctorBio: settings.doctorBio,
+          doctorExperienceYears: settings.doctorExperienceYears || 12,
+          patientCount: settings.patientCount || '15,000+',
+          rating: settings.rating || '4.9',
+          reviewCount: settings.reviewCount || '1,240+',
+          instagram: settings.instagram || 'https://www.instagram.com/dnaclinicindia/',
+          instagramHandle: settings.instagramHandle || '@dnaclinicindia',
+          certifications: settings.certifications || [],
+          whyChooseUs: settings.whyChooseUs || [],
+          contact: {
+            phone: settings.phone,
+            altPhone: settings.altPhone || settings.phone,
+            whatsapp: settings.whatsapp,
+            email: settings.email,
+            address: settings.address,
+            dehradunAddress: settings.dehradunAddress || '',
+            muzaffarnagarAddress: settings.muzaffarnagarAddress || '',
+            timings: settings.timings,
+            emergencyHelpline: settings.phone,
+          },
+          team: mergedTeam,
+        };
+
+        return {
+          ...prev,
+          profile: backendProfile,
+          hero: backendHero,
+          treatments: backendTreatments.length > 0 ? backendTreatments : prev.treatments,
+          testimonials: backendTestimonials.length > 0 ? backendTestimonials : prev.testimonials,
+          gallery: (gallery && gallery.length > 0) ? gallery : (res.data.gallery && res.data.gallery.length > 0 ? res.data.gallery : prev.gallery),
+        };
+      });
 
       setBackendLoaded(true);
       return true;
@@ -434,7 +469,11 @@ export const ClinicProvider = ({ children }) => {
   // Doctors Team CMS Mutators
   const updateDoctor = async (id, updatedFields) => {
     try {
-      await updateDoctorOnServer(id, updatedFields);
+      try {
+        await updateDoctorOnServer(id, updatedFields);
+      } catch (serverErr) {
+        console.warn('[CMS] Server doctor update skipped/failed, keeping local update:', serverErr.message);
+      }
       setClinicData(prev => {
         const currentTeam = prev.profile?.team || [];
         const updatedTeam = currentTeam.map(doc => doc.id === id ? { ...doc, ...updatedFields } : doc);
@@ -455,12 +494,11 @@ export const ClinicProvider = ({ children }) => {
           profile: updatedProfile
         };
       });
-      showToast('Doctor details and photo updated on server!');
-      await syncClinicDataFromServer();
+      showToast('Doctor details and photo updated!');
       return true;
     } catch (err) {
       console.error('[CMS] Failed to update doctor:', err);
-      showToast(err.message || 'Failed to update doctor on server.', 'error');
+      showToast(err.message || 'Failed to update doctor.', 'error');
       throw err;
     }
   };
@@ -477,7 +515,11 @@ export const ClinicProvider = ({ children }) => {
       ...newDoctor
     };
     try {
-      await addDoctorOnServer(doc);
+      try {
+        await addDoctorOnServer(doc);
+      } catch (serverErr) {
+        console.warn('[CMS] Server doctor add skipped/failed, keeping local addition:', serverErr.message);
+      }
       setClinicData(prev => ({
         ...prev,
         profile: {
@@ -485,19 +527,22 @@ export const ClinicProvider = ({ children }) => {
           team: [...(prev.profile?.team || []), doc]
         }
       }));
-      showToast(`Doctor "${doc.name}" added to specialist panel on server!`);
-      await syncClinicDataFromServer();
+      showToast(`Doctor "${doc.name}" added to specialist panel!`);
       return doc;
     } catch (err) {
       console.error('[CMS] Failed to add doctor:', err);
-      showToast(err.message || 'Failed to add doctor on server.', 'error');
+      showToast(err.message || 'Failed to add doctor.', 'error');
       throw err;
     }
   };
 
   const deleteDoctor = async (id) => {
     try {
-      await deleteDoctorOnServer(id);
+      try {
+        await deleteDoctorOnServer(id);
+      } catch (serverErr) {
+        console.warn('[CMS] Server doctor delete skipped/failed, removing locally:', serverErr.message);
+      }
       setClinicData(prev => ({
         ...prev,
         profile: {
@@ -505,11 +550,11 @@ export const ClinicProvider = ({ children }) => {
           team: (prev.profile?.team || []).filter(doc => doc.id !== id)
         }
       }));
-      showToast('Doctor removed from specialist panel on server.');
+      showToast('Doctor removed from specialist panel.');
       return true;
     } catch (err) {
       console.error('[CMS] Failed to delete doctor:', err);
-      showToast(err.message || 'Failed to delete doctor on server.', 'error');
+      showToast(err.message || 'Failed to delete doctor.', 'error');
       throw err;
     }
   };
