@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const SITE_URL = 'https://dnaclinicindia.com';
-const DEFAULT_IMAGE = `${SITE_URL}/images/dr_zoya_rana.webp`;
+const DEFAULT_IMAGE = `${SITE_URL}/images/dr_zoya_talat.webp`;
 
 export const SEO = ({
   title,
@@ -14,8 +14,8 @@ export const SEO = ({
   useEffect(() => {
     // 1. Title
     const fullTitle = title
-      ? `${title} | Dr. Zoya DNA Clinic`
-      : 'Dr. Zoya | Luxury Aesthetic Dermatology & Cosmetic Smile Studio';
+      ? (title.toLowerCase().includes('dna clinic') ? title : `${title} | DNA Clinic`)
+      : 'DNA Clinic | Aesthetic Dermatology & Cosmetic Smile Studio';
     document.title = fullTitle;
 
     // Helper to create or update meta tags
@@ -41,6 +41,10 @@ export const SEO = ({
       el.setAttribute('href', href);
     };
 
+    // Ensure browser tab logo
+    setLinkTag('icon', '/images/dna_logo_crop.png');
+    setLinkTag('apple-touch-icon', '/images/dna_logo_crop.png');
+
     const canonicalUrl = `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 
     // 2. Standard Meta
@@ -61,7 +65,7 @@ export const SEO = ({
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:image', image);
     setMetaTag('property', 'og:type', 'website');
-    setMetaTag('property', 'og:site_name', 'DNA Dental, Skin & Hair Clinic');
+    setMetaTag('property', 'og:site_name', 'DNA Clinic');
 
     // 5. Twitter Card
     setMetaTag('name', 'twitter:card', 'summary_large_image');
@@ -73,7 +77,7 @@ export const SEO = ({
     const defaultSchema = {
       '@context': 'https://schema.org',
       '@type': ['MedicalBusiness', 'Dentist'],
-      name: 'DNA Dental, Skin & Hair Clinic - Dr. Zoya',
+      name: 'DNA Clinic',
       url: SITE_URL,
       telephone: '+91 63953 77355',
       email: 'dnadentalclinic3@gmail.com',

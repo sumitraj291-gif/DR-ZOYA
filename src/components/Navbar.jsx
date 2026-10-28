@@ -54,16 +54,16 @@ export const Navbar = () => {
           <button
             onClick={() => handleNavClick('home')}
             className="flex items-center space-x-2 sm:space-x-3 text-left group focus:outline-none shrink-0 cursor-pointer"
-            aria-label="Dr. Zoya DNA Clinic Home"
+            aria-label="DNA Clinic Home"
           >
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-white border border-[#C5A059]/40 p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:border-[#C5A059] transition-all shrink-0">
               <img src="/images/dna_logo.webp" alt="DNA Clinic Logo" width="44" height="44" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col justify-center min-w-0">
               <div className="font-serif text-sm sm:text-xl font-bold tracking-wider text-[#0F172A] leading-none flex items-center space-x-1.5">
-                <span className="whitespace-nowrap">DR. ZOYA</span>
+                <span className="whitespace-nowrap">DNA CLINIC</span>
                 <span className="text-[8px] sm:text-[9px] text-[#85611E] font-sans font-bold bg-[#FAF6EE] border border-[#C5A059]/40 px-1.5 py-0.5 rounded-full uppercase tracking-wider leading-none shrink-0">
-                  DNA CLINIC
+                  BY DR. ZOYA
                 </span>
               </div>
               <div className="text-[8px] sm:text-[10px] tracking-widest uppercase text-[#576579] font-medium mt-1 truncate">

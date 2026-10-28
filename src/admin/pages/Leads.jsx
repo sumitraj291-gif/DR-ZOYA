@@ -162,8 +162,8 @@ export const Leads = () => {
           }}
         />
       ) : (
-        <div className="luxury-table-container">
-          <table className="w-full text-left luxury-table">
+        <div className="clinic-table-container">
+          <table className="w-full text-left clinic-table">
             <thead>
               <tr>
                 <th>Lead ID</th>

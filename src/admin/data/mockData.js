@@ -561,7 +561,7 @@ export const INITIAL_REVIEWS = [
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop",
     rating: 5,
     service: "Hollywood Smile Makeover",
-    reviewText: "Dr. Zoya is an artist! The digital 3D mock-up gave me total confidence, and the final porcelain veneers look completely natural and radiant. The studio feels like a 5-star luxury lounge.",
+    reviewText: "Dr. Zoya is an artist! The digital 3D mock-up gave me total confidence, and the final porcelain veneers look completely natural and radiant. The studio feels like a 5-star lounge.",
     date: "2026-09-10",
     status: "Published",
   },

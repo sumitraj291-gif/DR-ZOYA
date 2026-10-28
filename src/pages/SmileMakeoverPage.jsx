@@ -166,7 +166,7 @@ export const SmileMakeoverPage = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
-                <span>Supervised by: <strong>Dr. Zoya Rana (Director)</strong></span>
+                <span>Supervised by: <strong>Dr. Zoya (Director)</strong></span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />

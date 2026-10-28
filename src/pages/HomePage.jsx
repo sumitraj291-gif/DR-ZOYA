@@ -73,9 +73,9 @@ export const HomePage = () => {
       tabLabel: 'Medical Skin & Laser',
       icon: '✨',
       badge: 'Advanced Dermatology',
-      doctorName: 'Dr. Zoya Rana',
+      doctorName: 'Dr. Zoya Talat',
       doctorRole: 'Director & Chief Aesthetic Physician',
-      image: '/images/dr_zoya_rana.webp',
+      image: '/images/dr_zoya_talat.webp',
       hudTitle: '3D Dermal Scanning Active',
       hudMetric1: 'Hydra Infusion: 99.4% Deep',
       hudMetric2: 'Dermal Barrier: Rejuvenated',
@@ -176,7 +176,7 @@ export const HomePage = () => {
             
             {/* Left Column: Headlines, Copy & Actions (lg:col-span-7) */}
             <div className="lg:col-span-7 text-left space-y-4 xl:space-y-5">
-              {/* Luxury Badge */}
+              {/* Clinic Badge */}
               <div className="inline-flex items-center space-x-2 bg-white/95 border border-[#C5A059]/50 px-3.5 py-1.5 rounded-full shadow-xs">
                 <img src="/images/dna_logo.webp" alt="DNA Clinic" width="16" height="16" className="w-4 h-4 object-contain" />
                 <span className="text-xs font-bold text-[#0F172A]">
@@ -249,8 +249,8 @@ export const HomePage = () => {
                 
                 {/* Doctor Lead Badge */}
                 <div className="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#C5A059]/40 shadow-sm flex items-center space-x-2">
-                  <img src="/images/dr_zoya_portrait.webp" alt="Dr. Zoya Rana" className="w-5 h-5 rounded-full object-cover border border-[#C5A059]" />
-                  <span className="text-[11px] font-bold text-[#0F172A]">Dr. Zoya Rana & Medical Team</span>
+                  <img src="/images/dr_zoya_portrait.webp" alt="Dr. Zoya" className="w-5 h-5 rounded-full object-cover border border-[#C5A059]" />
+                  <span className="text-[11px] font-bold text-[#0F172A]">Dr. Zoya & Medical Team</span>
                 </div>
 
                 {/* Bottom Bar inside visual */}
@@ -452,7 +452,7 @@ export const HomePage = () => {
               See the Difference in Your Smile & Skin
             </h2>
             <p className="text-xs sm:text-sm text-[#475569]">
-              Actual before and after clinical cases performed by Dr. Zoya Rana and team.
+              Actual before and after clinical cases performed by Dr. Zoya and team.
             </p>
           </div>
 
@@ -620,7 +620,7 @@ export const HomePage = () => {
 
                 <div className="p-4 bg-[#FAF8F5] border-t border-[#EAE4DC] flex items-center justify-between text-xs">
                   <span className="text-xs text-[#475569] truncate max-w-[160px]">
-                    {item.clinician || "Dr. Zoya Rana"}
+                    {item.clinician || "Dr. Zoya Talat"}
                   </span>
                   <button
                     onClick={() => navigateTo('gallery')}
@@ -757,7 +757,7 @@ export const HomePage = () => {
               Hear From Our Happy Clients
             </h2>
             <p className="text-xs sm:text-sm text-[#475569]">
-              Real verified Google reviews from patients treated by Dr. Zoya Rana and Dr. Varsha Jha.
+              Real verified Google reviews from patients treated by Dr. Zoya and Dr. Varsha Jha.
             </p>
           </div>
 

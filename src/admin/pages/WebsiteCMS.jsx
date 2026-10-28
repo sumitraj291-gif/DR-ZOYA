@@ -262,7 +262,7 @@ export const WebsiteCMS = () => {
           <div className="flex items-center justify-between border-b border-[#F1ECE5] pb-3">
             <div>
               <h3 className="font-serif text-xl font-bold text-obsidian">Homepage Hero Banner</h3>
-              <p className="text-slate-500">Main headline, luxury badges, and subheading on the landing page.</p>
+              <p className="text-slate-500">Main headline, clinic badges, and subheading on the landing page.</p>
             </div>
           </div>
 

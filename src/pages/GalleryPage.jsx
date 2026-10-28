@@ -30,7 +30,7 @@ export const GalleryPage = () => {
       type: 'before_after',
       timeline: t.turnaround,
       description: t.resultDescription,
-      clinician: 'Dr. Zoya Rana & Specialist Team'
+      clinician: 'Dr. Zoya & Specialist Team'
     }))
   ];
 
@@ -271,7 +271,7 @@ export const GalleryPage = () => {
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-200/80 text-xs">
                 <div>
                   <strong className="text-gray-500 block uppercase text-[10px]">Supervising Clinician:</strong>
-                  <span className="font-semibold text-gray-900">{activeModalItem.clinician || "Dr. Zoya Rana"}</span>
+                  <span className="font-semibold text-gray-900">{activeModalItem.clinician || "Dr. Zoya Talat"}</span>
                 </div>
                 {activeModalItem.timeline && (
                   <div>

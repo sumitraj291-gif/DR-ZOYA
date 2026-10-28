@@ -128,15 +128,15 @@ export const Sidebar = ({ isMobile = false, onLogout }) => {
           </button>
         )}
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gold-gradient flex items-center justify-center text-obsidian font-serif font-bold text-xl shadow-gold-glow flex-shrink-0">
-            Z
+          <div className="w-9 h-9 rounded-xl bg-white border border-gold/40 p-1 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <img src="/images/dna_logo.webp" alt="DNA Clinic Logo" className="w-full h-full object-contain" />
           </div>
           <div className="min-w-0">
             <h2 className="font-serif text-lg font-bold tracking-widest text-white leading-none truncate">
-              DR. ZOYA
+              DNA CLINIC
             </h2>
             <p className="text-[9px] font-medium tracking-wider text-gold uppercase mt-1 truncate">
-              DNA CLINIC ADMIN
+              CLINICAL ADMIN PORTAL
             </p>
           </div>
         </div>

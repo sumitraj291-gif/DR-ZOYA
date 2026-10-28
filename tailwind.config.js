@@ -48,7 +48,7 @@ export default {
       },
       boxShadow: {
         'gold-glow': '0 4px 20px rgba(197, 160, 89, 0.25)',
-        'luxury': '0 10px 30px -5px rgba(9, 13, 20, 0.05), 0 4px 12px -2px rgba(9, 13, 20, 0.03)',
+        'clinic-soft': '0 10px 30px -5px rgba(9, 13, 20, 0.05), 0 4px 12px -2px rgba(9, 13, 20, 0.03)',
       },
       backgroundImage: {
         'gold-gradient': 'linear-gradient(135deg, #DFBE7B 0%, #C5A059 50%, #9F7B39 100%)',

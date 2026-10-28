@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Luxury Clinical Aesthetic Design System for Dr. Zoya Clinic */
+/* Clinical Aesthetic Design System for Dr. Zoya Clinic */
 :root {
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -80,7 +80,7 @@ body {
   background: var(--gold-gradient);
 }
 
-/* Luxury Glassmorphism & Cards */
+/* Glassmorphism & Cards */
 .glass-panel {
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(14px);
@@ -395,7 +395,7 @@ body {
 }
 
 /* ==========================================================================
-   Admin Panel Luxury CRM / ERP Design System
+   Admin Panel Clinical CRM / ERP Design System
    ========================================================================== */
 
 .font-serif-heading {
@@ -430,15 +430,15 @@ body {
   transform: translateY(-1px);
 }
 
-/* Admin Luxury Table Design */
-.luxury-table-container {
+/* Admin Table Design */
+.clinic-table-container {
   background: #FFFFFF;
   border: 1px solid #E8E2D9;
   border-radius: 1rem;
   overflow: hidden;
 }
 
-.luxury-table th {
+.clinic-table th {
   background: #090D14;
   color: #FFFFFF;
   text-transform: uppercase;
@@ -448,16 +448,16 @@ body {
   padding: 0.875rem 1rem;
 }
 
-.luxury-table td {
+.clinic-table td {
   padding: 1rem;
   border-bottom: 1px solid #F1ECE5;
 }
 
-.luxury-table tbody tr {
+.clinic-table tbody tr {
   transition: background-color 0.15s ease;
 }
 
-.luxury-table tbody tr:hover {
+.clinic-table tbody tr:hover {
   background-color: #FAF8F5;
 }
 

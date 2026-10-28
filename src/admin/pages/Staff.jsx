@@ -39,8 +39,8 @@ export const Staff = () => {
       />
 
       {/* Staff Table */}
-      <div className="luxury-table-container">
-        <table className="w-full text-left luxury-table">
+      <div className="clinic-table-container">
+        <table className="w-full text-left clinic-table">
           <thead>
             <tr>
               <th>Staff ID</th>

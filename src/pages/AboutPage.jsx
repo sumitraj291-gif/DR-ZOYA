@@ -43,13 +43,13 @@ export const AboutPage = () => {
           <div className="lg:col-span-5 relative">
             <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white relative max-w-md mx-auto bg-gray-100">
               <img
-                src={clinicData.profile.doctorImage || clinicData.profile.team?.[0]?.image || "/images/dr_zoya_rana.png"}
-                alt={`${clinicData.profile.doctorName} - Director DNA Clinic`}
+                src={clinicData.profile.doctorImage || clinicData.profile.team?.[0]?.image || "/images/dr_zoya_talat.png"}
+                alt={`${clinicData.profile.doctorName || 'Dr. Zoya'} - Director DNA Clinic`}
                 className="w-full h-[480px] object-cover object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <div className="font-serif text-2xl font-bold text-[#C5A059]">{clinicData.profile.doctorName}</div>
+                <div className="font-serif text-2xl font-bold text-[#C5A059]">{clinicData.profile.doctorName || 'Dr. Zoya'}</div>
                 <div className="text-xs text-gray-200">{clinicData.profile.doctorRole}</div>
               </div>
             </div>
@@ -70,7 +70,7 @@ export const AboutPage = () => {
             </p>
 
             <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-              Founded and led by <strong>Dr. Zoya Rana</strong>, our philosophy is anchored on customized treatment plans. We believe that your health and aesthetics deserve undivided clinical attention without commercial rush.
+              Founded and led by <strong>Dr. Zoya</strong>, our philosophy is anchored on customized treatment plans. We believe that your health and aesthetics deserve undivided clinical attention without commercial rush.
             </p>
 
             <div className="pt-2 flex flex-wrap gap-3">

@@ -22,7 +22,7 @@ import { SEO } from './components/SEO';
 
 const PAGE_META = {
   home: {
-    title: 'Luxury Aesthetic Dermatology & Cosmetic Smile Studio',
+    title: 'DNA Clinic | Aesthetic Dermatology & Cosmetic Smile Studio',
     description: 'Premier clinic for Aesthetic Dermatology, Cosmetic Dentistry, Invisible Aligners, Laser Treatments, and Facial Rejuvenation in Dehradun & Muzaffarnagar.',
     path: '/'
   },
@@ -38,7 +38,7 @@ const PAGE_META = {
   },
   about: {
     title: 'About Dr. Zoya & Clinical Team',
-    description: 'Meet Dr. Zoya Rana and our certified clinical specialists in Dehradun and Muzaffarnagar dedicated to natural aesthetic outcomes.',
+    description: 'Meet Dr. Zoya and our certified clinical specialists in Dehradun and Muzaffarnagar dedicated to natural aesthetic outcomes.',
     path: '/about'
   },
   'ai-analyzer': {
@@ -53,7 +53,7 @@ const PAGE_META = {
   },
   book: {
     title: 'Book an Appointment',
-    description: 'Schedule a clinical consultation with Dr. Zoya Rana and specialist doctors at our Dehradun or Muzaffarnagar clinic.',
+    description: 'Schedule a clinical consultation with Dr. Zoya and specialist doctors at our Dehradun or Muzaffarnagar clinic.',
     path: '/book'
   },
   contact: {
@@ -69,7 +69,7 @@ const PAGE_META = {
   }
 };
 
-const LuxuryLoadingFallback = ({ message = 'Loading experience...' }) => (
+const LoadingFallback = ({ message = 'Loading experience...' }) => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center p-8">
     <div className="relative flex items-center justify-center w-14 h-14 mb-4">
       <div className="absolute inset-0 rounded-full border-2 border-[#C5A059]/20 border-t-[#C5A059] animate-spin" />
@@ -158,7 +158,7 @@ const PageContent = () => {
       <Navbar />
       
       <main className="flex-grow">
-        <Suspense fallback={<LuxuryLoadingFallback />}>
+        <Suspense fallback={<LoadingFallback />}>
           {renderActivePage()}
         </Suspense>
       </main>

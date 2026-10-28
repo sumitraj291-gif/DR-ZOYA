@@ -48,10 +48,10 @@ const HERO_SERVICES = [
     description: 'Science-backed medical facials, US-FDA laser toning, chemical peels, and customized dermal serums crafted to renew your natural skin vitality.',
     image: '/images/hero/hero_skin.webp',
     alt: 'Patient receiving dermatologist-formulated facial serum and aesthetic skin treatment',
-    doctor: 'Dr. Zoya Rana',
+    doctor: 'Dr. Zoya Talat',
     doctorRole: 'Cosmetologist & Aesthetic Physician',
     doctorImg: '/images/dr_zoya.png',
-    themeColor: '#C5A059', // Luxury Gold
+    themeColor: '#C5A059', // Warm Gold
     accentBg: 'from-[#C5A059]/15 via-amber-500/5 to-transparent',
     glowColor: 'rgba(197, 160, 89, 0.22)',
     stat: { value: '100%', label: 'Customized Formulations' },
@@ -71,7 +71,7 @@ const HERO_SERVICES = [
     description: 'Targeted scalp micro-infusion, Growth Factor Concentrate (GFC), and clinical hair fall arrest protocols to awaken dormant follicles naturally.',
     image: '/images/hero/hero_hair.webp',
     alt: 'Clinical trichology scalp examination by hair restoration specialist',
-    doctor: 'Dr. Zoya Rana',
+    doctor: 'Dr. Zoya Talat',
     doctorRole: 'Certified Hair & Scalp Specialist',
     doctorImg: '/images/dr_zoya.png',
     themeColor: '#0369A1', // Sky-700 for accessible WCAG contrast
@@ -163,7 +163,7 @@ export const Hero3DAestheticExperience = () => {
         }}
       />
       
-      {/* Subtle luxury pattern lines */}
+      {/* Subtle clinic pattern lines */}
       <div className="absolute inset-0 bg-[radial-gradient(#C5A059_0.8px,transparent_0.8px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
       {/* Top Header Bar: Status & Play/Pause Controls (Target 56px-64px height) */}

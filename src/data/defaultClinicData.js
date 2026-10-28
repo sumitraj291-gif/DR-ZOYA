@@ -3,10 +3,10 @@ export const initialClinicData = {
     clinicName: "DNA Dental, Skin & Hair Clinic",
     brandAlias: "Dr. Zoya's DNA Clinic India",
     tagline: "Precision, Care, Confidence and Integrity — That's the DNA Standard",
-    doctorName: "Dr. Zoya Rana",
+    doctorName: "Dr. Zoya Talat",
     doctorTitle: "Director & Chief Aesthetic Physician",
     doctorRole: "Founder & Lead Specialist (Skin, Hair & Aesthetics)",
-    doctorBio: "At DNA Clinics, we bring together certified specialists, modern infrastructure, and ethical medical practices under one trusted brand. Operating premier centres in Dehradun and Muzaffarnagar, Dr. Zoya Rana and her expert team combine clinical excellence with patient comfort to deliver natural, confident transformations.",
+    doctorBio: "At DNA Clinics, we bring together certified specialists, modern infrastructure, and ethical medical practices under one trusted brand. Operating premier centres in Dehradun and Muzaffarnagar, Dr. Zoya and her expert team combine clinical excellence with patient comfort to deliver natural, confident transformations.",
     doctorExperienceYears: 12,
     patientCount: "15,000+",
     rating: "4.9",
@@ -32,20 +32,12 @@ export const initialClinicData = {
     },
     team: [
       {
-        id: "doc-1",
-        name: "Dr. Zoya Rana",
-        role: "Director",
-        qualification: "Chief Aesthetic Physician & Cosmetologist",
-        image: "/images/dr_zoya_rana.png",
-        specialty: "Advanced Dermatology, Hair Restoration & Anti-Aging"
-      },
-      {
         id: "doc-2",
         name: "Dr. Zoya Talat",
-        role: "Associate Specialist",
-        qualification: "Cosmetic & Laser Aesthetic Physician",
+        role: "Director",
+        qualification: "Chief Aesthetic Physician & Cosmetologist",
         image: "/images/dr_zoya_talat.png",
-        specialty: "Medical Facials, Chemical Peels & Skin Rejuvenation"
+        specialty: "Advanced Dermatology, Laser Rejuvenation & Clinical Aesthetics"
       },
       {
         id: "doc-3",
@@ -213,7 +205,7 @@ export const initialClinicData = {
       duration: "30 Mins",
       price: "From ₹450 / unit",
       advanceFee: 500,
-      description: "Micro-dosed wrinkle relaxers and Juvederm hyaluronic fillers strategically placed by Dr. Zoya Rana for a naturally refreshed look.",
+      description: "Micro-dosed wrinkle relaxers and Juvederm hyaluronic fillers strategically placed by Dr. Zoya Talat for a naturally refreshed look.",
       benefits: ["Erases Forehead Lines & Crow's Feet", "Zero Frozen Look", "Restores Youthful Cheek & Lip Volume", "Long-Lasting 12-18 Months"],
       isPopular: true,
       image: "/images/advanced_facials.png"
@@ -277,7 +269,7 @@ export const initialClinicData = {
       verifiedProcedure: "Skin & Hair Consultation",
       rating: 5,
       date: "Recent Google Review",
-      text: "DNA is one of the best Skin Dental and hair solution center. Very good consultation by Dr. Zoya Rana. The staff is polite and treatments are really effective."
+      text: "DNA is one of the best Skin Dental and hair solution center. Very good consultation by Dr. Zoya. The staff is polite and treatments are really effective."
     },
     {
       id: "rev-2",
@@ -327,7 +319,7 @@ export const initialClinicData = {
       afterImage: "/images/ba_smile_after.png",
       description: "Full cosmetic dental rehabilitation restoring incisal translucency, tooth proportion, and natural bright shade.",
       timeline: "2 Clinical Sittings",
-      clinician: "Dr. Varsha Jha & Dr. Zoya Rana"
+      clinician: "Dr. Varsha Jha & Dr. Zoya Talat"
     },
     {
       id: "gal-braces-1",
@@ -400,7 +392,7 @@ export const initialClinicData = {
       afterImage: "/images/ba_skin_after.png",
       description: "Deep pore clearance with customized medical facial protocol, chemical peeling, and barrier restoration.",
       timeline: "6 Weeks Protocol",
-      clinician: "Dr. Zoya Rana (Director)"
+      clinician: "Dr. Zoya Talat (Director)"
     },
     {
       id: "gal-glow-1",
@@ -410,7 +402,7 @@ export const initialClinicData = {
       image: "/images/gallery/glow_therapy_1.png",
       description: "Clinical hyaluronic and antioxidant infusion for immediate red-carpet luminosity and glass skin texture.",
       timeline: "50 Mins Protocol",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-glow-2",
@@ -420,7 +412,7 @@ export const initialClinicData = {
       image: "/images/gallery/glow_therapy_2.png",
       description: "Intense dermal nourishment targeting dullness, uneven complexion, and environmental oxidative stress.",
       timeline: "Instant Radiance",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-acne-1",
@@ -430,7 +422,7 @@ export const initialClinicData = {
       image: "/images/gallery/acne_treatment_1.png",
       description: "Targeted salicylic peels and blue light phototherapy to calm active inflammation and eradicate bacteria.",
       timeline: "4 - 6 Sessions",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-acne-2",
@@ -440,7 +432,7 @@ export const initialClinicData = {
       image: "/images/gallery/acne_treatment_2.png",
       description: "Microneedling and collagen induction therapy to smooth out pitted scars and texture irregularities.",
       timeline: "Sequential Care",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-facials-1",
@@ -450,7 +442,7 @@ export const initialClinicData = {
       image: "/images/gallery/advanced_facials_1.png",
       description: "Vortex suction pore purification and nutrient infusion with US-FDA approved clinical instruments.",
       timeline: "Monthly Maintenance",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-facials-2",
@@ -460,7 +452,7 @@ export const initialClinicData = {
       image: "/images/gallery/advanced_facials_2.png",
       description: "Gentle clinical peeling and epidermal polishing leaving skin smooth, supple, and radiant.",
       timeline: "Zero Downtime",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-anti-age",
@@ -470,7 +462,7 @@ export const initialClinicData = {
       image: "/images/gallery/anti_ageing_2.png",
       description: "Non-invasive dermal firming and targeted peptide delivery to restore youthful bounce and firmness.",
       timeline: "Preventive Anti-Aging",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-skin-rej",
@@ -512,7 +504,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_03.png",
       description: "Even tone and blemish elimination through personalized dermatological protocol.",
       timeline: "Clinical Case 03",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-dna-05",
@@ -522,7 +514,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_05.png",
       description: "Restoration of glowing complexion and reduction in congested pores.",
       timeline: "Clinical Case 05",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-dna-06",
@@ -562,7 +554,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_10.png",
       description: "Smoothing of coarse skin texture and elimination of sun spots.",
       timeline: "Clinical Case 10",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-dna-11",
@@ -572,7 +564,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_11.png",
       description: "Follicular density boost with growth factor concentrate (GFC) scalp therapy.",
       timeline: "Clinical Case 11",
-      clinician: "Dr. Zoya Rana & Dr. Zoya Talat"
+      clinician: "Dr. Zoya Talat"
     },
     {
       id: "gal-dna-12",
@@ -592,7 +584,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_13.png",
       description: "Deep melasma fading with targeted medical laser protocols.",
       timeline: "Clinical Case 13",
-      clinician: "Dr. Zoya Rana"
+      clinician: "Dr. Zoya Talat"
     },
 
     // 4. CLINIC SUITES & INFRASTRUCTURE
@@ -631,10 +623,10 @@ export const initialClinicData = {
   faqs: [
     {
       question: "Where are DNA Clinics located?",
-      answer: "DNA Clinics operate modern, fully-equipped centres in both Dehradun (Uttarakhand) and Muzaffarnagar (Uttar Pradesh). You can consult Dr. Zoya Rana, Dr. Zoya Talat, and Dr. Varsha Jha at either centre by prior booking."
+      answer: "DNA Clinics operate modern, fully-equipped centres in both Dehradun (Uttarakhand) and Muzaffarnagar (Uttar Pradesh). You can consult Dr. Zoya Talat, Dr. Varsha Jha, and our specialist surgeons at either centre by prior booking."
     },
     {
-      question: "How do I book an appointment with Dr. Zoya Rana?",
+      question: "How do I book an appointment with Dr. Zoya?",
       answer: "You can book directly through this website using the 'Book Consultation' button (advance fees ₹500 or ₹1,000 for VIP priority slot), call our priority line at +91 63953 77355, or chat with our 24/7 Smart WhatsApp Bot."
     },
     {
@@ -698,7 +690,7 @@ export const initialSeedAppointments = [
     paymentStatus: "Pending at Clinic",
     leadSource: "Smart WhatsApp Bot",
     status: "Contacted",
-    notes: "Inquired about facial rejuvenation with Dr. Zoya Rana.",
+    notes: "Inquired about facial rejuvenation with Dr. Zoya.",
     createdAt: "2026-09-16 01:20 PM"
   }
 ];

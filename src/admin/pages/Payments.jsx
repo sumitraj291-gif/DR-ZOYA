@@ -82,8 +82,8 @@ export const Payments = () => {
           description="There are no payment records matching your filter criteria."
         />
       ) : (
-        <div className="luxury-table-container">
-          <table className="w-full text-left luxury-table">
+        <div className="clinic-table-container">
+          <table className="w-full text-left clinic-table">
             <thead>
               <tr>
                 <th>Payment ID</th>
