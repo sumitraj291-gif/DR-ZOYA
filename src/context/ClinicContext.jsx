@@ -22,7 +22,7 @@ import {
 
 const ClinicContext = createContext();
 
-const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_team_final_v14';
+const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_team_final_v16';
 const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
 
 export const getDoctorSortOrder = (name) => {
@@ -73,6 +73,8 @@ export const ClinicProvider = ({ children }) => {
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v11');
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v12');
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v13');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v14');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v15');
       
       const saved = localStorage.getItem(CLINIC_STORAGE_KEY);
       if (saved) {
@@ -81,6 +83,10 @@ export const ClinicProvider = ({ children }) => {
         if (parsed?.profile?.contact?.phone?.includes('63953')) {
           if (!parsed.gallery || parsed.gallery.length < 20) {
             parsed.gallery = initialClinicData.gallery;
+          }
+          if (parsed.gallery) {
+            const s1 = parsed.gallery.find(g => g.id === 'gal-suite-1');
+            if (s1) s1.image = '/images/clinic_suite_chair.jpg';
           }
           if (parsed.profile?.team) {
             parsed.profile.team = parsed.profile.team.filter(

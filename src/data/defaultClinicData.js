@@ -602,18 +602,18 @@ export const initialClinicData = {
       title: "State-of-the-Art Aesthetic Suite",
       category: "Clinic & Tech",
       type: "single",
-      image: "/images/dna_banner1.png",
+      image: "/images/clinic_suite_chair.jpg",
       description: "Hospital-grade multi-stage sterilization and ergonomic patient consultation suites.",
       timeline: "Infrastructure",
       clinician: "DNA Clinics (Dehradun & Muzaffarnagar)"
     },
     {
       id: "gal-suite-2",
-      title: "Aesthetic Laser Technology Suite",
+      title: "Aesthetic Laser & Consultation Suite",
       category: "Clinic & Tech",
       type: "single",
-      image: "/images/dna_banner2.png",
-      description: "Non-invasive laser facial rejuvenation and collagen induction therapy.",
+      image: "/images/clinic_interior.webp",
+      description: "Non-invasive laser facial rejuvenation and comfortable patient consultation lounge.",
       timeline: "Technology",
       clinician: "DNA Clinic"
     },
