@@ -11,6 +11,8 @@ import {
   Award, 
   ChevronDown, 
   ChevronUp, 
+  ChevronLeft,
+  ChevronRight,
   Clock, 
   MapPin, 
   Phone,
@@ -25,6 +27,89 @@ import {
   Activity
 } from 'lucide-react';
 
+const SMILE_TRANSFORMATIONS = [
+  {
+    id: 'smile-veneers',
+    badge: 'Smile Transformation',
+    timeline: '2 Clinical Visits',
+    title: 'See the Difference in Your Smile',
+    description: 'Our advanced dental treatments restore damaged or missing teeth, enhance aesthetics, and improve overall oral health.',
+    treatment: 'Ceramic Veneers & Whitening',
+    actionText: 'Get Your Smile',
+    beforeImage: '/images/ba_smile_before.webp',
+    afterImage: '/images/ba_smile_after.webp',
+  },
+  {
+    id: 'smile-aligners',
+    badge: 'Orthodontic Alignment',
+    timeline: '6 - 9 Months Protocol',
+    title: 'Invisible Clear Aligners & Arch Alignment',
+    description: 'Computer-guided digital clear aligners custom planned for crowded, spaced, and misaligned anterior teeth.',
+    treatment: 'Clear Aligners & Orthodontics',
+    actionText: 'Plan Your Alignment',
+    beforeImage: '/images/gallery/braces_aligners_1.webp',
+    afterImage: '/images/gallery/braces_aligners_2.webp',
+  },
+  {
+    id: 'smile-implants',
+    badge: 'Implant Rehabilitation',
+    timeline: 'Permanent Osseointegration',
+    title: 'Titanium Root & Natural Crown',
+    description: 'Permanent bio-compatible titanium root replacement restored with lifelike zirconia crowns for full bite functionality.',
+    treatment: 'Dental Implants & Zirconia Crown',
+    actionText: 'Restore Your Bite',
+    beforeImage: '/images/gallery/dental_implants_1.webp',
+    afterImage: '/images/gallery/dental_implants_2.webp',
+  },
+];
+
+const SKIN_TRANSFORMATIONS = [
+  {
+    id: 'skin-acne-pore',
+    badge: 'Skin Transformation',
+    timeline: '6 Weeks Protocol',
+    title: 'See the Difference in Your Skin',
+    description: 'Advanced dermatology treatments designed to reduce acne, pigmentation, and signs of ageing while restoring healthy, glowing skin.',
+    treatment: 'Acne & Pore Revision',
+    actionText: 'Get Your Glow',
+    beforeImage: '/images/ba_skin_before.webp',
+    afterImage: '/images/ba_skin_after.webp',
+  },
+  {
+    id: 'skin-active-acne',
+    badge: 'Clinical Dermatology',
+    timeline: '4 - 6 Sessions',
+    title: 'Deep Pore Clearance & Scar Healing',
+    description: 'Targeted salicylic peels and blue light phototherapy calming active inflammation and smoothing scarred texture.',
+    treatment: 'Acne Clearance & Peel Protocol',
+    actionText: 'Clear Your Skin',
+    beforeImage: '/images/gallery/acne_treatment_1.webp',
+    afterImage: '/images/gallery/acne_treatment_2.webp',
+  },
+  {
+    id: 'skin-glow',
+    badge: 'Medical Glow Therapy',
+    timeline: '50 Mins Protocol',
+    title: 'Deep Hydration & Glass Skin Radiance',
+    description: 'Clinical hyaluronic and antioxidant infusion for immediate red-carpet luminosity and deep dermal moisture.',
+    treatment: 'Medical Glow & Hydration',
+    actionText: 'Reveal Your Glow',
+    beforeImage: '/images/gallery/glow_therapy_1.webp',
+    afterImage: '/images/gallery/glow_therapy_2.webp',
+  },
+  {
+    id: 'skin-hydra',
+    badge: 'Facial Aesthetics',
+    timeline: 'Zero Downtime',
+    title: 'Vortex Suction & Dermal Polish',
+    description: 'Gentle clinical peeling and epidermal polishing leaving skin smooth, supple, and radiant with FDA-approved care.',
+    treatment: 'Advanced Hydra Facial Suite',
+    actionText: 'Book Medical Facial',
+    beforeImage: '/images/gallery/advanced_facials_1.webp',
+    afterImage: '/images/gallery/advanced_facials_2.webp',
+  },
+];
+
 const InstagramIcon = ({ className = "w-4 h-4" }) => (
   <svg className={`${className} fill-currentColor`} viewBox="0 0 24 24">
     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -35,6 +120,72 @@ export const HomePage = () => {
   const { clinicData, navigateTo, openBookingModal } = useClinic();
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
   const [homeGalleryFilter, setHomeGalleryFilter] = useState('All');
+
+  // Auto-rotating Before & After Transformation Cases
+  const [smileIndex, setSmileIndex] = useState(0);
+  const [skinIndex, setSkinIndex] = useState(0);
+  const [isSmileHovered, setIsSmileHovered] = useState(false);
+  const [isSkinHovered, setIsSkinHovered] = useState(false);
+
+  useEffect(() => {
+    if (isSmileHovered) return;
+    const timer = setInterval(() => {
+      setSmileIndex(prev => (prev + 1) % SMILE_TRANSFORMATIONS.length);
+    }, 3800);
+    return () => clearInterval(timer);
+  }, [isSmileHovered]);
+
+  useEffect(() => {
+    if (isSkinHovered) return;
+    const timer = setInterval(() => {
+      setSkinIndex(prev => (prev + 1) % SKIN_TRANSFORMATIONS.length);
+    }, 4200);
+    return () => clearInterval(timer);
+  }, [isSkinHovered]);
+
+  const currentSmile = SMILE_TRANSFORMATIONS[smileIndex];
+  const currentSkin = SKIN_TRANSFORMATIONS[skinIndex];
+
+  // Curate balanced & diverse gallery showcase (Skin, Smile, Clinic & Tech)
+  const displayedGalleryItems = (() => {
+    const all = clinicData.gallery || [];
+    if (homeGalleryFilter !== 'All') {
+      return all.filter(item => item.category === homeGalleryFilter).slice(0, 6);
+    }
+
+    const smile = all.filter(item => item.category === 'Smile');
+    const skin = all.filter(item => item.category === 'Skin');
+    const tech = all.filter(item => item.category === 'Clinic & Tech');
+    const hair = all.filter(item => item.category === 'Hair');
+
+    const curated = [];
+    const pushIfValid = (item) => {
+      if (item && !curated.some(c => c.id === item.id) && curated.length < 6) {
+        curated.push(item);
+      }
+    };
+
+    // Row 1: Smile transformation, Skin transformation, Modern Clinic Laser Suite
+    pushIfValid(smile[0]);
+    pushIfValid(skin[0]);
+    pushIfValid(tech[0]);
+
+    // Row 2: Skin Glow Therapy, Smile Clear Aligners, Skin Hydra Facial / Hair
+    pushIfValid(skin[1]);
+    pushIfValid(smile[1]);
+    pushIfValid(skin[2] || tech[1] || hair[0]);
+
+    // Fallback remainder if any array is short
+    const maxLen = Math.max(smile.length, skin.length, tech.length, hair.length);
+    for (let i = 2; i < maxLen && curated.length < 6; i++) {
+      pushIfValid(skin[i]);
+      pushIfValid(smile[i]);
+      pushIfValid(tech[i]);
+      pushIfValid(hair[i]);
+    }
+
+    return curated.length > 0 ? curated : all.slice(0, 6);
+  })();
 
   // Interactive 3D Hero Clinical Pillar Showcase
   const [heroPillar, setHeroPillar] = useState('skin'); // 'skin', 'dental', 'hair'
@@ -249,7 +400,7 @@ export const HomePage = () => {
                 
                 {/* Doctor Lead Badge */}
                 <div className="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#C5A059]/40 shadow-sm flex items-center space-x-2">
-                  <img src="/images/dr_zoya_portrait.webp" alt="Dr. Zoya" className="w-5 h-5 rounded-full object-cover border border-[#C5A059]" />
+                  <img src="/images/dr_zoya_talat.webp" alt="Dr. Zoya" className="w-5 h-5 rounded-full object-cover border border-[#C5A059]" />
                   <span className="text-[11px] font-bold text-[#0F172A]">Dr. Zoya & Medical Team</span>
                 </div>
 
@@ -457,78 +608,214 @@ export const HomePage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10">
-            {/* Smile Transformation */}
-            <div className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            {/* Smile Transformation Card */}
+            <div 
+              onMouseEnter={() => setIsSmileHovered(true)}
+              onMouseLeave={() => setIsSmileHovered(false)}
+              className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left transition-all duration-300 relative group"
+            >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
-                  Smile Transformation
+                  {currentSmile.badge}
                 </span>
-                <span className="text-xs text-[#475569]">2 Clinical Visits</span>
-              </div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
-                See the Difference in Your Smile
-              </h3>
-              <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                Our advanced dental treatments restore damaged or missing teeth, enhance aesthetics, and improve overall oral health.
-              </p>
-
-              {/* Real Before/After Images side-by-side */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
-                <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
-                  <img src="/images/ba_smile_before.webp" alt="Smile Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-[#475569]">{currentSmile.timeline}</span>
+                  <div className="flex items-center space-x-1 pl-2 border-l border-gray-200">
+                    <button
+                      onClick={() => setSmileIndex(prev => (prev - 1 + SMILE_TRANSFORMATIONS.length) % SMILE_TRANSFORMATIONS.length)}
+                      className="w-6 h-6 rounded-full bg-[#FAF6EE] hover:bg-[#C5A059] hover:text-white text-gray-700 flex items-center justify-center transition text-xs"
+                      title="Previous Case"
+                      aria-label="Previous Smile Case"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setSmileIndex(prev => (prev + 1) % SMILE_TRANSFORMATIONS.length)}
+                      className="w-6 h-6 rounded-full bg-[#FAF6EE] hover:bg-[#C5A059] hover:text-white text-gray-700 flex items-center justify-center transition text-xs"
+                      title="Next Case"
+                      aria-label="Next Smile Case"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-                <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
-                  <img src="/images/ba_smile_after.webp" alt="Smile After" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
+              </div>
+
+              {/* Title & Description with fade animation */}
+              <div key={currentSmile.id} className="animate-case-fade space-y-2">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A] min-h-[32px]">
+                  {currentSmile.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed min-h-[40px]">
+                  {currentSmile.description}
+                </p>
+              </div>
+
+              {/* Real Before/After Images side-by-side with smooth fade */}
+              <div key={`img-${currentSmile.id}`} className="grid grid-cols-2 gap-3 sm:gap-4 pt-2 animate-case-fade">
+                <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3] bg-[#F8F9FA] group/img">
+                  <img 
+                    src={currentSmile.beforeImage} 
+                    alt={`${currentSmile.title} - Before`} 
+                    loading="lazy" 
+                    width="300" 
+                    height="225" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105" 
+                  />
+                  <span className="absolute bottom-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-xs">
+                    Before
+                  </span>
+                </div>
+                <div className="rounded-xl overflow-hidden border-2 border-[#C5A059] relative aspect-[4/3] bg-[#F8F9FA] group/img shadow-xs">
+                  <img 
+                    src={currentSmile.afterImage} 
+                    alt={`${currentSmile.title} - After`} 
+                    loading="lazy" 
+                    width="300" 
+                    height="225" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105" 
+                  />
+                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-xs">
+                    After
+                  </span>
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-semibold text-emerald-700">Ceramic Veneers & Whitening</span>
+              {/* Footer with Treatment label, dots and CTA */}
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-700 block">
+                    {currentSmile.treatment}
+                  </span>
+                  {/* Indicator Dots */}
+                  <div className="flex items-center space-x-1.5 pt-0.5">
+                    {SMILE_TRANSFORMATIONS.map((item, idx) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setSmileIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === smileIndex ? 'w-5 bg-[#C5A059]' : 'w-1.5 bg-[#E8E2D9] hover:bg-[#C5A059]/50'
+                        }`}
+                        aria-label={`Go to case ${idx + 1}`}
+                      />
+                    ))}
+                    <span className="text-[10px] text-gray-400 pl-1 font-mono">
+                      {smileIndex + 1}/{SMILE_TRANSFORMATIONS.length}
+                    </span>
+                  </div>
+                </div>
+
                 <button
-                  onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs"
+                  onClick={() => openBookingModal(currentSmile.treatment)}
+                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs whitespace-nowrap self-start sm:self-auto"
                 >
-                  Get Your Smile
+                  {currentSmile.actionText}
                 </button>
               </div>
             </div>
 
-            {/* Skin Transformation */}
-            <div className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left">
+            {/* Skin Transformation Card */}
+            <div 
+              onMouseEnter={() => setIsSkinHovered(true)}
+              onMouseLeave={() => setIsSkinHovered(false)}
+              className="bg-white p-6 lg:p-8 xl:p-10 rounded-2xl border border-[#E8E2D9] shadow-subtle space-y-4 text-left transition-all duration-300 relative group"
+            >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#85611E] uppercase tracking-wider bg-[#FAF6EE] px-3 py-1 rounded-full border border-[#C5A059]/30">
-                  Skin Transformation
+                  {currentSkin.badge}
                 </span>
-                <span className="text-xs text-[#475569]">6 Weeks Protocol</span>
-              </div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A]">
-                See the Difference in Your Skin
-              </h3>
-              <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                Advanced dermatology treatments designed to reduce acne, pigmentation, and signs of ageing while restoring healthy, glowing skin.
-              </p>
-
-              {/* Real Before/After Images side-by-side */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
-                <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3]">
-                  <img src="/images/ba_skin_before.webp" alt="Skin Before" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-black/75 text-white text-xs font-bold px-2 py-0.5 rounded">Before</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-[#475569]">{currentSkin.timeline}</span>
+                  <div className="flex items-center space-x-1 pl-2 border-l border-gray-200">
+                    <button
+                      onClick={() => setSkinIndex(prev => (prev - 1 + SKIN_TRANSFORMATIONS.length) % SKIN_TRANSFORMATIONS.length)}
+                      className="w-6 h-6 rounded-full bg-[#FAF6EE] hover:bg-[#C5A059] hover:text-white text-gray-700 flex items-center justify-center transition text-xs"
+                      title="Previous Case"
+                      aria-label="Previous Skin Case"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setSkinIndex(prev => (prev + 1) % SKIN_TRANSFORMATIONS.length)}
+                      className="w-6 h-6 rounded-full bg-[#FAF6EE] hover:bg-[#C5A059] hover:text-white text-gray-700 flex items-center justify-center transition text-xs"
+                      title="Next Case"
+                      aria-label="Next Skin Case"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-                <div className="rounded-xl overflow-hidden border border-[#C5A059] relative aspect-[4/3]">
-                  <img src="/images/ba_skin_after.webp" alt="Skin After" loading="lazy" width="300" height="225" className="w-full h-full object-cover" />
-                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-xs font-bold px-2 py-0.5 rounded">After</span>
+              </div>
+
+              {/* Title & Description with fade animation */}
+              <div key={currentSkin.id} className="animate-case-fade space-y-2">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0F172A] min-h-[32px]">
+                  {currentSkin.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed min-h-[40px]">
+                  {currentSkin.description}
+                </p>
+              </div>
+
+              {/* Real Before/After Images side-by-side with smooth fade */}
+              <div key={`img-${currentSkin.id}`} className="grid grid-cols-2 gap-3 sm:gap-4 pt-2 animate-case-fade">
+                <div className="rounded-xl overflow-hidden border border-gray-200 relative aspect-[4/3] bg-[#F8F9FA] group/img">
+                  <img 
+                    src={currentSkin.beforeImage} 
+                    alt={`${currentSkin.title} - Before`} 
+                    loading="lazy" 
+                    width="300" 
+                    height="225" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105" 
+                  />
+                  <span className="absolute bottom-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-xs">
+                    Before
+                  </span>
+                </div>
+                <div className="rounded-xl overflow-hidden border-2 border-[#C5A059] relative aspect-[4/3] bg-[#F8F9FA] group/img shadow-xs">
+                  <img 
+                    src={currentSkin.afterImage} 
+                    alt={`${currentSkin.title} - After`} 
+                    loading="lazy" 
+                    width="300" 
+                    height="225" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105" 
+                  />
+                  <span className="absolute bottom-2 left-2 bg-[#C5A059] text-[#090D14] text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-xs">
+                    After
+                  </span>
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-semibold text-emerald-700">Acne & Pore Revision</span>
+              {/* Footer with Treatment label, dots and CTA */}
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-700 block">
+                    {currentSkin.treatment}
+                  </span>
+                  {/* Indicator Dots */}
+                  <div className="flex items-center space-x-1.5 pt-0.5">
+                    {SKIN_TRANSFORMATIONS.map((item, idx) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setSkinIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === skinIndex ? 'w-5 bg-[#C5A059]' : 'w-1.5 bg-[#E8E2D9] hover:bg-[#C5A059]/50'
+                        }`}
+                        aria-label={`Go to case ${idx + 1}`}
+                      />
+                    ))}
+                    <span className="text-[10px] text-gray-400 pl-1 font-mono">
+                      {skinIndex + 1}/{SKIN_TRANSFORMATIONS.length}
+                    </span>
+                  </div>
+                </div>
+
                 <button
-                  onClick={() => openBookingModal()}
-                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs"
+                  onClick={() => openBookingModal(currentSkin.treatment)}
+                  className="btn-gold px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-xs xl:text-sm font-bold shadow-xs whitespace-nowrap self-start sm:self-auto"
                 >
-                  Get Your Glow
+                  {currentSkin.actionText}
                 </button>
               </div>
             </div>
@@ -570,10 +857,7 @@ export const HomePage = () => {
 
         {/* Gallery Grid - Improved vertical spacing, typography, and comfortable layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-8">
-          {(clinicData.gallery || [])
-            .filter(item => homeGalleryFilter === 'All' || item.category === homeGalleryFilter)
-            .slice(0, 6)
-            .map(item => (
+          {displayedGalleryItems.map(item => (
               <div
                 key={item.id}
                 className="bg-white rounded-2xl border border-[#E8E2D9] shadow-subtle hover:shadow-card transition-all duration-300 overflow-hidden flex flex-col justify-between group"

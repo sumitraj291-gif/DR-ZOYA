@@ -548,8 +548,8 @@ export const WebsiteCMS = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_zoya_portrait.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_zoya_portrait.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_zoya_talat.webp' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_zoya_talat.webp' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
                           >
                             Studio Portrait
                           </button>

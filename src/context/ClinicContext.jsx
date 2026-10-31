@@ -22,7 +22,7 @@ import {
 
 const ClinicContext = createContext();
 
-const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_team_final_v13';
+const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_team_final_v14';
 const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
 
 export const getDoctorSortOrder = (name) => {
@@ -72,6 +72,7 @@ export const ClinicProvider = ({ children }) => {
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v10');
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v11');
       localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v12');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v13');
       
       const saved = localStorage.getItem(CLINIC_STORAGE_KEY);
       if (saved) {
