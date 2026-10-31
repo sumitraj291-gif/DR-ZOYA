@@ -507,9 +507,12 @@ export const INITIAL_TREATMENTS = [
 
 // 8. STAFF MANAGEMENT & RBAC PERMISSIONS DATA
 export const MOCK_DOCTORS = [
-  { id: "DOC-01", name: "Dr. Zoya Khan", specialization: "Cosmetic & Smile Specialist", experience: "12+ yrs" },
-  { id: "DOC-02", name: "Dr. Vikramaditya Rao", specialization: "Implantologist & Oral Surgeon", experience: "15+ yrs" },
-  { id: "DOC-03", name: "Dr. Meera Nair", specialization: "Orthodontist & Clear Aligner Specialist", experience: "9+ yrs" },
+  { id: "DOC-01", name: "Dr. Zoya Talat", specialization: "Chief Aesthetic Physician & Cosmetologist", experience: "12+ yrs" },
+  { id: "DOC-02", name: "Dr. Amit Agarwal", specialization: "Prof & Head Maxillofacial Surgery", experience: "15+ yrs" },
+  { id: "DOC-03", name: "Dr. Nasima Fathima", specialization: "Plastic & Reconstructive Surgeon", experience: "11+ yrs" },
+  { id: "DOC-04", name: "Dr. Mohan Goel", specialization: "Plastic, Burns & Reconstructive Surgeon", experience: "10+ yrs" },
+  { id: "DOC-05", name: "Dr. Aanchal Singh", specialization: "Pediatric & Preventive Dentistry (BDS, MDS)", experience: "9+ yrs" },
+  { id: "DOC-06", name: "Dr. Junaid", specialization: "Clinical Dermatologist & Hair Specialist", experience: "8+ yrs" },
 ];
 
 export const MOCK_SERVICES = INITIAL_TREATMENTS;

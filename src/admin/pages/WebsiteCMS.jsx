@@ -535,57 +535,29 @@ export const WebsiteCMS = () => {
                         />
                       </div>
 
-                      {/* Photo quick selector if Dr. Nasida */}
-                      {doc.id === 'doc-4' && (
+                      {/* Photo quick selector if Dr. Zoya */}
+                      {(doc.id === 'doc-2' || doc.name?.toLowerCase().includes('zoya')) && (
                         <div className="flex flex-wrap items-center gap-2 pt-1">
                           <span className="text-[11px] text-slate-500">Quick Photo:</span>
                           <button
                             type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_nasida_fathima.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_nasida_fathima.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_zoya_talat.png' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_zoya_talat.png' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
                           >
-                            Formal Blazer
+                            Clinic Profile
                           </button>
                           <button
                             type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_nasida_fathima_scrubs.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_nasida_fathima_scrubs.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_zoya_portrait.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_zoya_portrait.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
                           >
-                            OT Scrubs
-                          </button>
-                        </div>
-                      )}
-
-                      {/* Photo quick selector if Dr. Rohan */}
-                      {doc.id === 'doc-5' && (
-                        <div className="flex flex-wrap items-center gap-2 pt-1">
-                          <span className="text-[11px] text-slate-500">Quick Photo:</span>
-                          <button
-                            type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_rohan_portrait.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_rohan_portrait.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
-                          >
-                            Portrait
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_rohan_goel.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_rohan_goel.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
-                          >
-                            Spain Fellowship
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_rohan_goel_ot.jpg' })}
-                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_rohan_goel_ot.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
-                          >
-                            OT Surgery
+                            Studio Portrait
                           </button>
                         </div>
                       )}
 
                       {/* Photo quick selector if Dr. Amit */}
-                      {doc.id === 'doc-6' && (
+                      {(doc.id === 'doc-6' || doc.name?.toLowerCase().includes('amit')) && (
                         <div className="flex flex-wrap items-center gap-2 pt-1">
                           <span className="text-[11px] text-slate-500">Quick Photo:</span>
                           <button
@@ -612,6 +584,83 @@ export const WebsiteCMS = () => {
                         </div>
                       )}
 
+                      {/* Photo quick selector if Dr. Nasima */}
+                      {(doc.id === 'doc-4' || doc.name?.toLowerCase().includes('nas')) && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <span className="text-[11px] text-slate-500">Quick Photo:</span>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_nasima.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_nasima.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            Formal Blazer
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_nasida_fathima_scrubs.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_nasida_fathima_scrubs.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            OT Scrubs
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Photo quick selector if Dr. Mohan */}
+                      {(doc.id === 'doc-5' || doc.name?.toLowerCase().includes('mohan') || doc.name?.toLowerCase().includes('rohan')) && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <span className="text-[11px] text-slate-500">Quick Photo:</span>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_mohan.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_mohan.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            Portrait
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_rohan_goel.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_rohan_goel.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            Fellowship
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_rohan_goel_ot.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_rohan_goel_ot.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            OT Surgery
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Photo quick selector if Dr. Aanchal Singh */}
+                      {(doc.id === 'doc-7' || doc.name?.toLowerCase().includes('aanchal')) && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <span className="text-[11px] text-slate-500">Quick Photo:</span>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_aanchal_singh.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_aanchal_singh.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            Pediatric Dental Clinic
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Photo quick selector if Dr. Junaid */}
+                      {(doc.id === 'doc-8' || doc.name?.toLowerCase().includes('junaid')) && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          <span className="text-[11px] text-slate-500">Quick Photo:</span>
+                          <button
+                            type="button"
+                            onClick={() => setDocForm({ ...docForm, image: '/images/dr_junaid.jpg' })}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${docForm.image === '/images/dr_junaid.jpg' ? 'bg-obsidian text-white border-obsidian' : 'bg-slate-50 text-slate-700 border-slate-200'}`}
+                          >
+                            Clinical Portrait
+                          </button>
+                        </div>
+                      )}
+                      
                       <div className="flex justify-end gap-2 pt-2">
                         <button
                           type="button"

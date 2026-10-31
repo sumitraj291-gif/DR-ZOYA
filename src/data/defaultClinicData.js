@@ -34,46 +34,55 @@ export const initialClinicData = {
       {
         id: "doc-2",
         name: "Dr. Zoya Talat",
-        role: "Director",
+        role: "Director & Chief Aesthetic Physician",
         qualification: "Chief Aesthetic Physician & Cosmetologist",
         image: "/images/dr_zoya_talat.png",
         specialty: "Advanced Dermatology, Laser Rejuvenation & Clinical Aesthetics"
       },
       {
-        id: "doc-3",
-        name: "Dr. Varsha Jha",
-        role: "Dental Surgeon",
-        qualification: "BDS, Cosmetic Dentistry & Smile Specialist",
-        image: "/images/dr_varsha_jha.png",
-        specialty: "Painless Extractions, Root Canals, Veneers & Aligners"
-      },
-      {
-        id: "doc-4",
-        name: "Dr. Nasida Fathima",
-        role: "Plastic & Reconstructive Surgeon",
-        qualification: "MBBS, MS, DNB, MCh, DrNB, MRCS (Edinburgh)",
-        image: "/images/dr_nasida_fathima.jpg",
-        scrubsImage: "/images/dr_nasida_fathima_scrubs.jpg",
-        specialty: "Plastic, Aesthetic & Reconstructive Surgery"
-      },
-      {
-        id: "doc-5",
-        name: "Dr. Rohan Goel",
-        role: "Plastic, Burns & Reconstructive Surgeon",
-        qualification: "MBBS, MS, M.Ch (Plastic Surgery - AIR 91), ISAPS Fellow (Spain)",
-        image: "/images/dr_rohan_portrait.jpg",
-        fellowshipImage: "/images/dr_rohan_goel.jpg",
-        otImage: "/images/dr_rohan_goel_ot.jpg",
-        specialty: "Burn Reconstruction, Microsurgery, Rhinoplasty, Body Contouring & Hair Restoration"
-      },
-      {
         id: "doc-6",
-        name: "Dr. Amit Agarrwal",
+        name: "Dr. Amit Agarwal",
         role: "Prof & Head Maxillofacial Surgery",
         qualification: "MDS, Ex-President AOMSI Uttarakhand, President NMO SDCH",
         image: "/images/dr_amit_portrait.jpg",
         bannerImage: "/images/dr_amit_agarrwal.jpg",
         specialty: "Complex Jaw Reconstruction, TMJ, Orthognathic, Trauma & Cleft Lip/Palate"
+      },
+      {
+        id: "doc-4",
+        name: "Dr. Nasima Fathima",
+        role: "Plastic & Reconstructive Surgeon",
+        qualification: "MBBS, MS, DNB, MCh, DrNB, MRCS (Edinburgh)",
+        image: "/images/dr_nasima.jpg",
+        scrubsImage: "/images/dr_nasida_fathima_scrubs.jpg",
+        specialty: "Plastic, Aesthetic & Reconstructive Surgery"
+      },
+      {
+        id: "doc-5",
+        name: "Dr. Mohan Goel",
+        role: "Plastic, Burns & Reconstructive Surgeon",
+        qualification: "MBBS, MS, M.Ch (Plastic Surgery - AIR 91), ISAPS Fellow (Spain)",
+        image: "/images/dr_mohan.jpg",
+        fellowshipImage: "/images/dr_rohan_goel.jpg",
+        otImage: "/images/dr_rohan_goel_ot.jpg",
+        specialty: "Burn Reconstruction, Microsurgery, Rhinoplasty, Body Contouring & Hair Restoration"
+      },
+      {
+        id: "doc-7",
+        name: "Dr. Aanchal Singh",
+        role: "Pediatric Dental Surgeon & Pedodontist",
+        qualification: "BDS (DY Patil Pune), MDS (Subharti Meerut - Pediatric & Preventive Dentistry)",
+        bio: "Completed BDS from Dr. D. Y. Patil Dental College, Pune, and MDS in Pediatric and Preventive Dentistry from Subharti Dental College, Meerut. Clinical expertise includes pediatric dental care, preventive dentistry, sedation & general anesthesia for pediatric procedures, and full-mouth rehabilitation of children with early childhood caries (ECC).",
+        image: "/images/dr_aanchal_singh.jpg",
+        specialty: "Pediatric Dental Care, Sedation & General Anesthesia, ECC Full-Mouth Rehab & Preventive Dentistry"
+      },
+      {
+        id: "doc-8",
+        name: "Dr. Junaid",
+        role: "Clinical Dermatologist & Hair Restoration Specialist",
+        qualification: "MBBS, MD / DNB (Dermatology), Trichology Specialist",
+        image: "/images/dr_junaid.jpg",
+        specialty: "Advanced Trichology, Scalp GFC/PRP, Acne Scar Resurfacing & Clinical Dermatology"
       }
     ]
   },
@@ -153,7 +162,7 @@ export const initialClinicData = {
       duration: "45 Mins",
       price: "₹2,500",
       advanceFee: 500,
-      description: "Comfort-focused single-sitting rotary root canal therapy, tooth-colored aesthetic fillings, and gentle extractions by Dr. Varsha Jha.",
+      description: "Comfort-focused single-sitting rotary root canal therapy, tooth-colored aesthetic fillings, and gentle extractions by Dr. Amit Agarwal and specialist team.",
       benefits: ["100% Pain-Free Experience", "Microscope Assisted Precision", "Preserves Natural Tooth Structure", "Hospital-Grade Sterilization"],
       isPopular: true,
       image: "/images/general_dentistry.png"
@@ -278,7 +287,7 @@ export const initialClinicData = {
       verifiedProcedure: "Painless Tooth Extraction & Care",
       rating: 5,
       date: "Recent Google Review",
-      text: "I recently visited Dr. Varsha for a tooth extraction, and she was very patient and understanding. The procedure was completely painless. Highly recommended!"
+      text: "I recently visited Dr. Amit for a tooth extraction, and she was very patient and understanding. The procedure was completely painless. Highly recommended!"
     },
     {
       id: "rev-3",
@@ -319,7 +328,7 @@ export const initialClinicData = {
       afterImage: "/images/ba_smile_after.png",
       description: "Full cosmetic dental rehabilitation restoring incisal translucency, tooth proportion, and natural bright shade.",
       timeline: "2 Clinical Sittings",
-      clinician: "Dr. Varsha Jha & Dr. Zoya Talat"
+      clinician: "Dr. Amit Agarwal & Dr. Zoya Talat"
     },
     {
       id: "gal-braces-1",
@@ -329,7 +338,7 @@ export const initialClinicData = {
       image: "/images/gallery/braces_aligners_1.png",
       description: "Computer-guided digital clear aligners custom planned for crowded and misaligned anterior teeth.",
       timeline: "6 - 9 Months",
-      clinician: "Dr. Varsha Jha (Dental Surgeon)"
+      clinician: "Dr. Amit Agarwal (Maxillofacial & Dental)"
     },
     {
       id: "gal-braces-2",
@@ -339,7 +348,7 @@ export const initialClinicData = {
       image: "/images/gallery/braces_aligners_2.png",
       description: "Precision orthodontic correction using discreet, removable medical-grade clear aligners.",
       timeline: "Comprehensive Care",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-implant-1",
@@ -349,7 +358,7 @@ export const initialClinicData = {
       image: "/images/gallery/dental_implants_1.png",
       description: "Permanent bio-compatible titanium root replacement restored with zirconia lifelike crown.",
       timeline: "Single Sitting + Osseointegration",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-implant-2",
@@ -359,7 +368,7 @@ export const initialClinicData = {
       image: "/images/gallery/dental_implants_2.png",
       description: "Advanced implantology restoring complete chewing functionality and facial profile balance.",
       timeline: "Specialist Protocol",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-rct-1",
@@ -369,7 +378,7 @@ export const initialClinicData = {
       image: "/images/gallery/root_canal_1.png",
       description: "Microscope-assisted painless single-visit root canal therapy preserving the natural tooth anatomy.",
       timeline: "45 Mins (Single Visit)",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-gen-dent",
@@ -379,7 +388,7 @@ export const initialClinicData = {
       image: "/images/gallery/general_dentistry_2.png",
       description: "Tooth-colored nano-hybrid fillings with hospital-grade multi-stage sterilization protocols.",
       timeline: "Preventive Care",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
 
     // 2. SKIN CARE & AESTHETIC DERMATOLOGY CASES FROM https://dnaclinicindia.com/gallery/
@@ -494,7 +503,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_02.png",
       description: "Precision ceramic incisal veneers crafted to match natural tooth translucency.",
       timeline: "Clinical Case 02",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-dna-03",
@@ -524,7 +533,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_06.png",
       description: "Straight, bright, uniform aesthetic outcome for dental makeover patient.",
       timeline: "Clinical Case 06",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-dna-08",
@@ -544,7 +553,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_09.png",
       description: "Complete closure of dental diastema and harmonious smile curve.",
       timeline: "Clinical Case 09",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-dna-10",
@@ -574,7 +583,7 @@ export const initialClinicData = {
       image: "/images/gallery/dna_gallery_12.png",
       description: "Hollywood smile transformation with ultra-thin porcelain veneers.",
       timeline: "Clinical Case 12",
-      clinician: "Dr. Varsha Jha"
+      clinician: "Dr. Amit Agarwal"
     },
     {
       id: "gal-dna-13",
@@ -623,7 +632,7 @@ export const initialClinicData = {
   faqs: [
     {
       question: "Where are DNA Clinics located?",
-      answer: "DNA Clinics operate modern, fully-equipped centres in both Dehradun (Uttarakhand) and Muzaffarnagar (Uttar Pradesh). You can consult Dr. Zoya Talat, Dr. Varsha Jha, and our specialist surgeons at either centre by prior booking."
+      answer: "DNA Clinics operate modern, fully-equipped centres in both Dehradun (Uttarakhand) and Muzaffarnagar (Uttar Pradesh). You can consult Dr. Zoya Talat, Dr. Amit Agarwal, Dr. Nasima, and our specialist team at either centre by prior booking."
     },
     {
       question: "How do I book an appointment with Dr. Zoya?",
@@ -631,7 +640,7 @@ export const initialClinicData = {
     },
     {
       question: "Are dental treatments really pain-free?",
-      answer: "Yes! At DNA Clinic, comfort comes first. Dr. Varsha Jha employs gentle local anesthesia, computer-assisted numbing, and modern rotary instruments so you feel relaxed and completely pain-free."
+      answer: "Yes! At DNA Clinic, comfort comes first. Our surgical and dental specialists employ gentle local anesthesia, computer-assisted numbing, and modern rotary instruments so you feel relaxed and completely pain-free."
     },
     {
       question: "Is the advance consultation fee deductible?",
@@ -674,7 +683,7 @@ export const initialSeedAppointments = [
     paymentStatus: "Pay at Clinic (Pending)",
     leadSource: "AI Smile Analyzer",
     status: "New",
-    notes: "Consultation requested with Dr. Varsha Jha for 3D aligner scan.",
+    notes: "Consultation requested with Dr. Amit Agarwal for 3D aligner scan.",
     createdAt: "2026-09-16 11:45 AM"
   },
   {

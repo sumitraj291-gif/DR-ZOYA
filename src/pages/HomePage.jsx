@@ -96,9 +96,9 @@ export const HomePage = () => {
       tabLabel: 'Digital Smile Makeover',
       icon: '🦷',
       badge: 'Cosmetic Dentistry',
-      doctorName: 'Dr. Varsha Jha',
-      doctorRole: 'Lead Dental Surgeon & Smile Specialist',
-      image: '/images/dr_varsha_jha.webp',
+      doctorName: 'Dr. Amit Agarwal',
+      doctorRole: 'Head Maxillofacial & Dental Surgery',
+      image: '/images/dr_amit_portrait.jpg',
       hudTitle: '3D Digital Smile Arch Calibration',
       hudMetric1: 'Ceramic Margins: 0.1mm Precision',
       hudMetric2: 'Bite Symmetry: 100% Harmonized',
@@ -757,7 +757,7 @@ export const HomePage = () => {
               Hear From Our Happy Clients
             </h2>
             <p className="text-xs sm:text-sm text-[#475569]">
-              Real verified Google reviews from patients treated by Dr. Zoya and Dr. Varsha Jha.
+              Real verified Google reviews from patients treated by Dr. Zoya and our specialist doctors.
             </p>
           </div>
 

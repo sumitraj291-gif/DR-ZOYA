@@ -25,9 +25,9 @@ const HERO_SERVICES = [
     description: 'Transforming smiles with painless laser dentistry, digital 3D smile design, pediatric care, and seamless ceramic restorations in a calm sanctuary.',
     image: '/images/hero/hero_dental.webp',
     alt: 'Smiling child receiving gentle, friendly dental care at DNA Dental Clinic',
-    doctor: 'Dr. Varsha Jha',
-    doctorRole: 'Lead Dental Surgeon (BDS)',
-    doctorImg: '/images/dr_varsha.png',
+    doctor: 'Dr. Amit Agarwal',
+    doctorRole: 'Head Maxillofacial & Dental Surgery (MDS)',
+    doctorImg: '/images/dr_amit_portrait.jpg',
     themeColor: '#047857', // Emerald-700 for accessible WCAG contrast
     accentBg: 'from-emerald-500/10 via-amber-500/5 to-transparent',
     glowColor: 'rgba(4, 120, 87, 0.18)',

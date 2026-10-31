@@ -97,7 +97,7 @@ export const SmileMakeoverPage = () => {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
               <img
                 src="/images/general_dentistry.png"
-                alt="Digital Smile Design Consultation with Dr. Zoya & Dr. Varsha"
+                alt="Digital Smile Design Consultation with Dr. Zoya & Dr. Amit Agarwal"
                 className="w-full h-[380px] sm:h-[440px] object-cover"
               />
               <div className="absolute bottom-3 left-3 right-3 bg-black/75 backdrop-blur-sm p-3 rounded-xl text-white text-xs border border-white/20 flex items-center justify-between">
@@ -162,7 +162,7 @@ export const SmileMakeoverPage = () => {
             <div className="space-y-2 text-xs text-gray-700 pt-2 border-t border-gray-100">
               <div className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />
-                <span>Lead Dental Surgeon: <strong>Dr. Varsha Jha (BDS)</strong></span>
+                <span>Lead Maxillofacial & Dental Surgeon: <strong>Dr. Amit Agarwal (MDS)</strong></span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-[#C5A059]" />

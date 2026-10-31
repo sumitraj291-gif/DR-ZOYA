@@ -22,8 +22,19 @@ import {
 
 const ClinicContext = createContext();
 
-const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_gallery_v6';
+const CLINIC_STORAGE_KEY = 'dna_clinic_live_data_v2026_team_final_v13';
 const APPOINTMENTS_STORAGE_KEY = 'dna_clinic_appointments_v2026';
+
+export const getDoctorSortOrder = (name) => {
+  const n = (name || '').toLowerCase();
+  if (n.includes('zoya')) return 1;
+  if (n.includes('amit')) return 2;
+  if (n.includes('nasima') || n.includes('nasida')) return 3;
+  if (n.includes('mohan') || n.includes('rohan')) return 4;
+  if (n.includes('aanchal') || n.includes('anchal')) return 5;
+  if (n.includes('junaid')) return 6;
+  return 99;
+};
 
 const VALID_PAGES = ['home', 'treatments', 'smile-makeover', 'about', 'ai-analyzer', 'gallery', 'book', 'contact', 'admin'];
 
@@ -55,6 +66,12 @@ export const ClinicProvider = ({ children }) => {
       localStorage.removeItem('dr_zoya_clinic_data_v1');
       localStorage.removeItem('dna_clinic_live_data_v2026_march');
       localStorage.removeItem('dna_clinic_live_data_v2026_gallery_v5');
+      localStorage.removeItem('dna_clinic_live_data_v2026_gallery_v6');
+      localStorage.removeItem('dna_clinic_live_data_v2026_doctors_v8');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v9');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v10');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v11');
+      localStorage.removeItem('dna_clinic_live_data_v2026_team_final_v12');
       
       const saved = localStorage.getItem(CLINIC_STORAGE_KEY);
       if (saved) {
@@ -66,10 +83,10 @@ export const ClinicProvider = ({ children }) => {
           }
           if (parsed.profile?.team) {
             parsed.profile.team = parsed.profile.team.filter(
-              d => d.id !== 'doc-1' && !d.name?.toLowerCase().includes('rana') && !d.image?.includes('dr_zoya_rana')
+              d => d.id !== 'doc-1' && d.id !== 'doc-3' && !d.name?.toLowerCase().includes('rana') && !d.name?.toLowerCase().includes('varsha') && !d.image?.includes('dr_zoya_rana') && !d.image?.includes('dr_varsha')
             );
           }
-          if (!parsed.profile?.team || parsed.profile.team.length < 5 || !parsed.profile.team.some(d => d.name?.includes('Rohan')) || !parsed.profile.team.some(d => d.name?.includes('Amit')) || !parsed.profile.team.some(d => d.name?.includes('Nasida'))) {
+          if (!parsed.profile?.team || parsed.profile.team.length < 6 || !parsed.profile.team.some(d => d.name?.includes('Amit')) || !parsed.profile.team.some(d => d.name?.includes('Nasima') || d.name?.includes('Nasida')) || !parsed.profile.team.some(d => d.name?.includes('Aanchal') || d.name?.includes('Anchal')) || !parsed.profile.team.some(d => d.name?.includes('Junaid'))) {
             parsed.profile = {
               ...(parsed.profile || initialClinicData.profile),
               team: initialClinicData.profile.team
@@ -149,7 +166,7 @@ export const ClinicProvider = ({ children }) => {
       setClinicData(prev => {
         const serverTeam = (team || [])
           .filter(d => d.isActive !== false)
-          .filter(d => d.id !== 'doc-1' && !d.name?.toLowerCase().includes('rana') && !d.image?.includes('dr_zoya_rana'));
+          .filter(d => d.id !== 'doc-1' && d.id !== 'doc-3' && !d.name?.toLowerCase().includes('rana') && !d.name?.toLowerCase().includes('varsha') && !d.image?.includes('dr_zoya_rana') && !d.image?.includes('dr_varsha'));
 
         // Start merged list with server doctors
         const mergedTeam = [...serverTeam];
@@ -167,7 +184,7 @@ export const ClinicProvider = ({ children }) => {
 
         // Also preserve any custom doctors added or edited in local state / CMS
         (prev.profile?.team || [])
-          .filter(d => d.id !== 'doc-1' && !d.name?.toLowerCase().includes('rana') && !d.image?.includes('dr_zoya_rana'))
+          .filter(d => d.id !== 'doc-1' && d.id !== 'doc-3' && !d.name?.toLowerCase().includes('rana') && !d.name?.toLowerCase().includes('varsha') && !d.image?.includes('dr_zoya_rana') && !d.image?.includes('dr_varsha'))
           .forEach(localDoc => {
           const normName = localDoc.name ? localDoc.name.toLowerCase().replace(/[^a-z]/g, '') : '';
           const existingIndex = mergedTeam.findIndex(
@@ -183,6 +200,10 @@ export const ClinicProvider = ({ children }) => {
             };
           }
         });
+
+        const finalCleanTeam = mergedTeam
+          .filter(d => d.id !== 'doc-1' && d.id !== 'doc-3' && !d.name?.toLowerCase().includes('rana') && !d.name?.toLowerCase().includes('varsha') && !d.image?.includes('dr_varsha'))
+          .sort((a, b) => getDoctorSortOrder(a.name) - getDoctorSortOrder(b.name));
 
         const backendProfile = {
           clinicName: settings.clinicName,
@@ -211,7 +232,7 @@ export const ClinicProvider = ({ children }) => {
             timings: settings.timings,
             emergencyHelpline: settings.phone,
           },
-          team: mergedTeam,
+          team: finalCleanTeam,
         };
 
         return {
